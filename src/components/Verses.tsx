@@ -1,8 +1,8 @@
-import useSWR from "swr";
 import { clsx } from "clsx";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
+import { useQuery } from "@tanstack/react-query";
 
 type Dao = {
   id: number;
@@ -33,7 +33,8 @@ function Verse({ verse }: { verse: Dao }) {
   });
   return (
     <div className="text-xl">
-      <span>第{verse.id}章:</span> <span>{text}</span>
+      <h2 className="text-gray-400 text-base">第{verse.id}章</h2>
+      <div>{text}</div>
     </div>
   );
 }
@@ -64,25 +65,21 @@ function Char({ char }: { char: string }) {
   );
 }
 
-const fetcher = async (url: string) => {
-  const r = await fetch(url);
-  const result = await r.json();
-  return dictionaryEntrySchema.parse(result);
-};
-
 function DefinitionPopover({ char }: { char: string }) {
-  const [shouldFetch, setShouldFetch] = useState(false);
-  useEffect(() => {
-    if (char) {
-      setShouldFetch(true);
-    } else {
-      setShouldFetch(false);
-    }
-  }, [char]);
-  const fetchString = shouldFetch ? `/api/definition?char=${char}` : null;
-  const { data, error, isLoading } = useSWR(fetchString, () =>
-    fetcher(fetchString ?? "")
-  );
+  const { data } = useQuery({
+    queryKey: ["definition", char],
+    queryFn: async () => {
+      if (!char) return;
+      const r = await fetch(`/api/definition?char=${char}`);
+      const result = await r.json();
+      return dictionaryEntrySchema.parse(result);
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    enabled: !!char,
+  });
 
   return (
     <div
