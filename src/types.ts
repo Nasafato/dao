@@ -1,5 +1,6 @@
 import * as z from "zod";
 
+export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;
 export const dictionaryEntrySchema = z.object({
   spelling: z.string(),
   source: z.string(),

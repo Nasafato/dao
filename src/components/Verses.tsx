@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { clsx } from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 
@@ -39,6 +39,7 @@ function Verse({ verse }: { verse: Dao }) {
 }
 
 function Char({ char }: { char: string }) {
+  // const [isHovering, setIsHovering] = useState(char === "不" ? true : false);
   const [isHovering, setIsHovering] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
   const handleMouseEnter = () => {
@@ -78,32 +79,37 @@ function DefinitionPopover({ char }: { char: string }) {
       setShouldFetch(false);
     }
   }, [char]);
-  const fetchString = shouldFetch ? `/api/definition?word=${char}` : null;
+  const fetchString = shouldFetch ? `/api/definition?char=${char}` : null;
   const { data, error, isLoading } = useSWR(fetchString, () =>
     fetcher(fetchString ?? "")
   );
-  const ref = useRef<HTMLDivElement>(null);
 
   return (
     <div
-      ref={ref}
-      className="absolute top-6 left-4 bg-white z-10 border-gray-500 border px-3 py-2 rounded-md shadow-md w-40 text-gray-800 overflow-scroll"
+      style={{ left: "100%", top: "1.5rem" }}
+      className={clsx(
+        "absolute bg-white z-10  border-gray-500 border px-3 py-2 rounded-md shadow-md w-52 text-gray-800 overflow-scroll hyphens-auto"
+      )}
     >
       <h3>{char}</h3>
       <div className="text-sm">{data?.pinyin.join(" ")}</div>
       <div className="h-[1px] bg-gray-800 w-12 my-1" />
-      {data &&
-        data.definitions.english.map((def, index) => (
-          <p className="text-xs" key={index}>
-            {def}
-          </p>
-        ))}
-      {data &&
-        data.definitions.chinese?.map((def, index) => (
-          <p className="text-xs" key={index}>
-            {def}
-          </p>
-        ))}
+      <ul className="list-decimal list-inside">
+        {data &&
+          data.definitions.english.map((def, index) => (
+            <li className="text-xs" key={index}>
+              {def}
+            </li>
+          ))}
+      </ul>
+      <ul>
+        {data &&
+          data.definitions.chinese?.map((def, index) => (
+            <li className="text-xs" key={index}>
+              {def}
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }
