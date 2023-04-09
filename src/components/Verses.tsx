@@ -34,7 +34,15 @@ type Popover = {
 const DefinitionPopoverContext = createContext<{
   popover: Popover;
   updatePopover: (args: any) => void;
-  renderPopover: (content: React.ReactNode, settings: Partial<Popover>) => void;
+  renderPopover: ({
+    content,
+    rect,
+    currentCharId,
+  }: {
+    content: React.ReactNode;
+    rect: DOMRect;
+    currentCharId: string;
+  }) => void;
   closePopover: () => void;
   openPopover: () => void;
 }>({
@@ -48,7 +56,15 @@ const DefinitionPopoverContext = createContext<{
     left: 0,
   },
   updatePopover: (args: any) => {},
-  renderPopover: (content: React.ReactNode, settings: Partial<Popover>) => {},
+  renderPopover: ({
+    content,
+    rect,
+    currentCharId,
+  }: {
+    content: React.ReactNode;
+    rect: DOMRect;
+    currentCharId: string;
+  }) => {},
   closePopover: () => {},
   openPopover: () => {},
 });
@@ -77,20 +93,20 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
     rect: DOMRect;
     currentCharId: string;
   }) => {
-    console.log("rendering popover");
     const popoverDimensions = {
-      width: 300,
-      height: 300,
+      width: 200,
+      height: 160,
     };
     const currentPopoverCoordinates = {
       x: rect.left,
       y: rect.top,
     };
 
-    for (const corner of ["TR", "BR", "BL", "TL"]) {
-      const yAxis = corner[0];
-      const xAxis = corner[1];
+    for (const orientation of ["TL", "TR", "BR", "BL"]) {
+      const yAxis = orientation[0];
+      const xAxis = orientation[1];
 
+      console.log("checking orientation", orientation, currentCharId);
       const buildFarthestCorner = () => {
         const farthestCorner = {
           x:
@@ -107,28 +123,37 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
 
       const checkOverlapsViewport = (corner: { x: number; y: number }) => {
         if (yAxis === "T" && corner.y < 0) {
+          console.log("Overlaps top");
           return true;
         } else if (yAxis === "B" && corner.y > window.innerHeight) {
+          console.log("Overlaps bottom");
           return true;
         } else if (xAxis === "L" && corner.x < 0) {
+          console.log("Overlaps left");
           return true;
         } else if (xAxis === "R" && corner.x > window.innerWidth) {
+          console.log("Overlaps right");
           return true;
         }
 
         return false;
       };
+      // For each orientation, check if the popover overlaps the viewport.
+      // If it doesn't, use that orientation.
 
       const farthestCorner = buildFarthestCorner();
       const hasOverlap = checkOverlapsViewport(farthestCorner);
       if (!hasOverlap) {
+        console.log("orientation", orientation);
         // Place the popover at the position of its top leftmost corner
         const popoverTop =
           yAxis === "T" ? rect.top - popoverDimensions.height : rect.bottom;
         const popoverLeft =
           xAxis === "L" ? rect.left - popoverDimensions.width : rect.right;
+        console.log("rect.top", rect.top, "popoverTop", popoverTop);
         currentPopoverCoordinates.x = popoverLeft;
         currentPopoverCoordinates.y = popoverTop;
+        break;
       }
     }
     setPopover({
@@ -209,6 +234,8 @@ export function Popover() {
     <div
       style={{
         position: "absolute",
+        width: popover.width,
+        height: popover.height,
         top: popover.top,
         left: popover.left,
       }}
@@ -299,12 +326,11 @@ function Definition({ char }: { char: string }) {
   return (
     <div
       className={clsx(
-        "bg-white border-gray-500 border px-3 py-2 rounded-md shadow-md w-52 text-gray-800 overflow-scroll hyphens-auto"
+        "bg-white border-gray-500 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
       )}
     >
       <h3>{char}</h3>
       <div className="text-sm">{data?.pinyin.join(" ")}</div>
-      <div className="h-[1px] bg-gray-800 w-12 my-1" />
       <ul className="list-decimal list-inside">
         {data &&
           data.definitions.english.map((def, index) => (
