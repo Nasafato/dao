@@ -93,30 +93,33 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
     rect: DOMRect;
     currentCharId: string;
   }) => {
+    const left = rect.left + window.scrollX;
+    const right = rect.right + window.scrollX;
+    const top = rect.top + window.scrollY;
+    const bottom = rect.bottom + window.scrollY;
     const popoverDimensions = {
       width: 200,
       height: 160,
     };
     const currentPopoverCoordinates = {
-      x: rect.left,
-      y: rect.top,
+      x: left - popoverDimensions.width,
+      y: top - popoverDimensions.height,
     };
 
     for (const orientation of ["TL", "TR", "BR", "BL"]) {
       const yAxis = orientation[0];
       const xAxis = orientation[1];
 
-      console.log("checking orientation", orientation, currentCharId);
       const buildFarthestCorner = () => {
         const farthestCorner = {
           x:
             xAxis === "L"
-              ? rect.left - popoverDimensions.width
-              : rect.right + popoverDimensions.width,
+              ? left - popoverDimensions.width
+              : right + popoverDimensions.width,
           y:
             yAxis === "T"
-              ? rect.top - popoverDimensions.height
-              : rect.bottom + popoverDimensions.height,
+              ? top - popoverDimensions.height
+              : bottom + popoverDimensions.height,
         };
         return farthestCorner;
       };
@@ -144,17 +147,16 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
       const farthestCorner = buildFarthestCorner();
       const hasOverlap = checkOverlapsViewport(farthestCorner);
       if (!hasOverlap) {
-        console.log("orientation", orientation);
-        // Place the popover at the position of its top leftmost corner
+        // Place the popover at the position of its top leftmost corner.
         const popoverTop =
-          yAxis === "T" ? rect.top - popoverDimensions.height : rect.bottom;
+          yAxis === "T" ? top - popoverDimensions.height : bottom;
         const popoverLeft =
-          xAxis === "L" ? rect.left - popoverDimensions.width : rect.right;
-        console.log("rect.top", rect.top, "popoverTop", popoverTop);
+          xAxis === "L" ? left - popoverDimensions.width : right;
         currentPopoverCoordinates.x = popoverLeft;
         currentPopoverCoordinates.y = popoverTop;
         break;
       }
+      // If there is inevitably overlap, go with the defaults.
     }
     setPopover({
       isOpen: true,
@@ -213,7 +215,6 @@ export function Popover() {
       const target = event.target as HTMLElement;
       const closest = target.closest("#popover-portal-root");
       if (popover.isOpen && ref.current && !closest) {
-        console.log("closing popover");
         closePopover();
       }
     };
