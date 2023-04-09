@@ -343,7 +343,7 @@ function Char({ char, charId }: { char: string; charId: string }) {
 }
 
 function Definition({ char }: { char: string }) {
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {
       if (!char) return;
@@ -366,6 +366,7 @@ function Definition({ char }: { char: string }) {
     >
       <h3>{char}</h3>
       <div className="text-sm">{data?.pinyin.join(" ")}</div>
+      {isLoading && <div>Loading...</div>}
       <ul className="list-decimal list-inside">
         {data &&
           data.definitions.english.map((def, index) => (
