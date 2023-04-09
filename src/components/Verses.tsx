@@ -1,8 +1,16 @@
 import { clsx } from "clsx";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { useQuery } from "@tanstack/react-query";
+import { createPortal } from "react-dom";
 
 type Dao = {
   id: number;
@@ -13,13 +21,221 @@ interface VerseProps {
   verses: Dao[];
 }
 
+type Popover = {
+  content: React.ReactNode;
+  currentCharId: string | null;
+  isOpen: boolean;
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+};
+
+const DefinitionPopoverContext = createContext<{
+  popover: Popover;
+  updatePopover: (args: any) => void;
+  renderPopover: (content: React.ReactNode, settings: Partial<Popover>) => void;
+  closePopover: () => void;
+  openPopover: () => void;
+}>({
+  popover: {
+    content: null,
+    currentCharId: null,
+    isOpen: false,
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+  },
+  updatePopover: (args: any) => {},
+  renderPopover: (content: React.ReactNode, settings: Partial<Popover>) => {},
+  closePopover: () => {},
+  openPopover: () => {},
+});
+
+function PopoverContextProvider({ children }: { children: React.ReactNode }) {
+  const [popover, setPopover] = useState<Popover>({
+    content: null,
+    currentCharId: null,
+    isOpen: false,
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+  });
+
+  const updatePopover = (newValues: any) => {
+    setPopover({ ...popover, ...newValues });
+  };
+
+  const renderPopover = ({
+    content,
+    rect,
+    currentCharId,
+  }: {
+    content: React.ReactNode;
+    rect: DOMRect;
+    currentCharId: string;
+  }) => {
+    console.log("rendering popover");
+    const popoverDimensions = {
+      width: 300,
+      height: 300,
+    };
+    const currentPopoverCoordinates = {
+      x: rect.left,
+      y: rect.top,
+    };
+
+    for (const corner of ["TR", "BR", "BL", "TL"]) {
+      const yAxis = corner[0];
+      const xAxis = corner[1];
+
+      const buildFarthestCorner = () => {
+        const farthestCorner = {
+          x:
+            xAxis === "L"
+              ? rect.left - popoverDimensions.width
+              : rect.right + popoverDimensions.width,
+          y:
+            yAxis === "T"
+              ? rect.top - popoverDimensions.height
+              : rect.bottom + popoverDimensions.height,
+        };
+        return farthestCorner;
+      };
+
+      const checkOverlapsViewport = (corner: { x: number; y: number }) => {
+        if (yAxis === "T" && corner.y < 0) {
+          return true;
+        } else if (yAxis === "B" && corner.y > window.innerHeight) {
+          return true;
+        } else if (xAxis === "L" && corner.x < 0) {
+          return true;
+        } else if (xAxis === "R" && corner.x > window.innerWidth) {
+          return true;
+        }
+
+        return false;
+      };
+
+      const farthestCorner = buildFarthestCorner();
+      const hasOverlap = checkOverlapsViewport(farthestCorner);
+      if (!hasOverlap) {
+        // Place the popover at the position of its top leftmost corner
+        const popoverTop =
+          yAxis === "T" ? rect.top - popoverDimensions.height : rect.bottom;
+        const popoverLeft =
+          xAxis === "L" ? rect.left - popoverDimensions.width : rect.right;
+        currentPopoverCoordinates.x = popoverLeft;
+        currentPopoverCoordinates.y = popoverTop;
+      }
+    }
+    setPopover({
+      isOpen: true,
+      content,
+      currentCharId,
+      width: popoverDimensions.width,
+      height: popoverDimensions.height,
+      top: currentPopoverCoordinates.y,
+      left: currentPopoverCoordinates.x,
+    });
+  };
+
+  const closePopover = () => {
+    setPopover({
+      ...popover,
+      isOpen: false,
+    });
+  };
+
+  const openPopover = () => {
+    setPopover({
+      ...popover,
+      isOpen: true,
+    });
+  };
+
+  return (
+    <DefinitionPopoverContext.Provider
+      value={{
+        popover,
+        updatePopover,
+        renderPopover,
+        closePopover,
+        openPopover,
+      }}
+    >
+      {children}
+    </DefinitionPopoverContext.Provider>
+  );
+}
+
+export function Popover() {
+  const { popover, closePopover } = usePopover();
+  const ref = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    ref.current = document.getElementById("popover-portal");
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const closest = target.closest("#popover-portal-root");
+      if (popover.isOpen && ref.current && !closest) {
+        console.log("closing popover");
+        closePopover();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closePopover, popover]);
+
+  if (!popover.isOpen) return null;
+
+  if (!mounted || !ref.current) {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      style={{
+        position: "absolute",
+        top: popover.top,
+        left: popover.left,
+      }}
+      className="z-10"
+      id="popover-portal-root"
+    >
+      {popover.content}
+    </div>,
+    ref.current
+  );
+}
+
+export function usePopover() {
+  const context = useContext(DefinitionPopoverContext);
+  return context;
+}
+
 export function Verses({ verses }: VerseProps) {
   return (
-    <div className="space-y-4">
-      {verses.map((verse) => {
-        return <Verse key={verse.id} verse={verse} />;
-      })}
-    </div>
+    <PopoverContextProvider>
+      <div className="space-y-4">
+        {verses.map((verse) => {
+          return <Verse key={verse.id} verse={verse} />;
+        })}
+        <Popover />
+      </div>
+    </PopoverContextProvider>
   );
 }
 
@@ -29,7 +245,7 @@ function Verse({ verse }: { verse: Dao }) {
     if (punctuation.includes(char)) {
       return char;
     }
-    return <Char key={index} char={char} />;
+    return <Char key={index} char={char} charId={`${verse.id}-${index}`} />;
   });
   return (
     <div className="text-xl">
@@ -39,33 +255,32 @@ function Verse({ verse }: { verse: Dao }) {
   );
 }
 
-function Char({ char }: { char: string }) {
-  // const [isHovering, setIsHovering] = useState(char === "不" ? true : false);
-  const [isHovering, setIsHovering] = useState(false);
+function Char({ char, charId }: { char: string; charId: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-  };
+  const { renderPopover, popover } = usePopover();
 
   return (
     <span
       ref={ref}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onClick={() => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        renderPopover({
+          content: <Definition char={char} />,
+          currentCharId: charId,
+          rect,
+        });
+      }}
       className={clsx("relative", {
-        "text-green-600": isHovering,
+        "text-green-600": popover.currentCharId === charId,
       })}
     >
       {char}
-      {isHovering && <DefinitionPopover char={char} />}
     </span>
   );
 }
 
-function DefinitionPopover({ char }: { char: string }) {
+function Definition({ char }: { char: string }) {
   const { data } = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {
@@ -83,9 +298,8 @@ function DefinitionPopover({ char }: { char: string }) {
 
   return (
     <div
-      style={{ left: "100%", top: "1.5rem" }}
       className={clsx(
-        "absolute bg-white z-10  border-gray-500 border px-3 py-2 rounded-md shadow-md w-52 text-gray-800 overflow-scroll hyphens-auto"
+        "bg-white border-gray-500 border px-3 py-2 rounded-md shadow-md w-52 text-gray-800 overflow-scroll hyphens-auto"
       )}
     >
       <h3>{char}</h3>
