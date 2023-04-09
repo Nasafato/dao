@@ -10,7 +10,7 @@ import {
 import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { useQuery } from "@tanstack/react-query";
-import { createPortal } from "react-dom";
+import { createPortal, render } from "react-dom";
 
 type Dao = {
   id: number;
@@ -24,6 +24,7 @@ interface VerseProps {
 type Popover = {
   content: React.ReactNode;
   currentCharId: string | null;
+  element: HTMLElement | null;
   isOpen: boolean;
   width: number;
   height: number;
@@ -38,8 +39,10 @@ const DefinitionPopoverContext = createContext<{
     content,
     rect,
     currentCharId,
+    element,
   }: {
     content: React.ReactNode;
+    element: HTMLElement;
     rect: DOMRect;
     currentCharId: string;
   }) => void;
@@ -48,6 +51,7 @@ const DefinitionPopoverContext = createContext<{
 }>({
   popover: {
     content: null,
+    element: null,
     currentCharId: null,
     isOpen: false,
     width: 0,
@@ -72,6 +76,7 @@ const DefinitionPopoverContext = createContext<{
 function PopoverContextProvider({ children }: { children: React.ReactNode }) {
   const [popover, setPopover] = useState<Popover>({
     content: null,
+    element: null,
     currentCharId: null,
     isOpen: false,
     width: 0,
@@ -86,10 +91,12 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
 
   const renderPopover = ({
     content,
+    element,
     rect,
     currentCharId,
   }: {
     content: React.ReactNode;
+    element: HTMLElement;
     rect: DOMRect;
     currentCharId: string;
   }) => {
@@ -161,6 +168,7 @@ function PopoverContextProvider({ children }: { children: React.ReactNode }) {
     setPopover({
       isOpen: true,
       content,
+      element: element,
       currentCharId,
       width: popoverDimensions.width,
       height: popoverDimensions.height,
@@ -286,9 +294,34 @@ function Verse({ verse }: { verse: Dao }) {
 function Char({ char, charId }: { char: string; charId: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const { renderPopover, popover } = usePopover();
+  useEffect(() => {
+    // Handle resize
+    const handleResize = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      renderPopover({
+        content: <Definition char={char} />,
+        currentCharId: charId,
+        element: ref.current,
+        rect,
+      });
+    };
+
+    if (charId !== popover.currentCharId || !ref.current || !popover.isOpen) {
+      return;
+    }
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      // Remove event listener on cleanup
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [charId, popover.currentCharId, char, renderPopover, popover.isOpen]);
 
   return (
     <span
+      id={charId}
       ref={ref}
       onClick={() => {
         if (!ref.current) return;
@@ -296,11 +329,12 @@ function Char({ char, charId }: { char: string; charId: string }) {
         renderPopover({
           content: <Definition char={char} />,
           currentCharId: charId,
+          element: ref.current,
           rect,
         });
       }}
       className={clsx("relative", {
-        "text-green-600": popover.currentCharId === charId,
+        "text-green-600": popover.currentCharId === charId && popover.isOpen,
       })}
     >
       {char}
