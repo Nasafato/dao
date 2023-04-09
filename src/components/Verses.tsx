@@ -11,10 +11,12 @@ import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { createPortal, render } from "react-dom";
+import AudioPlayer from "./AudioPlayer";
 
 type Dao = {
   id: number;
   text: string;
+  audio: string;
 };
 
 interface VerseProps {
@@ -286,6 +288,7 @@ function Verse({ verse }: { verse: Dao }) {
   return (
     <div className="text-xl">
       <h2 className="text-gray-400 text-base">第{verse.id}章</h2>
+      {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />}
       <div>{text}</div>
     </div>
   );
@@ -295,6 +298,10 @@ function Char({ char, charId }: { char: string; charId: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const { renderPopover, popover } = usePopover();
   useEffect(() => {
+    if (charId !== popover.currentCharId || !ref.current || !popover.isOpen) {
+      return;
+    }
+
     // Handle resize
     const handleResize = () => {
       if (!ref.current) return;
@@ -307,9 +314,6 @@ function Char({ char, charId }: { char: string; charId: string }) {
       });
     };
 
-    if (charId !== popover.currentCharId || !ref.current || !popover.isOpen) {
-      return;
-    }
     // Add event listener
     window.addEventListener("resize", handleResize);
 
