@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
+/**
+ * To be honest, Murf.ai has the most natural sounding audio out of all the AI
+ * generated services, but the pro plan is $26/month.
+ *
+ * I'll try to find an open-source model.
+ */
 function AudioPlayer({ src }: { src: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
