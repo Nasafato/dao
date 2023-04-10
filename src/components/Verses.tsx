@@ -3,8 +3,8 @@ import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
 import { punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
-import AudioPlayer from "./AudioPlayer";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
+import { AudioPlayer } from "./HeadlessAudioPlayer";
 
 type DaoVerse = {
   id: number;
@@ -39,8 +39,27 @@ function Verse({ verse }: { verse: DaoVerse }) {
   });
   return (
     <div className="text-xl">
-      <h2 className="text-gray-400 text-base">第{verse.id}章</h2>
-      {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />}
+      <a
+        id={`dao${verse.id}`}
+        href={`#dao${verse.id}`}
+        className="text-gray-400 text-base pt-4"
+      >
+        第{verse.id}章
+      </a>
+      {verse.audio && (
+        <div className="py-2">
+          <audio controls src={`/audio/${verse.audio}`} />
+        </div>
+      )}
+      {/* {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />} */}
+      {/* {verse.audio && (
+        <AudioPlayer src={`/audio/${verse.audio}`}>
+          <AudioPlayer.PlayButton></AudioPlayer.PlayButton>
+          <AudioPlayer.ProgressTime></AudioPlayer.ProgressTime>
+          <AudioPlayer.ProgressBar></AudioPlayer.ProgressBar>
+          <AudioPlayer.Volume></AudioPlayer.Volume>
+        </AudioPlayer>
+      )} */}
       <div>{text}</div>
     </div>
   );
