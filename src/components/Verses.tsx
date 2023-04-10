@@ -13,14 +13,14 @@ import { useQuery } from "@tanstack/react-query";
 import { createPortal, render } from "react-dom";
 import AudioPlayer from "./AudioPlayer";
 
-type Dao = {
+type DaoVerse = {
   id: number;
   text: string;
-  audio: string;
+  audio?: string | undefined;
 };
 
 interface VerseProps {
-  verses: Dao[];
+  verses: DaoVerse[];
 }
 
 type Popover = {
@@ -277,7 +277,7 @@ export function Verses({ verses }: VerseProps) {
   );
 }
 
-function Verse({ verse }: { verse: Dao }) {
+function Verse({ verse }: { verse: DaoVerse }) {
   const chars = verse.text.split("");
   const text = chars.map((char, index) => {
     if (punctuation.includes(char)) {
