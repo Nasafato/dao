@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-/**
- * To be honest, Murf.ai has the most natural sounding audio out of all the AI
- * generated services, but the pro plan is $26/month.
- *
- * I'll try to find an open-source model.
- */
 function AudioPlayer({ src }: { src: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -14,14 +8,32 @@ function AudioPlayer({ src }: { src: string }) {
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
-    setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      if (currentTime === duration) {
+        setCurrentTime(0);
+      }
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
   };
 
   const handleLoadedMetadata = () => {
+    console.log("handling loaded metadata");
     if (!audioRef.current) return;
     console.log("loaded", audioRef.current.duration);
     setDuration(audioRef.current.duration);
   };
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    const ref = audioRef.current;
+    // Listen for onloaded
+    ref.addEventListener("loadedmetadata", handleLoadedMetadata);
+    return () => {
+      ref.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
+  });
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -39,7 +51,6 @@ function AudioPlayer({ src }: { src: string }) {
 
   const handleEnded = () => {
     setIsPlaying(false);
-    setCurrentTime(0);
   };
 
   useEffect(() => {
@@ -53,12 +64,7 @@ function AudioPlayer({ src }: { src: string }) {
 
   return (
     <div className="py-2 flex items-center gap-x-4">
-      <audio
-        src={src}
-        ref={audioRef}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={handleEnded}
-      />
+      <audio src={src} ref={audioRef} onEnded={handleEnded} />
       <button
         className="bg-gray-800 text-white rounded-full flex h-6 w-6 items-center justify-center focus:outline-none"
         onClick={togglePlayPause}

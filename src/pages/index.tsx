@@ -12,18 +12,14 @@ export default function Home({ recordings }: { recordings: string[] }) {
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <Verses
           verses={DAO_TEXT.map((verse, index) => {
-            for (const file of recordings) {
-              if (file.includes(`verse${index + 1}`)) {
-                return {
-                  id: index + 1,
-                  text: verse,
-                  audio: file,
-                };
-              }
-            }
+            const id = index + 1;
+            const audio = recordings.find((file) =>
+              file.includes(`dao${index < 10 ? "0" + id : id}`)
+            );
             return {
-              id: index + 1,
+              id,
               text: verse,
+              audio,
             };
           })}
         />
@@ -34,9 +30,5 @@ export default function Home({ recordings }: { recordings: string[] }) {
 
 export async function getStaticProps() {
   const files = await fs.readdir(`${process.cwd()}/public/audio`);
-  for (const file of files) {
-    console.log(file);
-  }
-
   return { props: { recordings: files } };
 }
