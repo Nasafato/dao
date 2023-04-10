@@ -19,9 +19,7 @@ function AudioPlayer({ src }: { src: string }) {
   };
 
   const handleLoadedMetadata = () => {
-    console.log("handling loaded metadata");
     if (!audioRef.current) return;
-    console.log("loaded", audioRef.current.duration);
     setDuration(audioRef.current.duration);
   };
 
