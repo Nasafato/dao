@@ -13,23 +13,13 @@ export default function Home({ recordings }: { recordings: string[] }) {
         <Verses
           verses={DAO_TEXT.map((verse, index) => {
             const id = index + 1;
-            const audio = recordings.find((file) =>
-              file.includes(`dao${index < 10 ? "0" + id : id}`)
-            );
             return {
               id,
               text: verse,
-              audio,
-              // audio: id === 1 ? audio : undefined,
             };
           })}
         />
       </div>
     </main>
   );
-}
-
-export async function getStaticProps() {
-  const files = await fs.readdir(`${process.cwd()}/public/audio`);
-  return { props: { recordings: files } };
 }

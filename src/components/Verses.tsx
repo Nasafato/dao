@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
-import { punctuation } from "../consts";
+import { CDN_URL, punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 import { AudioPlayer } from "./HeadlessAudioPlayer";
@@ -9,7 +9,6 @@ import { AudioPlayer } from "./HeadlessAudioPlayer";
 type DaoVerse = {
   id: number;
   text: string;
-  audio?: string | undefined;
 };
 
 interface VerseProps {
@@ -46,11 +45,13 @@ function Verse({ verse }: { verse: DaoVerse }) {
       >
         第{verse.id}章
       </a>
-      {/* {verse.audio && (
-        <div className="py-2">
-          <audio controls src={`/audio/${verse.audio}`} preload="metadata"/>
-        </div>
-      )} */}
+      <div className="py-2">
+        <audio
+          controls
+          src={`${CDN_URL}/dao${verse.id < 10 ? "0" + verse.id : verse.id}.mp3`}
+          preload="metadata"
+        />
+      </div>
       {/* {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />} */}
       {/* {verse.audio && (
         <AudioPlayer src={`/audio/${verse.audio}`}>
