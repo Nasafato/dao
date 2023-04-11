@@ -46,20 +46,20 @@ function Verse({ verse }: { verse: DaoVerse }) {
       >
         第{verse.id}章
       </a>
-      {verse.audio && (
+      {/* {verse.audio && (
         <div className="py-2">
-          <audio controls src={`/audio/${verse.audio}`} preload="metadata" />
+          <audio controls src={`/audio/${verse.audio}`} preload="metadata"/>
         </div>
-      )}
+      )} */}
       {/* {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />} */}
-      {verse.audio && (
+      {/* {verse.audio && (
         <AudioPlayer src={`/audio/${verse.audio}`}>
           <AudioPlayer.PlayButton></AudioPlayer.PlayButton>
           <AudioPlayer.ProgressTime></AudioPlayer.ProgressTime>
           <AudioPlayer.ProgressBar></AudioPlayer.ProgressBar>
           <AudioPlayer.Volume></AudioPlayer.Volume>
         </AudioPlayer>
-      )}
+      )} */}
       <div>{text}</div>
     </div>
   );
