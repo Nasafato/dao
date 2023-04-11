@@ -1,10 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "../setup";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
 import { CDN_URL, punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 import { AudioPlayer } from "./HeadlessAudioPlayer";
+import * as z from "zod";
+
+const DictionarySchema = z.record(dictionaryEntrySchema);
+
+type DictionarySchemaType = z.infer<typeof DictionarySchema>;
 
 type DaoVerse = {
   id: number;
@@ -16,6 +22,21 @@ interface VerseProps {
 }
 
 export function Verses({ verses }: VerseProps) {
+  useQuery({
+    queryKey: ["dictionary"],
+    queryFn: async () => {
+      const result = await fetch("/api/dictionary");
+      const json = await result.json();
+      const validated = DictionarySchema.parse(json);
+      return validated;
+    },
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    cacheTime: Infinity,
+  });
+
   return (
     <PopoverContextProvider>
       <div className="space-y-4">
@@ -122,6 +143,13 @@ function Definition({ char }: { char: string }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {
+      const dictionary = queryClient.getQueryData<DictionarySchemaType>([
+        "dictionary",
+      ]);
+      if (dictionary) {
+        const entry = dictionary[char];
+        return entry;
+      }
       if (!char) return;
       const r = await fetch(`/api/definition?char=${char}`);
       const result = await r.json();

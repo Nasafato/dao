@@ -1,6 +1,4 @@
-import { Html, Head, Main, NextScript } from "next/document";
-import { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { Head, Html, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
