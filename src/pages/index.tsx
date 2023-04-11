@@ -19,7 +19,8 @@ export default function Home({ recordings }: { recordings: string[] }) {
             return {
               id,
               text: verse,
-              audio: id === 1 ? audio : undefined,
+              audio,
+              // audio: id === 1 ? audio : undefined,
             };
           })}
         />

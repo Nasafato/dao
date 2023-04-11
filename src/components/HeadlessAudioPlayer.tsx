@@ -19,11 +19,13 @@ export function AudioPlayer({
   children,
   as,
   className,
+  preload = "metadata",
 }: {
   src: string;
-  as: any;
-  className: string;
+  as?: any;
+  className?: string;
   children: React.ReactNode;
+  preload?: string;
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -93,6 +95,7 @@ export function AudioPlayer({
       <audio
         src={src}
         ref={audioRef}
+        preload={preload}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
