@@ -1,13 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "../setup";
+import { PlayIcon, PauseIcon } from "@heroicons/react/20/solid";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
 import { CDN_URL, punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
-import { AudioPlayer } from "./HeadlessAudioPlayer";
 import * as z from "zod";
-import { MediaWindow, MediaWindowProvider } from "./MediaWindow";
+import {
+  MediaWindow,
+  MediaWindowProvider,
+  isPlayingAtom,
+  mediaSourceAtom,
+  durationAtom,
+  currentTimeAtom,
+  mediaTypeAtom,
+  volumeAtom,
+} from "./MediaWindow";
+import { useAtom } from "jotai";
 
 const DictionarySchema = z.record(dictionaryEntrySchema);
 
@@ -40,19 +50,38 @@ export function Verses({ verses }: VerseProps) {
 
   return (
     <PopoverContextProvider>
-      <MediaWindowProvider
-        defaultMediaSource={`${CDN_URL}/dao01.mp3`}
-        defaultMediaType="audio"
-      >
-        <div className="space-y-4">
-          {verses.map((verse) => {
-            return <Verse key={verse.id} verse={verse} />;
-          })}
-          <Popover />
-        </div>
-        <MediaWindow />
-      </MediaWindowProvider>
+      <div className="space-y-4">
+        {verses.map((verse) => {
+          return <Verse key={verse.id} verse={verse} />;
+        })}
+        <Popover />
+      </div>
+      <MediaWindow />
     </PopoverContextProvider>
+  );
+}
+
+function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
+  const [mediaSource, setMediaSource] = useAtom(mediaSourceAtom);
+  const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
+
+  return (
+    <button
+      className="h-5 w-5 bg-gray-200 rounded-full flex justify-center items-center text-gray-500 hover:bg-gray-300"
+      onClick={() => {
+        if (mediaSource !== verseMediaSource) {
+          setMediaSource(verseMediaSource);
+        } else {
+          setIsPlaying(!isPlaying);
+        }
+      }}
+    >
+      {isPlaying && mediaSource === verseMediaSource ? (
+        <PauseIcon className="h-3 w-3 " />
+      ) : (
+        <PlayIcon className="h-3 w-3" />
+      )}
+    </button>
   );
 }
 
@@ -64,24 +93,23 @@ function Verse({ verse }: { verse: DaoVerse }) {
     }
     return <Char key={index} char={char} charId={`${verse.id}-${index}`} />;
   });
+
+  const verseMediaSource = `${CDN_URL}/dao${
+    verse.id < 10 ? "0" + verse.id : verse.id
+  }.mp3`;
+
   return (
     <div className="text-xl">
-      <a
-        id={`dao${verse.id}`}
-        href={`#dao${verse.id}`}
-        className="text-gray-400 text-base pt-4"
-      >
-        第{verse.id}章
-      </a>
-      {/* {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />} */}
-      {/* {verse.audio && (
-        <AudioPlayer src={`/audio/${verse.audio}`}>
-          <AudioPlayer.PlayButton></AudioPlayer.PlayButton>
-          <AudioPlayer.ProgressTime></AudioPlayer.ProgressTime>
-          <AudioPlayer.ProgressBar></AudioPlayer.ProgressBar>
-          <AudioPlayer.Volume></AudioPlayer.Volume>
-        </AudioPlayer>
-      )} */}
+      <div className="flex items-center justify-between py-1 w-[80px]">
+        <a
+          id={`dao${verse.id}`}
+          href={`#dao${verse.id}`}
+          className="text-gray-400 text-base"
+        >
+          第{verse.id}章
+        </a>
+        <PlayPauseButton verseMediaSource={verseMediaSource} />
+      </div>
       <div>{text}</div>
     </div>
   );
