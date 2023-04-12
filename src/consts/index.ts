@@ -5,4 +5,4 @@ export const descriptiveVideos = {
   "15": ["https://www.youtube.com/watch?v=GNZKZBdgdQ8"],
 };
 
-export const CDN_URL = "https://daodejing.b-cdn.net/";
+export const CDN_URL = "https://daodejing.b-cdn.net";

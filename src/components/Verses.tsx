@@ -7,6 +7,7 @@ import { dictionaryEntrySchema } from "../types";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 import { AudioPlayer } from "./HeadlessAudioPlayer";
 import * as z from "zod";
+import { MediaWindow, MediaWindowProvider } from "./MediaWindow";
 
 const DictionarySchema = z.record(dictionaryEntrySchema);
 
@@ -39,12 +40,18 @@ export function Verses({ verses }: VerseProps) {
 
   return (
     <PopoverContextProvider>
-      <div className="space-y-4">
-        {verses.map((verse) => {
-          return <Verse key={verse.id} verse={verse} />;
-        })}
-        <Popover />
-      </div>
+      <MediaWindowProvider
+        defaultMediaSource={`${CDN_URL}/dao01.mp3`}
+        defaultMediaType="audio"
+      >
+        <div className="space-y-4">
+          {verses.map((verse) => {
+            return <Verse key={verse.id} verse={verse} />;
+          })}
+          <Popover />
+        </div>
+        <MediaWindow />
+      </MediaWindowProvider>
     </PopoverContextProvider>
   );
 }
@@ -66,13 +73,6 @@ function Verse({ verse }: { verse: DaoVerse }) {
       >
         第{verse.id}章
       </a>
-      <div className="py-2">
-        <audio
-          controls
-          src={`${CDN_URL}/dao${verse.id < 10 ? "0" + verse.id : verse.id}.mp3`}
-          preload="metadata"
-        />
-      </div>
       {/* {verse.audio && <AudioPlayer src={`/audio/${verse.audio}`} />} */}
       {/* {verse.audio && (
         <AudioPlayer src={`/audio/${verse.audio}`}>

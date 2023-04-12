@@ -166,17 +166,7 @@ export function ProgressBar({ className }: { className?: string }) {
   };
   return (
     <input
-      className={clsx(
-        className,
-        styles.range
-        // `
-        // appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full
-        // [&::-webkit-slider-runnable-track]:bg-gray-300 [&::-webkit-slider-thumb]:appearance-none
-        // h-3
-        // hover:[&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full
-        // [&::-webkit-slider-thumb]:bg-purple-500
-        // `
-      )}
+      className={clsx(className, styles.range)}
       type="range"
       min={0}
       max={duration}
