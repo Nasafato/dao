@@ -2,10 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "../setup";
 import { PlayIcon, PauseIcon } from "@heroicons/react/20/solid";
 import { clsx } from "clsx";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { CDN_URL, punctuation } from "../consts";
 import { dictionaryEntrySchema } from "../types";
-import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
+import {
+  DefinitionPopoverContext,
+  Popover,
+  PopoverContextProvider,
+  usePopover,
+} from "./VersesPopover";
 import * as z from "zod";
 import {
   MediaWindow,
@@ -43,6 +48,7 @@ export function Verses({ verses }: VerseProps) {
       const validated = DictionarySchema.parse(json);
       return validated;
     },
+    networkMode: "always",
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -53,6 +59,7 @@ export function Verses({ verses }: VerseProps) {
   return (
     <PopoverContextProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
+      {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-4">
         {verses.map((verse) => {
           return <Verse key={verse.id} verse={verse} />;
@@ -63,6 +70,11 @@ export function Verses({ verses }: VerseProps) {
     </PopoverContextProvider>
   );
 }
+
+// function DebugContext({ context }: { context: any }) {
+// const ctx = useContext(context);
+// return <pre>{JSON.stringify(ctx, null, 2)}</pre>;
+// }
 
 function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
   const [, changeMediaSource] = useAtom(changeMediaSourceAtom);
@@ -190,10 +202,11 @@ function Definition({ char }: { char: string }) {
       const result = await r.json();
       return dictionaryEntrySchema.parse(result);
     },
+    networkMode: "always",
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime: Infinity,
+    // staleTime: Infinity,
     enabled: !!char,
   });
 

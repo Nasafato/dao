@@ -23,7 +23,7 @@ const RESPONSIVE_DIMENSIONS = {
   },
 };
 
-const DefinitionPopoverContext = createContext<{
+export const DefinitionPopoverContext = createContext<{
   popover: Popover;
   updatePopover: (args: any) => void;
   renderPopover: ({
