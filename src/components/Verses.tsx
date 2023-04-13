@@ -9,13 +9,15 @@ import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 import * as z from "zod";
 import {
   MediaWindow,
-  MediaWindowProvider,
   isPlayingAtom,
   mediaSourceAtom,
   durationAtom,
   currentTimeAtom,
   mediaTypeAtom,
   volumeAtom,
+  DebugAtom,
+  mediaAtom,
+  changeMediaSourceAtom,
 } from "./MediaWindow";
 import { useAtom } from "jotai";
 
@@ -50,6 +52,7 @@ export function Verses({ verses }: VerseProps) {
 
   return (
     <PopoverContextProvider>
+      {/* <DebugAtom atom={mediaAtom} /> */}
       <div className="space-y-4">
         {verses.map((verse) => {
           return <Verse key={verse.id} verse={verse} />;
@@ -62,6 +65,7 @@ export function Verses({ verses }: VerseProps) {
 }
 
 function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
+  const [, changeMediaSource] = useAtom(changeMediaSourceAtom);
   const [mediaSource, setMediaSource] = useAtom(mediaSourceAtom);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
 
@@ -70,7 +74,10 @@ function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
       className="h-5 w-5 bg-gray-200 rounded-full flex justify-center items-center text-gray-500 hover:bg-gray-300"
       onClick={() => {
         if (mediaSource !== verseMediaSource) {
-          setMediaSource(verseMediaSource);
+          changeMediaSource({
+            mediaSource: verseMediaSource,
+            mediaType: "audio",
+          });
         } else {
           setIsPlaying(!isPlaying);
         }

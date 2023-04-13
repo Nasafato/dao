@@ -17,188 +17,69 @@ import { useLogPropChanges } from "../hooks";
 
 // MediaWindowContext.tsx
 
-export const isPlayingAtom = atom(false);
-export const currentTimeAtom = atom(0);
-export const durationAtom = atom(0);
-export const volumeAtom = atom(0.5);
-export const mediaTypeAtom = atom("audio");
-export const mediaSourceAtom = atom<string | null>(null);
-
-export const AudioContext = createContext<{
-  audioRef: MutableRefObject<HTMLAudioElement | null>;
-  // @ts-ignore
-}>({});
-
-type MediaWindowContextType = {
-  mediaType: string | null;
-  setMediaType: (mediaType: string | null) => void;
-  mediaSource: string | null;
-  setMediaSource: (mediaSource: string | null) => void;
+export const mediaAtom = atom<{
   isPlaying: boolean;
-  setIsPlaying: (isPlaying: boolean) => void;
   currentTime: number;
-  setCurrentTime: (currentTime: number) => void;
   duration: number;
-  setDuration: (duration: number) => void;
   volume: number;
-  setVolume: (volume: number) => void;
-  handlePlayPause: () => void;
-  handleTimeUpdate: (time: number) => void;
-  handleDurationChange: (duration: number) => void;
-  handleVolumeChange: (volume: number) => void;
-  handleSeek: (time: number) => void;
-  changeMediaSource: (
-    mediaSource: string,
-    options?: { type: string; reset: boolean }
-  ) => void;
-};
-
-const MediaWindowContext = createContext<MediaWindowContextType>({
-  mediaType: null,
-  setMediaType: () => {},
-  mediaSource: null,
-  setMediaSource: () => {},
+  mediaType: string;
+  mediaSource: string | null;
+}>({
   isPlaying: false,
-  setIsPlaying: () => {},
   currentTime: 0,
-  setCurrentTime: () => {},
   duration: 0,
-  setDuration: () => {},
-  volume: 1,
-  setVolume: () => {},
-  handlePlayPause: () => {},
-  handleTimeUpdate: () => {},
-  handleDurationChange: () => {},
-  handleVolumeChange: () => {},
-  handleSeek: () => {},
-  changeMediaSource: () => {},
+  volume: 0.5,
+  mediaType: "audio",
+  mediaSource: null,
 });
 
-export const useMediaWindowContext = () => useContext(MediaWindowContext);
-
-export const useAudioContext = () => useContext(AudioContext);
-
-export function MediaWindowProvider({
-  defaultMediaSource,
-  defaultMediaType,
-  children,
-}: {
-  children: React.ReactNode;
-  defaultMediaSource?: string | null;
-  defaultMediaType?: string | null;
-}) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [mediaType, setMediaType] = useState<string | null>(
-    defaultMediaType ?? null
-  );
-  const [mediaSource, setMediaSource] = useState<string | null>(
-    defaultMediaSource ?? null
-  );
-
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleTimeUpdate = (time: number) => {
-    setCurrentTime(time);
-  };
-
-  const handleDurationChange = (duration: number) => {
-    setDuration(duration);
-  };
-
-  const handleVolumeChange = (volume: number) => {
-    setVolume(volume);
-  };
-
-  const handleSeek = (time: number) => {
-    setCurrentTime(time);
-  };
-
-  return (
-    <AudioContext.Provider value={{ audioRef }}>
-      <MediaWindowContext.Provider
-        value={{
-          changeMediaSource: (
-            mediaSource: string,
-            options = { type: "audio", reset: true }
-          ) => {
-            setMediaSource(mediaSource);
-            if (options.reset) {
-              setCurrentTime(0);
-            }
-          },
-          mediaType,
-          setMediaType,
-          mediaSource,
-          setMediaSource,
-          isPlaying,
-          setIsPlaying,
-          currentTime,
-          setCurrentTime,
-          duration,
-          setDuration,
-          volume,
-          setVolume,
-          handlePlayPause,
-          handleTimeUpdate,
-          handleDurationChange,
-          handleVolumeChange,
-          handleSeek,
-        }}
-      >
-        {children}
-      </MediaWindowContext.Provider>
-    </AudioContext.Provider>
-  );
+export function DebugAtom({ atom }: { atom: any }) {
+  const [value] = useAtom(atom);
+  return <pre>{JSON.stringify(value, null, 2)}</pre>;
 }
 
-function PlaybackController() {
-  const { audioRef } = useAudioContext();
-  const { isPlaying } = useMediaWindowContext();
+export const isPlayingAtom = atom(
+  (get) => get(mediaAtom).isPlaying,
+  (get, set, isPlaying: boolean) =>
+    set(mediaAtom, { ...get(mediaAtom), isPlaying })
+);
+export const currentTimeAtom = atom((get) => get(mediaAtom).currentTime);
+export const durationAtom = atom((get) => get(mediaAtom).duration);
+export const volumeAtom = atom((get) => get(mediaAtom).volume);
+export const mediaTypeAtom = atom((get) => get(mediaAtom).mediaType);
+export const mediaSourceAtom = atom(
+  (get) => get(mediaAtom).mediaSource,
+  (get, set, mediaSource: string) => {
+    set(mediaAtom, { ...get(mediaAtom), mediaSource });
+  }
+);
 
-  console.log("rerendering");
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+export const changeMediaSourceAtom = atom(
+  null,
+  (
+    get,
+    set,
+    {
+      mediaSource,
+      mediaType = "audio",
+      startPlaying = true,
+    }: { mediaSource: string; mediaType?: string; startPlaying?: boolean }
+  ) => {
+    const currentMediaSource = get(mediaSourceAtom);
+    if (currentMediaSource === mediaSource) {
+      return;
     }
-  }, [isPlaying, audioRef]);
-
-  return null;
-}
+    set(mediaAtom, {
+      ...get(mediaAtom),
+      mediaSource,
+      mediaType,
+      currentTime: 0,
+      isPlaying: startPlaying,
+    });
+  }
+);
 
 export function MediaWindow() {
-  // const {
-  //   isPlaying,
-  //   mediaType,
-  //   setIsPlaying,
-  //   setDuration,
-  //   volume,
-  //   setVolume,
-  //   ...ctx
-  // } = useMediaWindowContext();
-  // const { audioRef } = useAudioContext();
-
-  // console.log("rerendering media window");
-  // const mediaSource = useMemo(() => {
-  //   return ctx.mediaSource;
-  // }, [ctx.mediaSource]);
-
-  // useEffect(() => {
-  //   console.log("prop ctx changed to", ctx);
-  // }, [ctx]);
-
-  // useLogPropChanges({ mediaSource, isPlaying, audioRef });
-
   const [mediaSource] = useAtom(mediaSourceAtom);
   const [mediaType] = useAtom(mediaTypeAtom);
   const [isPlaying] = useAtom(isPlayingAtom);
@@ -213,7 +94,6 @@ export function MediaWindow() {
       }
     }
   }, [isPlaying]);
-  // const cachedMediaSource = useRef<string | null>(mediaSource);
 
   // useEffect(() => {
   //   if (cachedMediaSource.current === mediaSource) {
@@ -266,7 +146,6 @@ export function MediaWindow() {
 
   return (
     <div className="fixed bottom-0 px-3 py-2 border-t border-gray-200 w-full bg-white shadow-md left-0 flex justify-center items-center">
-      {/* {mediaType === "audio" && mediaSource && audioComponent} */}
       <audio
         controls
         src={mediaSource}
@@ -276,11 +155,3 @@ export function MediaWindow() {
     </div>
   );
 }
-
-export function Player() {
-  const { isPlaying } = useMediaWindowContext();
-
-  return <audio></audio>;
-}
-
-export function AudioWindow() {}
