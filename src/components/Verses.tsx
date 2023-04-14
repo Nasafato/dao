@@ -1,30 +1,25 @@
+import {
+  PauseIcon,
+  PlayIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
-import { queryClient } from "../setup";
-import { PlayIcon, PauseIcon } from "@heroicons/react/20/solid";
 import { clsx } from "clsx";
-import { useContext, useEffect, useRef } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useRef, useState } from "react";
+import * as z from "zod";
 import { CDN_URL, punctuation } from "../consts";
+import { queryClient } from "../setup";
 import { dictionaryEntrySchema } from "../types";
 import {
-  DefinitionPopoverContext,
-  Popover,
-  PopoverContextProvider,
-  usePopover,
-} from "./VersesPopover";
-import * as z from "zod";
-import {
   MediaWindow,
+  changeMediaSourceAtom,
   isPlayingAtom,
   mediaSourceAtom,
-  durationAtom,
-  currentTimeAtom,
-  mediaTypeAtom,
-  volumeAtom,
-  DebugAtom,
-  mediaAtom,
-  changeMediaSourceAtom,
 } from "./MediaWindow";
-import { useAtom } from "jotai";
+import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 
 const DictionarySchema = z.record(dictionaryEntrySchema);
 
@@ -60,7 +55,7 @@ export function Verses({ verses }: VerseProps) {
     <PopoverContextProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {verses.map((verse) => {
           return <Verse key={verse.id} verse={verse} />;
         })}
@@ -71,40 +66,8 @@ export function Verses({ verses }: VerseProps) {
   );
 }
 
-// function DebugContext({ context }: { context: any }) {
-// const ctx = useContext(context);
-// return <pre>{JSON.stringify(ctx, null, 2)}</pre>;
-// }
-
-function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
-  const [, changeMediaSource] = useAtom(changeMediaSourceAtom);
-  const [mediaSource, setMediaSource] = useAtom(mediaSourceAtom);
-  const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
-
-  return (
-    <button
-      className="h-5 w-5 bg-gray-200 rounded-full flex justify-center items-center text-gray-500 hover:bg-gray-300"
-      onClick={() => {
-        if (mediaSource !== verseMediaSource) {
-          changeMediaSource({
-            mediaSource: verseMediaSource,
-            mediaType: "audio",
-          });
-        } else {
-          setIsPlaying(!isPlaying);
-        }
-      }}
-    >
-      {isPlaying && mediaSource === verseMediaSource ? (
-        <PauseIcon className="h-3 w-3 " />
-      ) : (
-        <PlayIcon className="h-3 w-3" />
-      )}
-    </button>
-  );
-}
-
 function Verse({ verse }: { verse: DaoVerse }) {
+  const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
   const text = chars.map((char, index) => {
     if (punctuation.includes(char)) {
@@ -130,8 +93,53 @@ function Verse({ verse }: { verse: DaoVerse }) {
         <PlayPauseButton verseMediaSource={verseMediaSource} />
       </div>
       <div>{text}</div>
+      {/* <hr className="mt-2" /> */}
+      <button
+        className="mb-2 mt-4 text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 flex items-center gap-x-1"
+        onClick={() => {
+          setShowDescription(!showDescription);
+        }}
+      >
+        Description{" "}
+        {showDescription ? (
+          <XMarkIcon className="h-2 w-2" />
+        ) : (
+          <ArrowDownIcon className="h-2 w-2" />
+        )}
+      </button>
+      {showDescription && <Description verseId={verse.id} />}
     </div>
   );
+}
+
+function Description({ verseId }: { verseId: number }) {
+  const { data } = useQuery({
+    queryKey: ["description", verseId],
+    queryFn: async () => {
+      const res = await fetch(`/api/description?verseId=${verseId}`);
+      const json = await res.json();
+      return json as string;
+    },
+  });
+
+  if (!data) {
+    return null;
+  }
+  const chars = data.split("");
+  const text = chars.map((char, index) => {
+    if (punctuation.includes(char)) {
+      return char;
+    }
+    return (
+      <Char
+        key={index}
+        char={char}
+        charId={`${verseId}-description-${index}`}
+      />
+    );
+  });
+
+  return <div>{text}</div>;
 }
 
 function Char({ char, charId }: { char: string; charId: string }) {
@@ -142,7 +150,6 @@ function Char({ char, charId }: { char: string; charId: string }) {
       return;
     }
 
-    // Handle resize
     const handleResize = () => {
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
@@ -154,11 +161,9 @@ function Char({ char, charId }: { char: string; charId: string }) {
       });
     };
 
-    // Add event listener
     window.addEventListener("resize", handleResize);
 
     return () => {
-      // Remove event listener on cleanup
       window.removeEventListener("resize", handleResize);
     };
   }, [charId, popover.currentCharId, char, renderPopover, popover.isOpen]);
@@ -236,5 +241,33 @@ function Definition({ char }: { char: string }) {
           ))}
       </ul>
     </div>
+  );
+}
+
+function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
+  const [, changeMediaSource] = useAtom(changeMediaSourceAtom);
+  const [mediaSource, setMediaSource] = useAtom(mediaSourceAtom);
+  const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
+
+  return (
+    <button
+      className="h-5 w-5 bg-gray-200 rounded-full flex justify-center items-center text-gray-500 hover:bg-gray-300"
+      onClick={() => {
+        if (mediaSource !== verseMediaSource) {
+          changeMediaSource({
+            mediaSource: verseMediaSource,
+            mediaType: "audio",
+          });
+        } else {
+          setIsPlaying(!isPlaying);
+        }
+      }}
+    >
+      {isPlaying && mediaSource === verseMediaSource ? (
+        <PauseIcon className="h-3 w-3 " />
+      ) : (
+        <PlayIcon className="h-3 w-3" />
+      )}
+    </button>
   );
 }

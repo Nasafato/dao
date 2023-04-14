@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import DAO_DICT from "@/fixtures/dao-dictionary.json";
+import DAO_DICT from "./fixtures/dao-combined-dictionary.json";
 import { dictionaryEntrySchema, DictionaryEntry } from "@/types";
 
 type DICT = Record<string, DictionaryEntry>;

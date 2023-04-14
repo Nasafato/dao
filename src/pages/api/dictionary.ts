@@ -1,4 +1,4 @@
-import DAO_DICT from "@/fixtures/dao-dictionary.json";
+import DAO_DICT from "./fixtures/dao-combined-dictionary.json";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
