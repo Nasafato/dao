@@ -14,7 +14,7 @@ function augmentDictionary() {
     },
   };
 
-  fs.writeFileSync("dictionary.json", JSON.stringify(dictionary, null, 2));
+  fs.writeFileSync("dictionary.json", JSON.stringify(dictionary));
 }
 
 if (require.main === module) {

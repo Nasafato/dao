@@ -42,10 +42,7 @@ module.exports = {
       daoDict[c] = dictionary[c];
     }
 
-    fs.writeFileSync(
-      "descriptions-dictionary.json",
-      JSON.stringify(daoDict, null, 2)
-    );
+    fs.writeFileSync("descriptions-dictionary.json", JSON.stringify(daoDict));
   },
 };
 

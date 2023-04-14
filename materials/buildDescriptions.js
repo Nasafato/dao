@@ -33,7 +33,7 @@ module.exports = {
     }
     fs.writeFileSync(
       "./dao-descriptions.json",
-      JSON.stringify(descriptionsIndex, null, 2)
+      JSON.stringify(descriptionsIndex)
     );
   },
 };

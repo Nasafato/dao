@@ -39,7 +39,7 @@ function buildDaoDictionary() {
     daoDict[c] = dictionary[c];
   }
 
-  fs.writeFileSync("dao-dictionary.json", JSON.stringify(daoDict, null, 2));
+  fs.writeFileSync("dao-dictionary.json", JSON.stringify(daoDict));
 }
 
 if (require.main === module) {

@@ -16,6 +16,6 @@ module.exports = {
       });
     }
 
-    fs.writeFileSync("./dao-combined.json", JSON.stringify(combined, null, 2));
+    fs.writeFileSync("./dao-combined.json", JSON.stringify(combined));
   },
 };

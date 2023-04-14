@@ -51,7 +51,7 @@ function build(dict) {
 function buildDictionary() {
   const dict = readDict();
   const dictionary = build(dict);
-  fs.writeFileSync("dictionary.json", JSON.stringify(dictionary, null, 2));
+  fs.writeFileSync("dictionary.json", JSON.stringify(dictionary));
 }
 
 if (require.main === module) {
