@@ -7,6 +7,7 @@ export default function Document() {
       <body>
         <Main />
         <div id="popover-portal"></div>
+        <div id="command-palette-portal"></div>
         <NextScript />
       </body>
     </Html>

@@ -20,6 +20,7 @@ import {
   mediaSourceAtom,
 } from "./MediaWindow";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
+import { CommandPalette } from "./CommandPalette";
 
 const DictionarySchema = z.record(dictionaryEntrySchema);
 
@@ -62,6 +63,7 @@ export function Verses({ verses }: VerseProps) {
         <Popover />
       </div>
       <MediaWindow />
+      <CommandPalette />
     </PopoverContextProvider>
   );
 }
@@ -120,6 +122,7 @@ function Description({ verseId }: { verseId: number }) {
       const json = await res.json();
       return json as string;
     },
+    networkMode: "always",
   });
 
   if (!data) {
