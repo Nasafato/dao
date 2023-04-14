@@ -5,7 +5,7 @@ module.exports = {
     const descriptions = JSON.parse(fs.readFileSync("./dao-descriptions.json"));
     const texts = JSON.parse(fs.readFileSync("./dao.json"));
 
-    const combined = [];
+    const combined = {};
     for (let i = 0; i < 80; i++) {
       const text = texts[i];
       const description = descriptions[i + 1];

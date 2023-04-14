@@ -13,10 +13,13 @@ import React, {
   MutableRefObject,
 } from "react";
 import { useLogPropChanges } from "../hooks";
+import { tryParseDaoIndex } from "../utils";
 // import MediaControls from "./MediaControls";
 // import { AudioPlayer } from "./HeadlessAudioPlayer";
 
 // MediaWindowContext.tsx
+
+const DAO_HREF_PATTERN = /^#dao([1-81])$/;
 
 const commandPaletteAtom = atom({
   isOpen: false,
@@ -53,9 +56,38 @@ export function CommandPalette() {
         setIsOpen(false);
       }
     };
-
     window.addEventListener("keydown", handleKeyboardEvent);
+    return () => {
+      window.removeEventListener("keydown", handleKeyboardEvent);
+    };
+  }, [isOpen]);
 
+  useEffect(() => {
+    const handleKeyboardEvent = (e: KeyboardEvent) => {
+      if (isOpen) {
+        return;
+      }
+      if (e.metaKey || e.altKey || e.ctrlKey) {
+        return;
+      }
+      const key = e.key.toLowerCase();
+      if (key === "j" || key === "k") {
+        console.log(key);
+        const href = "#" + location.href.split("#")[1];
+        console.log("href", href);
+        const matches = href.match(DAO_HREF_PATTERN);
+        console.log("matches");
+        if (!matches) {
+          return;
+        }
+        let verseId = tryParseDaoIndex(matches[1]) ?? 1;
+        const incrementOrDecrement = key === "j" ? -1 : 1;
+        verseId = (verseId + incrementOrDecrement) % 81;
+        // Later, try to find the dao index nearest to the top of the screen.
+        location.href = `#dao${verseId}`;
+      }
+    };
+    window.addEventListener("keydown", handleKeyboardEvent);
     return () => {
       window.removeEventListener("keydown", handleKeyboardEvent);
     };
@@ -66,6 +98,14 @@ export function CommandPalette() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const tryParse = Number.parseInt(value, 10);
+    if (!Number.isNaN(tryParse) && tryParse <= 81 && tryParse >= 1) {
+      location.href = `#dao${tryParse}`;
+      setValue("");
+      setPreview("");
+      setIsOpen(false);
+    }
+
     if (value.startsWith("g")) {
       const rest = value.slice(1);
       const number = Number.parseInt(rest, 10);
