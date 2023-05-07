@@ -68,6 +68,14 @@ export function Verses({ verses }: VerseProps) {
   );
 }
 
+function fetchVerseMediaSource(
+  verseId: number,
+  options: { type: "human" | "generated" } = { type: "human" }
+) {
+  const type = options.type === "human" ? "human" : "generated";
+  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
+}
+
 function Verse({ verse }: { verse: DaoVerse }) {
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
@@ -78,9 +86,7 @@ function Verse({ verse }: { verse: DaoVerse }) {
     return <Char key={index} char={char} charId={`${verse.id}-${index}`} />;
   });
 
-  const verseMediaSource = `${CDN_URL}/dao${
-    verse.id < 10 ? "0" + verse.id : verse.id
-  }.mp3`;
+  const verseMediaSource = fetchVerseMediaSource(verse.id);
 
   return (
     <div className="text-xl">

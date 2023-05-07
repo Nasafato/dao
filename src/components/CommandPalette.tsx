@@ -82,6 +82,7 @@ export function CommandPalette() {
         }
         let verseId = tryParseDaoIndex(matches[1]) ?? 1;
         const incrementOrDecrement = key === "k" ? -2 : 2;
+        // console.log(`${}`)
         verseId = ((verseId + incrementOrDecrement) % 81) + 1;
         // Later, try to find the dao index nearest to the top of the screen.
         location.href = `#dao${verseId}`;
