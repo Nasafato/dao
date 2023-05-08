@@ -3,21 +3,6 @@
 // Workbox RuntimeCaching config: https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry
 module.exports = [
   {
-    urlPattern: ({ url }) => {
-      const isSameOrigin = self.origin === url.origin;
-      return !isSameOrigin;
-    },
-    handler: "NetworkFirst",
-    options: {
-      cacheName: "cross-origin",
-      expiration: {
-        maxEntries: 32,
-        maxAgeSeconds: 60 * 60, // 1 hour
-      },
-      networkTimeoutSeconds: 10,
-    },
-  },
-  {
     urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,
     handler: "CacheFirst",
     options: {
@@ -77,6 +62,17 @@ module.exports = [
     handler: "CacheFirst",
     options: {
       rangeRequests: true,
+      cacheName: "static-audio-assets",
+      expiration: {
+        maxEntries: 200,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 24 hours
+      },
+    },
+  },
+  {
+    urlPattern: /\.(?:mp3|wav|ogg)$/i,
+    handler: "CacheFirst",
+    options: {
       cacheName: "static-audio-assets",
       expiration: {
         maxEntries: 200,
@@ -177,6 +173,21 @@ module.exports = [
       expiration: {
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      },
+      networkTimeoutSeconds: 10,
+    },
+  },
+  {
+    urlPattern: ({ url }) => {
+      const isSameOrigin = self.origin === url.origin;
+      return !isSameOrigin;
+    },
+    handler: "NetworkFirst",
+    options: {
+      cacheName: "cross-origin",
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 60 * 60, // 1 hour
       },
       networkTimeoutSeconds: 10,
     },
