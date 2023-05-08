@@ -1,7 +1,7 @@
 import { precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
-import { cacheData } from "./utils/cache";
+import { cacheData } from "../src/utils/cache";
 
 precacheAndRoute(self.__WB_MANIFEST);
 

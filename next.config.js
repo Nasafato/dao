@@ -8,8 +8,7 @@ const nextConfig = {
     if (!isServer && !dev) {
       config.plugins.push(
         new InjectManifest({
-          swSrc: "./src/service-worker.js",
-          swDest: "service-worker.js",
+          swSrc: "./public/service-worker.js",
           exclude: [/\.map$/, /_app.js$/, /_document.js$/, /_error.js$/],
           maximumFileSizeToCacheInBytes: 10000000,
         })
