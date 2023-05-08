@@ -21,6 +21,8 @@ import {
 } from "./MediaWindow";
 import { Popover, PopoverContextProvider, usePopover } from "./VersesPopover";
 import { CommandPalette } from "./CommandPalette";
+import { buildMediaSourceUrl } from "../utils/cache";
+import { DownloadAudioButton } from "./DownloadAudioButton";
 
 const DictionarySchema = z.record(dictionaryEntrySchema);
 
@@ -68,14 +70,6 @@ export function Verses({ verses }: VerseProps) {
   );
 }
 
-function fetchVerseMediaSource(
-  verseId: number,
-  options: { type: "human" | "generated" } = { type: "human" }
-) {
-  const type = options.type === "human" ? "human" : "generated";
-  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
-}
-
 function Verse({ verse }: { verse: DaoVerse }) {
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
@@ -86,7 +80,7 @@ function Verse({ verse }: { verse: DaoVerse }) {
     return <Char key={index} char={char} charId={`${verse.id}-${index}`} />;
   });
 
-  const verseMediaSource = fetchVerseMediaSource(verse.id);
+  const verseMediaSource = buildMediaSourceUrl(verse.id);
 
   return (
     <div className="text-xl">
@@ -99,6 +93,7 @@ function Verse({ verse }: { verse: DaoVerse }) {
           第{verse.id}章
         </a>
         <PlayPauseButton verseMediaSource={verseMediaSource} />
+        <DownloadAudioButton src={verseMediaSource} />
       </div>
       <div>{text}</div>
       {/* <hr className="mt-2" /> */}
