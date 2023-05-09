@@ -12,6 +12,12 @@ export interface Env {
   DAO_BUCKET: R2Bucket;
 }
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "http://localhost:3000",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
 const worker = {
   async fetch(
     request: Request,
@@ -28,7 +34,9 @@ const worker = {
           return new Response("Not found", { status: 404 });
         }
 
-        const headers = new Headers();
+        const headers = new Headers({
+          ...corsHeaders,
+        });
         object.writeHttpMetadata(headers);
         headers.set("etag", object.httpEtag);
 

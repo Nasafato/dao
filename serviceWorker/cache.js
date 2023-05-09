@@ -70,17 +70,6 @@ module.exports = [
     },
   },
   {
-    urlPattern: /\.(?:mp3|wav|ogg)$/i,
-    handler: "CacheFirst",
-    options: {
-      cacheName: "static-audio-assets",
-      expiration: {
-        maxEntries: 200,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 24 hours
-      },
-    },
-  },
-  {
     urlPattern: /\.(?:mp4)$/i,
     handler: "CacheFirst",
     options: {

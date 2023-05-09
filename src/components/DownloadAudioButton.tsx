@@ -2,23 +2,28 @@ import { useEffect, useState } from "react";
 
 export function DownloadAudioButton({ src }: { src: string }) {
   const [isCached, setIsCached] = useState(false);
+  const fileName = src.split("/").pop() || "";
   useEffect(() => {
     const checkCache = async () => {
-      const isCached = await isAudioCached(src);
+      const isCached = await isAudioCached(fileName);
       setIsCached(isCached);
     };
     checkCache();
-  }, [src]);
-
-  if (isCached) {
-    return <div>Downloaded</div>;
-  }
+  }, [fileName]);
 
   const onClick = () => {
     fetch(src);
   };
 
-  return <button onClick={onClick}>Download</button>;
+  if (isCached) {
+    return <div>Downloaded</div>;
+  }
+
+  return (
+    <button onClick={onClick} type="button">
+      Download
+    </button>
+  );
 }
 
 async function isAudioCached(audioUrl: string) {
@@ -26,7 +31,7 @@ async function isAudioCached(audioUrl: string) {
     return false;
   }
 
-  const cacheName = "static-audio-assets"; // Replace with the name of the cache you used in the service worker
+  const cacheName = "cross-origin"; // Replace with the name of the cache you used in the service worker
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(audioUrl);
 
