@@ -2,17 +2,42 @@ import { useCallback, useEffect, useState } from "react";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   const [isCached, setIsCached] = useState(false);
+
   const checkCache = useCallback(async () => {
     const isCached = await isAudioCached(audioUrl);
     setIsCached(isCached);
   }, [audioUrl]);
 
   useEffect(() => {
-    checkCache();
+    function handleMessage(event: MessageEvent) {
+      if (event.data === "audio-cached") {
+        checkCache();
+      }
+    }
+
+    navigator.serviceWorker.addEventListener("message", handleMessage);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener("message", handleMessage);
+    };
   }, [checkCache]);
 
   const onClick = async () => {
-    await fetch(audioUrl);
+    // await fetch(audioUrl);
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    // Send a message to the service worker to cache the audio file
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        action: "cache-audio",
+        audioUrl,
+        signal,
+      });
+    }
+
+    // Wait for the service worker to cache the audio file
+    await navigator.serviceWorker.ready;
     await checkCache();
   };
 
