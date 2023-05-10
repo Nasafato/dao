@@ -9,17 +9,6 @@
  */
 
 export interface Env {
-  // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-  // MY_KV_NAMESPACE: KVNamespace;
-  //
-  // Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-  // MY_DURABLE_OBJECT: DurableObjectNamespace;
-  //
-  // Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-  // MY_BUCKET: R2Bucket;
-  //
-  // Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
-  // MY_SERVICE: Fetcher;
   DAO_BUCKET: R2Bucket;
 }
 
@@ -43,6 +32,12 @@ const worker = {
         object.writeHttpMetadata(headers);
         headers.set("etag", object.httpEtag);
 
+        const origin = request.headers.get("origin");
+        if (origin && isAllowedOrigin(origin)) {
+          headers.set("Access-Control-Allow-Origin", origin);
+          headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+          headers.set("Access-Control-Allow-Headers", "Content-Type");
+        }
         return new Response(object.body, { headers });
       default:
         return new Response("Method Not Allowed", {
@@ -56,3 +51,20 @@ const worker = {
 };
 
 export default worker;
+
+function isAllowedOrigin(origin: string) {
+  if (!origin) {
+    return false;
+  }
+  const allowedOrigins = [
+    "http://localhost:3000",
+    /^https:\/\/dao.*nasafato\.vercel\.app$/,
+    "https://daodejing.app",
+  ];
+
+  return allowedOrigins.some((allowedOrigin) =>
+    typeof allowedOrigin === "string"
+      ? origin === allowedOrigin
+      : origin.match(allowedOrigin)
+  );
+}
