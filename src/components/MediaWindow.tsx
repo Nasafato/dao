@@ -147,10 +147,11 @@ export function MediaWindow() {
   return (
     <div className="fixed bottom-0 px-3 py-2 border-t border-gray-200 w-full bg-white shadow-md left-0 flex justify-center items-center">
       <audio
+        // crossOrigin="anonymous"
         controls
         src={mediaSource}
         ref={audioRef}
-        preload="metadata"
+        // preload="metadata"
       ></audio>
     </div>
   );

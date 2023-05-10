@@ -93,6 +93,7 @@ export function AudioPlayer({
     >
       {element}
       <audio
+        crossOrigin="anonymous"
         src={src}
         ref={audioRef}
         preload={preload}
