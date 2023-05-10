@@ -1,3 +1,8 @@
+import {
+  ArrowDownTrayIcon,
+  //   CheckCircleIcon,
+  CheckIcon,
+} from "@heroicons/react/20/solid";
 import { useCallback, useEffect, useState } from "react";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
@@ -7,6 +12,10 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
     const isCached = await isAudioCached(audioUrl);
     setIsCached(isCached);
   }, [audioUrl]);
+
+  useEffect(() => {
+    checkCache();
+  }, [checkCache]);
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
@@ -39,12 +48,16 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   };
 
   if (isCached) {
-    return <div>Downloaded</div>;
+    return (
+      <div>
+        <CheckIcon className="text-green-500 w-4 h-4" />
+      </div>
+    );
   }
 
   return (
     <button onClick={onClick} type="button">
-      Download
+      <ArrowDownTrayIcon className="w-5 h-5 text-gray-800 hover:text-gray-600" />
     </button>
   );
 }

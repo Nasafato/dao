@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import DAO_DICT from "./fixtures/dao-combined-dictionary.json";
-import { dictionaryEntrySchema, DictionaryEntry } from "@/types";
+import { DictionaryEntrySchema, DictionaryEntry } from "@/types";
 
 type DICT = Record<string, DictionaryEntry>;
 const DAO_DICTIONARY = DAO_DICT as unknown as DICT;
@@ -21,6 +21,6 @@ export default function handler(
     res.status(404).json({ message: "Not found" });
     return;
   }
-  const validated = dictionaryEntrySchema.parse(entry);
+  const validated = DictionaryEntrySchema.parse(entry);
   res.status(200).json(validated);
 }
