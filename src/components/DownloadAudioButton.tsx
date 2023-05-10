@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 
-export function DownloadAudioButton({ src }: { src: string }) {
+export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   const [isCached, setIsCached] = useState(false);
-  const fileName = src.split("/").pop() || "";
   useEffect(() => {
     const checkCache = async () => {
-      const isCached = await isAudioCached(fileName);
+      const isCached = await isAudioCached(audioUrl);
       setIsCached(isCached);
     };
     checkCache();
-  }, [fileName]);
+  }, [audioUrl]);
 
   const onClick = () => {
-    fetch(src);
+    fetch(audioUrl);
   };
 
   if (isCached) {

@@ -93,7 +93,7 @@ function Verse({ verse }: { verse: DaoVerse }) {
           第{verse.id}章
         </a>
         <PlayPauseButton verseMediaSource={verseMediaSource} />
-        <DownloadAudioButton src={verseMediaSource} />
+        <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>
       <div>{text}</div>
       {/* <hr className="mt-2" /> */}
