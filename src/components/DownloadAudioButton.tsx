@@ -58,7 +58,7 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
       <button className="group">
         <Spinner
           className={clsx(
-            "w-5 h-5 mr-2 text-gray-200 dark:text-gray-600 fill-gray-800"
+            "w-5 h-5 mr-2 text-gray-200 dark:text-gray-400 fill-gray-800 dark:fill-gray-600"
           )}
         />
       </button>
@@ -67,7 +67,7 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
 
   return (
     <button onClick={onClick} type="button">
-      <ArrowDownTrayIcon className="w-5 h-5 text-gray-800 hover:text-gray-600" />
+      <ArrowDownTrayIcon className="w-5 h-5 text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200" />
     </button>
   );
 }
