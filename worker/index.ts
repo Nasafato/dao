@@ -67,3 +67,26 @@ self.addEventListener("message", async (event) => {
     event.source.postMessage("audio-cached");
   }
 });
+
+// self.addEventListener("fetch", (event) => {
+//   if (!event) return;
+
+//   const { request } = event;
+
+//   event.respondWith(
+//     (async function () {
+//       // Check if the request is in the cache
+//       const cache = await caches.open("cross-origin-dao-audio-assets");
+//       const cachedResponse = await cache.match(request.url);
+
+//       if (cachedResponse) {
+//         console.log("Serving from cache:", request.url);
+//         return cachedResponse;
+//       }
+
+//       console.log("Fetching from network:", request.url);
+//       const networkResponse = await fetch(request.url);
+//       return networkResponse;
+//     })()
+//   );
+// });

@@ -69,10 +69,7 @@ async function isAudioCached(audioUrl: string) {
 
   const cacheName = "cross-origin-dao-audio-assets"; // Replace with the name of the cache you used in the service worker
   const cache = await caches.open(cacheName);
-  console.log("cache", cache);
-  console.log("keys", await cache.keys());
   const cachedResponse = await cache.match(audioUrl);
-  console.log("cachd response", cachedResponse);
 
   return Boolean(cachedResponse);
 }
