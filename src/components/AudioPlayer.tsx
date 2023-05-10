@@ -62,7 +62,12 @@ function AudioPlayer({ src }: { src: string }) {
 
   return (
     <div className="py-2 flex items-center gap-x-4">
-      <audio src={src} ref={audioRef} onEnded={handleEnded} />
+      <audio
+        src={src}
+        ref={audioRef}
+        onEnded={handleEnded}
+        crossOrigin="anonymous"
+      />
       <button
         className="bg-gray-800 text-white rounded-full flex h-6 w-6 items-center justify-center focus:outline-none"
         onClick={togglePlayPause}
