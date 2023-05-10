@@ -1,4 +1,4 @@
-import { CDN_CACHE_NAME } from "../src/consts";
+import { DAO_CDN_MP3_CACHE, CDN_URL } from "../src/consts";
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -58,7 +58,7 @@ self.addEventListener("message", async (event) => {
     const response = await fetch(audioUrl);
 
     // Cache the audio file using the same cache name and strategy as in your runtimeCaching configuration
-    const cache = await caches.open(CDN_CACHE_NAME);
+    const cache = await caches.open(DAO_CDN_MP3_CACHE);
     await cache.put(audioUrl, response);
 
     // Send a message back to the component when caching is complete
@@ -66,25 +66,38 @@ self.addEventListener("message", async (event) => {
   }
 });
 
-// self.addEventListener("fetch", (event) => {
-//   if (!event) return;
+const DAO_CDN_MP3_PATTERN =
+  /^https:\/\/dao-worker\.daodejing\.workers\.dev\/.*\.mp3$/;
 
-//   const { request } = event;
+self.addEventListener("fetch", (event) => {
+  if (!event) return;
 
-//   event.respondWith(
-//     (async function () {
-//       // Check if the request is in the cache
-//       const cache = await caches.open("cross-origin-dao-audio-assets");
-//       const cachedResponse = await cache.match(request.url);
-
-//       if (cachedResponse) {
-//         console.log("Serving from cache:", request.url);
-//         return cachedResponse;
-//       }
-
-//       console.log("Fetching from network:", request.url);
-//       const networkResponse = await fetch(request.url);
-//       return networkResponse;
-//     })()
-//   );
-// });
+  const { request } = event;
+  console.log("request", request);
+  if (request.url.match(DAO_CDN_MP3_PATTERN)) {
+    console.log("matched mp3 pattern", request.mode);
+    event.respondWith(
+      (async function () {
+        // Check if the request is in the cache
+        const cache = await caches.open(DAO_CDN_MP3_CACHE);
+        const corsRequest = new Request(request, { mode: "cors" });
+        const cachedResponse = await cache.match(corsRequest);
+        if (cachedResponse) {
+          console.log("Serving from cache:", corsRequest);
+          return cachedResponse;
+        }
+        console.log("Fetching from network:", corsRequest);
+        const networkResponse = await fetch(corsRequest);
+        console.log("Cors request mode: ", corsRequest.mode);
+        await cache.put(corsRequest, networkResponse.clone());
+        const keys = await cache.keys();
+        console.log(
+          "Cache keys: ",
+          keys.map((key) => key.url),
+          keys.map((key) => key.mode)
+        );
+        return networkResponse;
+      })()
+    );
+  }
+});

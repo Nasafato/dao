@@ -4,7 +4,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 import { useCallback, useEffect, useState } from "react";
-import { CDN_CACHE_NAME } from "../consts";
+import { DAO_CDN_MP3_CACHE } from "../consts";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   const [isCached, setIsCached] = useState(false);
@@ -69,10 +69,8 @@ async function isAudioCached(audioUrl: string) {
     return false;
   }
 
-  const cache = await caches.open(CDN_CACHE_NAME);
-  console.log("cache", cache);
+  const cache = await caches.open(DAO_CDN_MP3_CACHE);
   const cachedResponse = await cache.match(audioUrl);
-  console.log("response", cachedResponse);
 
   return Boolean(cachedResponse);
 }

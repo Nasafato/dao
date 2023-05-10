@@ -37,6 +37,7 @@ const worker = {
           headers.set("Access-Control-Allow-Origin", origin);
           headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
           headers.set("Access-Control-Allow-Headers", "Content-Type");
+          headers.set("Access-Control-Allow-Credentials", "true");
         }
         return new Response(object.body, { headers });
       default:
