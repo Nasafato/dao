@@ -1,7 +1,7 @@
 import * as z from "zod";
 
-export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>;
-export const dictionaryEntrySchema = z.object({
+export type DictionaryEntry = z.infer<typeof DictionaryEntrySchema>;
+export const DictionaryEntrySchema = z.object({
   spelling: z.string(),
   source: z.string(),
   traditional: z.string().optional(),
@@ -12,3 +12,12 @@ export const dictionaryEntrySchema = z.object({
     chinese: z.array(z.string()).optional(),
   }),
 });
+
+export const DictionarySchema = z.record(DictionaryEntrySchema);
+
+export type DictionarySchemaType = z.infer<typeof DictionarySchema>;
+
+export type DaoVerse = {
+  id: number;
+  text: string;
+};

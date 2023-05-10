@@ -25,6 +25,20 @@ module.exports = [
     },
   },
   {
+    urlPattern: /^https:\/\/dao-worker\.daodejing\.workers\.dev\/.*\.mp3/i,
+    handler: "CacheFirst",
+    options: {
+      cacheableResponse: {
+        statuses: [0, 200],
+      },
+      cacheName: "dao-cdn-mp3",
+      expiration: {
+        maxEntries: 200,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+      },
+    },
+  },
+  {
     urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
     handler: "StaleWhileRevalidate",
     options: {

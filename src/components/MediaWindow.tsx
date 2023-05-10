@@ -151,7 +151,7 @@ export function MediaWindow() {
         controls
         src={mediaSource}
         ref={audioRef}
-        preload="metadata"
+        // preload="metadata"
       ></audio>
     </div>
   );
