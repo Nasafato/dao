@@ -168,6 +168,20 @@ module.exports = [
   },
   {
     urlPattern: ({ url }) => {
+      return /\.(?:mp3|wav|ogg)$/i.test(url.pathname);
+    },
+    handler: "CacheFirst",
+    options: {
+      rangeRequests: true,
+      cacheName: "cross-origin-dao-audio-assets",
+      expiration: {
+        maxEntries: 200,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 1 week
+      },
+    },
+  },
+  {
+    urlPattern: ({ url }) => {
       const isSameOrigin = self.origin === url.origin;
       return !isSameOrigin;
     },
