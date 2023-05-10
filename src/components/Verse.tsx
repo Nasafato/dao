@@ -45,7 +45,7 @@ export function Verse({ verse }: { verse: DaoVerse }) {
 
   return (
     <div className="text-xl">
-      <div className="flex items-center justify-between py-1 w-[80px]">
+      <div className="flex items-center py-1 gap-x-2">
         <a
           id={`dao${verse.id}`}
           href={`#dao${verse.id}`}
