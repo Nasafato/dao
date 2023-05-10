@@ -1,3 +1,4 @@
+import { CDN_CACHE_NAME } from "../src/consts";
 import { util } from "./util";
 
 declare let self: ServiceWorkerGlobalScope;
@@ -60,7 +61,7 @@ self.addEventListener("message", async (event) => {
     const response = await fetch(audioUrl);
 
     // Cache the audio file using the same cache name and strategy as in your runtimeCaching configuration
-    const cache = await caches.open("cross-origin-dao-audio-assets");
+    const cache = await caches.open(CDN_CACHE_NAME);
     await cache.put(audioUrl, response);
 
     // Send a message back to the component when caching is complete

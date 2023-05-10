@@ -4,6 +4,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 import { useCallback, useEffect, useState } from "react";
+import { CDN_CACHE_NAME } from "../consts";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   const [isCached, setIsCached] = useState(false);
@@ -67,8 +68,7 @@ async function isAudioCached(audioUrl: string) {
     return false;
   }
 
-  const cacheName = "cross-origin-dao-audio-assets"; // Replace with the name of the cache you used in the service worker
-  const cache = await caches.open(cacheName);
+  const cache = await caches.open(CDN_CACHE_NAME);
   const cachedResponse = await cache.match(audioUrl);
 
   return Boolean(cachedResponse);
