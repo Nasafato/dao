@@ -48,3 +48,22 @@ self.addEventListener("notificationclick", (event) => {
       })
   );
 });
+
+// In your service worker file
+self.addEventListener("message", async (event) => {
+  if (!event) return;
+
+  const { action, audioUrl } = event.data;
+
+  if (action === "cache-audio") {
+    console.log("caching audio");
+    const response = await fetch(audioUrl);
+
+    // Cache the audio file using the same cache name and strategy as in your runtimeCaching configuration
+    const cache = await caches.open("cross-origin-dao-audio-assets");
+    await cache.put(audioUrl, response);
+
+    // Send a message back to the component when caching is complete
+    event.source.postMessage("audio-cached");
+  }
+});

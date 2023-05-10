@@ -24,6 +24,7 @@
  */
 interface ExtendableEvent extends Event {
   waitUntil(fn: Promise<any>): void;
+  ports: Array<MessagePort>;
 }
 
 interface PushSubscriptionChangeEvent extends ExtendableEvent {
@@ -106,10 +107,15 @@ interface SyncEvent extends ExtendableEvent {
   tag: string;
 }
 
-interface ExtendableMessageEvent extends ExtendableEvent {
-  data: any;
-  source: Client | Object;
+interface ExtendableMessageEvent<T = any> extends ExtendableEvent {
+  data: T;
+  source: Client;
 }
+
+type CacheAudioMessage = ExtendableMessageEvent<{
+  action: "cache-audio";
+  audioUrl: string;
+}>;
 
 // ServiceWorkerGlobalScope
 
@@ -124,7 +130,7 @@ interface ServiceWorkerGlobalScope {
   ): void;
   addEventListener(
     event: "message",
-    fn: (event?: ExtendableMessageEvent) => any
+    fn: (event?: CacheAudioMessage) => any
   ): void;
   addEventListener(event: "fetch", fn: (event?: FetchEvent) => any): void;
   addEventListener(

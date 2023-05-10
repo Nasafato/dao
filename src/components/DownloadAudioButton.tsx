@@ -24,15 +24,12 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
 
   const onClick = async () => {
     // await fetch(audioUrl);
-    const controller = new AbortController();
-    const signal = controller.signal;
 
     // Send a message to the service worker to cache the audio file
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         action: "cache-audio",
         audioUrl,
-        signal,
       });
     }
 
