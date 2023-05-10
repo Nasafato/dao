@@ -1,27 +1,27 @@
 import {
-  XMarkIcon,
   ArrowDownIcon,
   PauseIcon,
   PlayIcon,
+  XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useAtom } from "jotai";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CDN_URL, punctuation } from "../consts";
 import { queryClient } from "../setup";
 import {
-  DaoVerse,
-  DictionarySchemaType,
-  DictionaryEntrySchema,
-} from "../types";
-import {
   changeMediaSourceAtom,
-  mediaSourceAtom,
   isPlayingAtom,
-} from "./MediaWindow";
-import { usePopover } from "./VersesPopover";
+  mediaSourceAtom,
+} from "../state/mediaAtoms";
+import {
+  DaoVerse,
+  DictionaryEntrySchema,
+  DictionarySchemaType,
+} from "../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
+import { usePopover } from "./VersesPopover";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -49,7 +49,7 @@ export function Verse({ verse }: { verse: DaoVerse }) {
         <a
           id={`dao${verse.id}`}
           href={`#dao${verse.id}`}
-          className="text-gray-400 text-base whitespace-nowrap"
+          className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
         >
           第{verse.id}章
         </a>
@@ -59,7 +59,7 @@ export function Verse({ verse }: { verse: DaoVerse }) {
       <div>{text}</div>
       {/* <hr className="mt-2" /> */}
       <button
-        className="mb-2 mt-4 text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 flex items-center gap-x-1"
+        className="mb-2 mt-4 text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 dark:hover:bg-gray-800 flex items-center gap-x-1"
         onClick={() => {
           setShowDescription(!showDescription);
         }}
