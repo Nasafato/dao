@@ -1,5 +1,15 @@
 // utils/cacheData.ts
 
+import { CDN_URL } from "../consts";
+
+export function buildMediaSourceUrl(
+  verseId: number,
+  options: { type: "human" | "generated" } = { type: "human" }
+) {
+  const type = options.type === "human" ? "human" : "generated";
+  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
+}
+
 interface CachedData {
   key: string;
   data: any;
