@@ -1,6 +1,5 @@
 import {
   ArrowDownTrayIcon,
-  //   CheckCircleIcon,
   CheckIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
@@ -22,20 +21,6 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
     checkCache();
   }, [checkCache]);
 
-  // useEffect(() => {
-  //   function handleMessage(event: MessageEvent) {
-  //     if (event.data === "audio-cached") {
-  //       checkCache();
-  //     }
-  //   }
-
-  //   navigator.serviceWorker.addEventListener("message", handleMessage);
-
-  //   return () => {
-  //     navigator.serviceWorker.removeEventListener("message", handleMessage);
-  //   };
-  // }, [checkCache]);
-
   const onClick = async () => {
     const isCached = await checkAudioCached(audioUrl);
     if (isCached) {
@@ -51,20 +36,6 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     await checkCache();
     setIsDownloading(false);
-    // await fetch(audioUrl);
-
-    // await checkCache();
-    // Send a message to the service worker to cache the audio file
-    // if (navigator.serviceWorker.controller) {
-    //   navigator.serviceWorker.controller.postMessage({
-    //     action: "cache-audio",
-    //     audioUrl,
-    //   });
-    // }
-
-    // Wait for the service worker to cache the audio file
-    // await navigator.serviceWorker.ready;
-    // await checkCache();
   };
 
   const onClearDownloadClick = async () => {
