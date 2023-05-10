@@ -183,7 +183,7 @@ function Definition({ char }: { char: string }) {
   return (
     <div
       className={clsx(
-        "bg-white border-gray-500 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
+        "bg-white dark:bg-gray-900 border-gray-500 dark:border-gray-200 dark:text-gray-100 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
       )}
     >
       <h3>{char}</h3>
