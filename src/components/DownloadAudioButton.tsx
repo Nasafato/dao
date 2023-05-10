@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
   const [isCached, setIsCached] = useState(false);
-  useEffect(() => {
-    const checkCache = async () => {
-      const isCached = await isAudioCached(audioUrl);
-      setIsCached(isCached);
-    };
-    checkCache();
+  const checkCache = useCallback(async () => {
+    const isCached = await isAudioCached(audioUrl);
+    setIsCached(isCached);
   }, [audioUrl]);
 
-  const onClick = () => {
-    fetch(audioUrl);
+  useEffect(() => {
+    checkCache();
+  }, [checkCache]);
+
+  const onClick = async () => {
+    await fetch(audioUrl);
+    await checkCache();
   };
 
   if (isCached) {
