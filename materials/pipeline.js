@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const { augmentDictionary } = require("./augmentDictionary");
 const { buildDictionary } = require("./buildDictionary");
@@ -17,8 +18,11 @@ function run() {
   // buildDaoDictionary();
   buildCombinedDictionary();
   fs.copyFile(
-    "./dao-combined-dictionary.json",
-    "../src/pages/api/fixtures/dao-combined-dictionary.json",
+    path.join(__dirname, "dao-combined-dictionary.json"),
+    path.join(
+      __dirname,
+      "../src/pages/api/fixtures/dao-combined-dictionary.json"
+    ),
     (err) => {
       if (err) throw err;
       console.log(
@@ -26,6 +30,14 @@ function run() {
         "copied to",
         "../src/pages/api/fixtures/dao-combined-dictionary.json"
       );
+    }
+  );
+  fs.copyFile(
+    path.join(__dirname, "dao.json"),
+    path.join(__dirname, "../src/fixtures/dao.json"),
+    (err) => {
+      if (err) throw err;
+      console.log("dao.json copied to fixtures/dao.json");
     }
   );
   // createDescriptions();

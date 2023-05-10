@@ -1,11 +1,15 @@
 const fs = require("fs");
+const path = require("path");
+
+const daoDescriptionsPath = path.join(__dirname, "dao-descriptions.json");
+const daoPath = path.join(__dirname, "dao.json");
 
 module.exports = {
   buildVerseIndex() {
-    const descriptions = JSON.parse(fs.readFileSync("./dao-descriptions.json"));
-    const texts = JSON.parse(fs.readFileSync("./dao.json"));
+    const descriptions = JSON.parse(fs.readFileSync(daoDescriptionsPath));
+    const texts = JSON.parse(fs.readFileSync(daoPath));
 
-    const combined = {};
+    const combined = [];
     for (let i = 0; i < 80; i++) {
       const text = texts[i];
       const description = descriptions[i + 1];

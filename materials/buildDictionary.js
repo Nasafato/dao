@@ -1,8 +1,11 @@
 const fs = require("fs");
+const path = require("path");
+
+const cedictPath = path.join(__dirname, "cedict.txt");
 
 function readDict() {
   const dict = fs
-    .readFileSync("cedict.txt", "utf8")
+    .readFileSync(cedictPath, "utf8")
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => {

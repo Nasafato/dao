@@ -1,13 +1,19 @@
 const fs = require("fs");
+const path = require("path");
 
 module.exports = {
   buildCombinedDictionary() {
-    const dictionary = JSON.parse(fs.readFileSync("dictionary.json", "utf8"));
+    const dictionary = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "dictionary.json"), "utf8")
+    );
 
     const punctuations = `　。、「」【】：，？﹖； () ﹕ ！ ﹗ （ ） 《 》 “ ” . *`;
 
-    const descriptions = fs.readFileSync("dao-description-cleaned.txt", "utf8");
-    const dao = fs.readFileSync("dao.txt", "utf8");
+    const descriptions = fs.readFileSync(
+      path.join(__dirname, "dao-description-cleaned.txt"),
+      "utf8"
+    );
+    const dao = fs.readFileSync(path.join(__dirname, "dao.txt"), "utf8");
 
     const allChars = new Set();
     for (const c of dao) {
@@ -51,7 +57,10 @@ module.exports = {
       daoDict[c] = dictionary[c];
     }
 
-    fs.writeFileSync("dao-combined-dictionary.json", JSON.stringify(daoDict));
+    fs.writeFileSync(
+      path.join(__dirname, "dao-combined-dictionary.json"),
+      JSON.stringify(daoDict)
+    );
   },
 };
 
