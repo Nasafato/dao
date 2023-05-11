@@ -13,9 +13,16 @@ export function Header() {
   let right = null;
   if (session) {
     right = (
-      <div>
-        <div>{session.user?.name ?? "No name"}</div>
-        <button onClick={() => signOut()}>Sign out</button>
+      <div className="flex flex-col items-center gap-y-2">
+        <div className="rounded-full py-2 px-3 ring-1 ring-gray-950/5">
+          {session.user?.name ?? "No name"}
+        </div>
+        <button
+          onClick={() => signOut()}
+          className="px-2 py1 text-center hover:text-gray-500"
+        >
+          Sign out
+        </button>
       </div>
     );
   } else if (status === "loading") {
