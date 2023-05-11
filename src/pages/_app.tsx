@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { SessionProvider } from "next-auth/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
@@ -15,9 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
   // });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
+    <SessionProvider session={pageProps.session}>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }

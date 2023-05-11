@@ -1,11 +1,42 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import { useTheme } from "../state/theme";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-export function Navbar() {
+export function Header() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const isActive: (pathname: string) => boolean = (pathname) =>
+    router.pathname === pathname;
+
+  let right = null;
+  if (session) {
+    right = (
+      <div>
+        <div>{session.user?.name ?? "No name"}</div>
+        <button onClick={() => signOut()}>Sign out</button>
+      </div>
+    );
+  } else if (status === "loading") {
+    right = <div>Loading...</div>;
+  } else {
+    right = (
+      <div>
+        <Link href="/api/auth/signin" data-active={isActive("/signup")}>
+          Log in
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <nav className="px-8 lg:px-24 py-8">
-      <div className="m-auto max-w-xl items-center justify-between font-mono text-sm border-b border-gray-200 pb-4">
-        <ModeToggle />
+      <div className="m-auto max-w-xl font-mono text-sm border-b border-gray-200 pb-4">
+        <div className="flex justify-between">
+          <ModeToggle />
+          {right}
+        </div>
       </div>
     </nav>
   );
