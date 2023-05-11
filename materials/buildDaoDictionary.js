@@ -1,11 +1,14 @@
 const fs = require("fs");
+const path = require("path");
 
 function buildDaoDictionary() {
-  const dictionary = JSON.parse(fs.readFileSync("dictionary.json", "utf8"));
+  const dictionary = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "dictionary.json"), "utf8")
+  );
 
   const punctuations = `　。、「」【】：，？﹖； () ﹕ ！ ﹗ （ ）`;
 
-  const dao = fs.readFileSync("dao.txt", "utf8");
+  const dao = fs.readFileSync(path.join(__dirname, "dao.txt"), "utf8");
 
   const allChars = new Set();
   for (const c of dao) {
@@ -39,7 +42,10 @@ function buildDaoDictionary() {
     daoDict[c] = dictionary[c];
   }
 
-  fs.writeFileSync("dao-dictionary.json", JSON.stringify(daoDict));
+  fs.writeFileSync(
+    path.join(__dirname, "dao-dictionary.json"),
+    JSON.stringify(daoDict)
+  );
 }
 
 if (require.main === module) {

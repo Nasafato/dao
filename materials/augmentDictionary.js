@@ -1,7 +1,10 @@
 const fs = require("fs");
+const path = require("path");
 
 function augmentDictionary() {
-  const dictionary = JSON.parse(fs.readFileSync("dictionary.json", "utf8"));
+  const dictionary = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "dictionary.json"), "utf8")
+  );
   dictionary["繟"] = {
     spelling: "simplified",
     source: "manual addition",
@@ -14,7 +17,10 @@ function augmentDictionary() {
     },
   };
 
-  fs.writeFileSync("dictionary.json", JSON.stringify(dictionary));
+  fs.writeFileSync(
+    path.join(__dirname, "dictionary.json"),
+    JSON.stringify(dictionary)
+  );
 }
 
 if (require.main === module) {
