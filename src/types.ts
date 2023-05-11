@@ -21,3 +21,8 @@ export type DaoVerse = {
   id: number;
   text: string;
 };
+
+export const VerseToUserSchema = z.object({
+  verseId: z.number(),
+  status: z.enum(["learning", "reviewing", "not-learning"]),
+});

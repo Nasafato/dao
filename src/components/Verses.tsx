@@ -4,6 +4,7 @@ import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { Popover, PopoverContextProvider } from "./VersesPopover";
+import { useVerseStatuses } from "../hooks";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -26,13 +27,16 @@ export function Verses({ verses }: VerseProps) {
     cacheTime: Infinity,
   });
 
+  const verseStatuses = useVerseStatuses();
+
   return (
     <PopoverContextProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-6">
         {verses.map((verse) => {
-          return <Verse key={verse.id} verse={verse} />;
+          const status = verseStatuses[verse.id] ?? null;
+          return <Verse key={verse.id} verse={verse} verseStatus={status} />;
         })}
         <Popover />
       </div>
