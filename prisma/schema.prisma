@@ -29,11 +29,16 @@ model User {
 }
 
 model VerseToUser {
-  id      Int    @id
-  verse   Verse  @relation(fields: [verseId], references: [id])
-  verseId Int
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String
+  verse     Verse    @relation(fields: [verseId], references: [id])
+  verseId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  // learning | reviewing
+  status    String   @default("learning")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@id([verseId, userId])
 }
 
 model Verse {

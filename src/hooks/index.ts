@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useRef, useEffect } from "react";
 
 export function useLogPropChanges(props: any) {
@@ -17,4 +19,27 @@ export function useLogPropChanges(props: any) {
 
     prevProps.current = props;
   });
+}
+
+export function useVerseStatuses() {
+  const { status, data } = useSession();
+  const queryResult = useQuery({
+    queryKey: ["verseStatuses"],
+    queryFn: async () => {
+      const res = await fetch("/api/verse");
+      return res.json();
+    },
+    enabled: status === "authenticated" && !!data,
+  });
+
+  if (!queryResult.data) {
+    return {};
+  }
+
+  const result: Record<string, string> = {};
+  for (const verseToUser of queryResult.data.data) {
+    result[verseToUser.verseId] = verseToUser.status;
+  }
+
+  return result;
 }

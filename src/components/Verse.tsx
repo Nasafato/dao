@@ -22,6 +22,7 @@ import {
 } from "../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { usePopover } from "./VersesPopover";
+import { VerseHeader } from "./VerseHeader";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -31,7 +32,13 @@ function fetchVerseMediaSource(
   return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
 }
 
-export function Verse({ verse }: { verse: DaoVerse }) {
+export function Verse({
+  verse,
+  verseStatus,
+}: {
+  verse: DaoVerse;
+  verseStatus: string | null;
+}) {
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
   const text = chars.map((char, index) => {
@@ -45,17 +52,11 @@ export function Verse({ verse }: { verse: DaoVerse }) {
 
   return (
     <div className="text-xl">
-      <div className="flex items-center py-1 gap-x-2">
-        <a
-          id={`dao${verse.id}`}
-          href={`#dao${verse.id}`}
-          className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
-        >
-          第{verse.id}章
-        </a>
-        <PlayPauseButton verseMediaSource={verseMediaSource} />
-        <DownloadAudioButton audioUrl={verseMediaSource} />
-      </div>
+      <VerseHeader
+        verseId={verse.id}
+        verseMediaSource={verseMediaSource}
+        verseStatus={verseStatus}
+      />
       <div>{text}</div>
       {/* <hr className="mt-2" /> */}
       <button
@@ -206,33 +207,5 @@ function Definition({ char }: { char: string }) {
           ))}
       </ul>
     </div>
-  );
-}
-
-function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
-  const [, changeMediaSource] = useAtom(changeMediaSourceAtom);
-  const [mediaSource, setMediaSource] = useAtom(mediaSourceAtom);
-  const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
-
-  return (
-    <button
-      className="h-5 w-5 bg-gray-200 rounded-full flex justify-center items-center text-gray-500 hover:bg-gray-300"
-      onClick={() => {
-        if (mediaSource !== verseMediaSource) {
-          changeMediaSource({
-            mediaSource: verseMediaSource,
-            mediaType: "audio",
-          });
-        } else {
-          setIsPlaying(!isPlaying);
-        }
-      }}
-    >
-      {isPlaying && mediaSource === verseMediaSource ? (
-        <PauseIcon className="h-3 w-3 " />
-      ) : (
-        <PlayIcon className="h-3 w-3" />
-      )}
-    </button>
   );
 }
