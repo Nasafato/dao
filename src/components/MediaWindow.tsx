@@ -73,7 +73,7 @@ export function MediaWindow() {
   }
 
   return (
-    <div className="fixed bottom-0 px-3 py-2 border-t border-gray-200 w-full bg-white shadow-md left-0 flex justify-center items-center dark:bg-gray-900">
+    <div className="fixed bottom-0 px-3 py-2 border-t border-gray-200 w-full bg-white shadow-md left-0 flex justify-center items-center dark:bg-gray-950">
       <audio
         // crossOrigin="anonymous"
         controls
