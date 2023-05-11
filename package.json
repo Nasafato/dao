@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "studio": "dotenv -e .env.development.local prisma studio"
+    "studio": "dotenv -e .env.development.local prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.17",
