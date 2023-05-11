@@ -2,14 +2,17 @@ const fs = require("fs");
 
 module.exports = {
   createDescriptions() {
-    const f = fs.readFileSync("./dao-description.txt");
+    const f = fs.readFileSync(path.join(__dirname, "./dao-description.txt"));
 
     const lines = f
       .toString()
       .split("\n")
       .filter((s) => s.trim());
 
-    fs.writeFileSync("./dao-description-cleaned.txt", lines.join("\n"));
+    fs.writeFileSync(
+      path.join(__dirname, "./dao-description-cleaned.txt"),
+      lines.join("\n")
+    );
 
     const linesWithoutTitle = lines.slice(1);
     console.log(linesWithoutTitle.length);
@@ -32,7 +35,7 @@ module.exports = {
       descriptionsIndex[i + 1] = descriptions[i].trim();
     }
     fs.writeFileSync(
-      "./dao-descriptions.json",
+      path.join(__dirname, "./dao-descriptions.json"),
       JSON.stringify(descriptionsIndex)
     );
   },

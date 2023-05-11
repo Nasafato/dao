@@ -7,15 +7,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "studio": "dotenv -e .env.development.local prisma studio"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.17",
+    "@prisma/client": "4.14.0",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.29.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
+    "@vercel/postgres": "^0.3.0",
     "autoprefixer": "10.4.14",
     "babel-loader": "^9.1.2",
     "clsx": "^1.2.1",
@@ -32,5 +35,10 @@
     "typescript": "5.0.4",
     "workbox": "^0.0.0",
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "prisma": "^4.14.0",
+    "tsx": "^3.12.7"
   }
 }

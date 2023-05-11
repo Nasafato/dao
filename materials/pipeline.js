@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+const { buildDaoJson } = require("./buildDaoJson");
 const { augmentDictionary } = require("./augmentDictionary");
 const { buildDictionary } = require("./buildDictionary");
 const { buildDaoDictionary } = require("./buildDaoDictionary");
@@ -12,6 +13,7 @@ const { buildVerseIndex } = require("./buildVerseIndex");
 const { buildCombinedDictionary } = require("./buildCombinedDictionary");
 
 function run() {
+  buildDaoJson();
   buildDictionary();
   augmentDictionary();
   buildVerseIndex();
