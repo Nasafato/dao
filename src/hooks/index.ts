@@ -41,5 +41,8 @@ export function useVerseStatuses() {
     result[verseToUser.verseId] = verseToUser.status;
   }
 
-  return result;
+  return {
+    verseStatuses: result,
+    isFetched: queryResult.isFetched,
+  };
 }

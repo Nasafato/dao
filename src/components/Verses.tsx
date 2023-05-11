@@ -35,7 +35,9 @@ export function Verses({ verses }: VerseProps) {
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-6">
         {verses.map((verse) => {
-          const status = verseStatuses[verse.id] ?? null;
+          const status = verseStatuses.isFetched
+            ? verseStatuses.verseStatuses[verse.id] ?? null
+            : "not-fetched";
           return <Verse key={verse.id} verse={verse} verseStatus={status} />;
         })}
         <Popover />

@@ -8,6 +8,7 @@ import {
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { useSession } from "next-auth/react";
 import { queryClient } from "../setup";
+import { VerseStatus } from "./VerseStatus";
 
 export function VerseHeader({
   verseId,
@@ -18,75 +19,6 @@ export function VerseHeader({
   verseMediaSource: string;
   verseStatus: string | null;
 }) {
-  const onLearnClick = () => {
-    console.log("learning verse", verseId);
-    fetch("/api/verse", {
-      method: "POST",
-      body: JSON.stringify({
-        status: "learning",
-        verseId,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Failed to mark verse as 'learning'");
-      })
-      .then((json) => {
-        console.log("json", json);
-        queryClient.invalidateQueries(["verseStatuses"]);
-      });
-  };
-
-  const onUnlearnClick = () => {
-    console.log("unlearning verse", verseId);
-    fetch("/api/verse", {
-      method: "POST",
-      body: JSON.stringify({
-        status: "not-learning",
-        verseId,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Failed to mark verse as 'learning'");
-      })
-      .then((json) => {
-        console.log("json", json);
-        queryClient.invalidateQueries(["verseStatuses"]);
-      });
-  };
-
-  const session = useSession();
-  const renderVerseStatus = () => {
-    if (!(session?.status === "authenticated")) return null;
-    if (!verseStatus || verseStatus === "not-learning")
-      return (
-        <button type="button" onClick={onLearnClick} className="text-sm">
-          Learn
-        </button>
-      );
-
-    if (verseStatus === "learning") {
-      return (
-        <div className="group text-sm">
-          <div className="group-hover:hidden">Learning</div>
-          <button className="hidden group-hover:block" onClick={onUnlearnClick}>
-            Unlearn
-          </button>
-        </div>
-      );
-    }
-
-    if (verseStatus === "reviewing") {
-      return <button className="text-sm">Unreview</button>;
-    }
-
-    return <div className="text-sm">Unrecognized state</div>;
-  };
   return (
     <div className="flex items-center py-1 gap-x-2">
       <a
@@ -98,7 +30,7 @@ export function VerseHeader({
       </a>
       <PlayPauseButton verseMediaSource={verseMediaSource} />
       <DownloadAudioButton audioUrl={verseMediaSource} />
-      {renderVerseStatus()}
+      <VerseStatus verseStatus={verseStatus} verseId={verseId} />
     </div>
   );
 }
