@@ -4,12 +4,11 @@ import {
   PlayIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { CDN_URL, punctuation } from "../consts";
-import { queryClient } from "../setup";
 import {
   changeMediaSourceAtom,
   isPlayingAtom,
@@ -158,6 +157,7 @@ function Char({ char, charId }: { char: string; charId: string }) {
 }
 
 function Definition({ char }: { char: string }) {
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {

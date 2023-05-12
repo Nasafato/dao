@@ -1,13 +1,13 @@
 // pages/api/post/index.ts
 
 import { getSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { VerseToUser } from "@prisma/client";
 import { VerseToUserSchema } from "../../../types";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "../../../server/auth";
 
 export default async function handler(
   req: NextApiRequest,

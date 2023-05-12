@@ -6,8 +6,6 @@ import {
   isPlayingAtom,
 } from "../state/mediaAtoms";
 import { DownloadAudioButton } from "./DownloadAudioButton";
-import { useSession } from "next-auth/react";
-import { queryClient } from "../setup";
 import { VerseStatus } from "./VerseStatus";
 
 export function VerseHeader({
@@ -20,16 +18,18 @@ export function VerseHeader({
   verseStatus: string | null;
 }) {
   return (
-    <div className="flex items-center py-1 gap-x-2">
-      <a
-        id={`dao${verseId}`}
-        href={`#dao${verseId}`}
-        className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
-      >
-        第{verseId}章
-      </a>
-      <PlayPauseButton verseMediaSource={verseMediaSource} />
-      <DownloadAudioButton audioUrl={verseMediaSource} />
+    <div className="flex items-center py-1 justify-between">
+      <div className="flex items-center gap-x-2">
+        <a
+          id={`dao${verseId}`}
+          href={`#dao${verseId}`}
+          className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
+        >
+          第{verseId}章
+        </a>
+        <PlayPauseButton verseMediaSource={verseMediaSource} />
+        <DownloadAudioButton audioUrl={verseMediaSource} />
+      </div>
       <VerseStatus verseStatus={verseStatus} verseId={verseId} />
     </div>
   );

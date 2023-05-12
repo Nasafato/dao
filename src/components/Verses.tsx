@@ -4,7 +4,7 @@ import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { Popover, PopoverContextProvider } from "./VersesPopover";
-import { useVerseStatuses } from "../hooks";
+import { api } from "../utils/trpc";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -27,7 +27,12 @@ export function Verses({ verses }: VerseProps) {
     cacheTime: Infinity,
   });
 
-  const verseStatuses = useVerseStatuses();
+  const verseStatusesQuery = api.verseStatus.findMany.useQuery();
+  const verseStatuses = verseStatusesQuery.data ?? [];
+  const statusMap: Record<string, string> = {};
+  for (const status of verseStatuses) {
+    statusMap[status.verseId] = status.status;
+  }
 
   return (
     <PopoverContextProvider>
@@ -35,9 +40,10 @@ export function Verses({ verses }: VerseProps) {
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-6">
         {verses.map((verse) => {
-          const status = verseStatuses.isFetched
-            ? verseStatuses.verseStatuses[verse.id] ?? null
-            : "not-fetched";
+          let status = "not-fetched";
+          if (statusMap[verse.id]) {
+            status = statusMap[verse.id];
+          }
           return <Verse key={verse.id} verse={verse} verseStatus={status} />;
         })}
         <Popover />
