@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRef, useEffect } from "react";
+import { VerseToUserSchema } from "../types";
+import { z } from "zod";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -21,13 +23,16 @@ export function useLogPropChanges(props: any) {
   });
 }
 
+const VerseToUserArraySchema = z.array(VerseToUserSchema);
+
 export function useVerseStatuses() {
   const { status, data } = useSession();
   const queryResult = useQuery({
     queryKey: ["verseStatuses"],
     queryFn: async () => {
       const res = await fetch("/api/verse");
-      return res.json();
+      const json = await res.json();
+      return VerseToUserArraySchema.parse(json.data);
     },
     enabled: status === "authenticated" && !!data,
   });
@@ -37,7 +42,7 @@ export function useVerseStatuses() {
   }
 
   const result: Record<string, string> = {};
-  for (const verseToUser of queryResult.data.data) {
+  for (const verseToUser of queryResult.data) {
     result[verseToUser.verseId] = verseToUser.status;
   }
 

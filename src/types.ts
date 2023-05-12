@@ -26,3 +26,5 @@ export const VerseToUserSchema = z.object({
   verseId: z.number(),
   status: z.enum(["learning", "reviewing", "not-learning"]),
 });
+
+export type VerseToUserSchemaType = z.infer<typeof VerseToUserSchema>;

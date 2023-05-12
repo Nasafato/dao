@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { Verse } from "@prisma/client";
 import { Inter } from "next/font/google";
 import { Header } from "../components/Header";
@@ -20,11 +20,23 @@ export default function Home({ verses }: { verses: Verse[] }) {
 }
 
 export async function getStaticProps() {
-  const verses = await prisma.verse.findMany({
-    orderBy: {
-      id: "asc",
-    },
-  });
+  let verses;
+  try {
+    verses = await prisma.verse.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    const daoText = await import("../fixtures/dao.json");
+    verses = Array.from(daoText).map((value, index) => {
+      return {
+        text: value,
+        id: index + 1,
+      };
+    });
+  }
   return {
     props: {
       verses,

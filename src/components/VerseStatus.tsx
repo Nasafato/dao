@@ -1,6 +1,15 @@
 import { useSession } from "next-auth/react";
-import { queryClient } from "../setup";
-import { AcademicCapIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  AcademicCapIcon,
+  PlusCircleIcon,
+  PlusSmallIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
+import { Spinner } from "./Spinner";
+import { VerseToUserSchema, VerseToUserSchemaType } from "../types";
+import { api } from "../utils/trpc";
+import { getQueryKey } from "@trpc/react-query";
 
 export function VerseStatus({
   verseId,
@@ -9,46 +18,24 @@ export function VerseStatus({
   verseId: number;
   verseStatus: string | null;
 }) {
-  const onLearnClick = () => {
-    console.log("learning verse", verseId);
-    fetch("/api/verse", {
-      method: "POST",
-      body: JSON.stringify({
-        status: "learning",
-        verseId,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Failed to mark verse as 'learning'");
-      })
-      .then((json) => {
-        console.log("json", json);
-        queryClient.invalidateQueries(["verseStatuses"]);
-      });
+  const utils = api.useContext();
+  const updateStatusMutation = api.verseStatus.updateStatus.useMutation({
+    onSuccess: async () => {
+      await utils.verseStatus.findMany.invalidate();
+    },
+  });
+  const onUnlearnClick = () => {
+    updateStatusMutation.mutate({
+      verseId,
+      status: "not-learning",
+    });
   };
 
-  const onUnlearnClick = () => {
-    console.log("unlearning verse", verseId);
-    fetch("/api/verse", {
-      method: "POST",
-      body: JSON.stringify({
-        status: "not-learning",
-        verseId,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Failed to mark verse as 'learning'");
-      })
-      .then((json) => {
-        console.log("json", json);
-        queryClient.invalidateQueries(["verseStatuses"]);
-      });
+  const onLearnClick = () => {
+    updateStatusMutation.mutate({
+      verseId,
+      status: "learning",
+    });
   };
 
   const session = useSession();
@@ -63,7 +50,14 @@ export function VerseStatus({
         onClick={onLearnClick}
         className="text-xs ring-1 ring-gray-950/5 rounded-full px-3 py-1"
       >
-        Learn
+        <div className="flex w-full gap-x-1 items-center">
+          {updateStatusMutation.isLoading ? (
+            <Spinner className="h-3 w-3 text-gray-200 fill-gray-800" />
+          ) : (
+            <PlusCircleIcon className="h-3 w-3 text-green-500" />
+          )}
+          <div>Learn</div>
+        </div>
       </button>
     );
 
@@ -77,7 +71,12 @@ export function VerseStatus({
           className="hidden group-hover:flex items-center gap-x-1 ring-1 ring-gray-950/5 rounded-full px-3 py-1"
           onClick={onUnlearnClick}
         >
-          <XMarkIcon className="h-3 w-3 text-red-500" /> Unlearn
+          {updateStatusMutation.isLoading ? (
+            <Spinner className="h-3 w-3 text-gray-200 fill-gray-800" />
+          ) : (
+            <XMarkIcon className="h-3 w-3 text-red-500" />
+          )}
+          Unlearn
         </button>
       </div>
     );
