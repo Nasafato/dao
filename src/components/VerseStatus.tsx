@@ -22,36 +22,20 @@ export function VerseStatus({
     typeof api.verseStatus.updateStatus.useMutation
   >;
 }) {
-  const onUnlearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "not-learning",
-    });
-  };
-
-  const onLearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "learning",
-    });
-  };
-
   const session = useSession();
   if (!(session?.status === "authenticated")) return null;
   // if (verseStatus === "not-fetched") {
   //   return null;
   // }
   if (verseStatus === "not-fetched" || verseStatus === "not-learning")
-    return (
-      updateStatusMutation.isLoading && (
-        <div className="text-xs ring-1 ring-gray-950/5 rounded-full px-3 py-1">
-          <div className="flex w-full gap-x-1 items-center">
-            <Spinner className="mr-1 h-3 w-3 text-gray-200 fill-gray-800" />
-            Learning
-          </div>
+    return updateStatusMutation.isLoading ? (
+      <div className="text-xs ring-1 ring-gray-950/5 rounded-full px-3 py-1">
+        <div className="flex w-full gap-x-1 items-center">
+          <Spinner className="mr-1 h-3 w-3 text-gray-200 fill-gray-800" />
+          Learning
         </div>
-      )
-    );
+      </div>
+    ) : null;
 
   if (verseStatus === "learning") {
     return (
