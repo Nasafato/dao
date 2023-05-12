@@ -7,6 +7,8 @@ import {
 } from "../state/mediaAtoms";
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { VerseStatus } from "./VerseStatus";
+import { VerseLearningMenu } from "./VerseLearningMenu";
+import { api } from "../utils/trpc";
 
 export function VerseHeader({
   verseId,
@@ -17,6 +19,13 @@ export function VerseHeader({
   verseMediaSource: string;
   verseStatus: string | null;
 }) {
+  const utils = api.useContext();
+
+  const updateStatusMutation = api.verseStatus.updateStatus.useMutation({
+    onSuccess: async () => {
+      await utils.verseStatus.findMany.invalidate();
+    },
+  });
   return (
     <div className="flex items-center py-1 justify-between">
       <div className="flex items-center gap-x-2">
@@ -30,7 +39,18 @@ export function VerseHeader({
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>
-      <VerseStatus verseStatus={verseStatus} verseId={verseId} />
+      <div className="flex items-center gap-x-2">
+        <VerseStatus
+          verseStatus={verseStatus}
+          verseId={verseId}
+          updateStatusMutation={updateStatusMutation}
+        />
+        <VerseLearningMenu
+          verseId={verseId}
+          verseStatus={verseStatus}
+          updateStatusMutation={updateStatusMutation}
+        />
+      </div>
     </div>
   );
 }
