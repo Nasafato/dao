@@ -51,7 +51,16 @@ export function VerseStatus({
             render={(timeLeft) => {
               let display = "";
 
-              if (timeLeft.hours > 0) {
+              if (timeLeft.years > 0) {
+                const years = timeLeft.years.toString().padStart(2, "0");
+                display = `${years}y`;
+              } else if (timeLeft.months > 0) {
+                const months = timeLeft.months.toString().padStart(2, "0");
+                display = `${months}m`;
+              } else if (timeLeft.days > 0) {
+                const days = timeLeft.days.toString().padStart(2, "0");
+                display = `${days}d`;
+              } else if (timeLeft.hours > 0) {
                 const hours = timeLeft.hours.toString().padStart(2, "0");
                 display = `${hours}h`;
               } else if (timeLeft.minutes > 0) {

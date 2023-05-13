@@ -58,12 +58,20 @@ export function Countdown({ targetDate, ...props }: CountdownProps) {
 }
 
 function defaultRender(timeLeft: TimeLeft) {
+  const years = timeLeft.years.toString().padStart(2, "0");
+  const months = timeLeft.months.toString().padStart(2, "0");
+  const days = timeLeft.days.toString().padStart(2, "0");
   const hours = timeLeft.hours.toString().padStart(2, "0");
   const minutes = timeLeft.minutes.toString().padStart(2, "0");
   const seconds = timeLeft.seconds.toString().padStart(2, "0");
-  return (
-    <div className="font-mono">
-      {hours}h {minutes}m {seconds}seconds
-    </div>
-  );
+  const display = [];
+  if (timeLeft.years > 0) display.push(`${years}y`);
+  if (timeLeft.months > 0) display.push(`${months}m`);
+  if (timeLeft.days > 0) display.push(`${days}d`);
+  if (timeLeft.hours > 0) display.push(`${hours}h`);
+  if (timeLeft.minutes > 0) display.push(`${minutes}m`);
+  if (timeLeft.seconds > 0) display.push(`${seconds}s`);
+  if (display.length === 0) display.push("Now");
+
+  return <div className="font-mono">{display.join(" ")}</div>;
 }
