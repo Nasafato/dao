@@ -9,8 +9,8 @@ import { DaoVerse } from "../types";
 
 export function VerseStatus({
   verse,
-  verseStatus,
   updateStatusMutation,
+  verseStatus,
 }: {
   verse: DaoVerse;
   verseStatus: VerseToUser | null;
@@ -78,9 +78,3 @@ export function VerseStatus({
 
   return <div className="text-sm">Unrecognized state</div>;
 }
-
-// function renderPill(content) {
-//   return (
-//     <div className="flex items-center justify-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"></div>
-//   );
-// }

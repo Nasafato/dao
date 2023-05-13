@@ -42,7 +42,21 @@ export function VerseMemoryTestModal() {
               ...verseStatus,
             }
           );
+          utils.verseStatus.findMany.setData(undefined, (old) => {
+            if (!old) {
+              return [verseStatus];
+            }
+            const newData = [...old];
+            for (let i = 0; i < newData.length; i++) {
+              if (newData[i].verseId === verseStatus.verseId) {
+                newData[i] = verseStatus;
+                break;
+              }
+            }
+            return newData;
+          });
           utils.verseStatus.findOne.invalidate({ verseId: verse?.id });
+          utils.verseStatus.findMany.invalidate();
         },
       }
     );
@@ -57,8 +71,6 @@ export function VerseMemoryTestModal() {
     }
   );
   const nextReview = verseStatusQuery.data?.nextReview;
-  // const timeUntilNextReviewInMinutes =
-  //   (Date.now() - timeUntilNextReview) / 1000 / 60;
 
   const onClose = () => {
     setVerseBeingTested(null);
@@ -74,7 +86,8 @@ export function VerseMemoryTestModal() {
               Test Verse {verse?.id ?? ""}
             </Dialog.Title>
             <Dialog.Description className="mb-2">
-              Test your memory of the verse.
+              Test your memory of the verse
+              {verse && `: ${verse.text.slice(0, 4)}...`}
             </Dialog.Description>
             <div>
               <div className="flex justify-between">

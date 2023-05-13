@@ -6,6 +6,9 @@ interface CountdownProps {
 }
 
 type TimeLeft = {
+  years: number;
+  months: number;
+  days: number;
   hours: number;
   minutes: number;
   seconds: number;
@@ -14,10 +17,20 @@ type TimeLeft = {
 export function Countdown({ targetDate, ...props }: CountdownProps) {
   const calculateTimeLeft = useCallback(() => {
     let difference = +targetDate - +new Date();
-    let timeLeft = { hours: 0, minutes: 0, seconds: 0 };
+    let timeLeft = {
+      years: 0,
+      months: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
 
     if (difference > 0) {
       timeLeft = {
+        years: Math.floor(difference / (1000 * 60 * 60 * 24 * 365)),
+        months: Math.floor(difference / (1000 * 60 * 60 * 24 * 30)),
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
