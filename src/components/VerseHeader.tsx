@@ -44,8 +44,8 @@ export function VerseHeader({
       </div>
       <div className="flex items-center gap-x-2">
         <VerseStatus
-          verseStatus={verseStatus?.status || "not-fetched"}
-          verseId={verseId}
+          verse={verse}
+          verseStatus={verseStatus}
           updateStatusMutation={updateStatusMutation}
         />
         <VerseLearningMenu

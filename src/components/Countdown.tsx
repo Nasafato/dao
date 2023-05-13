@@ -2,24 +2,25 @@ import React, { useCallback, useEffect, useState } from "react";
 
 interface CountdownProps {
   targetDate: Date;
+  render?: (timeLeft: TimeLeft) => JSX.Element;
 }
 
-export function Countdown({ targetDate }: CountdownProps) {
+type TimeLeft = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
+export function Countdown({ targetDate, ...props }: CountdownProps) {
   const calculateTimeLeft = useCallback(() => {
     let difference = +targetDate - +new Date();
-    let timeLeft = { hours: "00", minutes: "00", seconds: "00" };
+    let timeLeft = { hours: 0, minutes: 0, seconds: 0 };
 
     if (difference > 0) {
       timeLeft = {
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24)
-          .toString()
-          .padStart(2, "0"),
-        minutes: Math.floor((difference / 1000 / 60) % 60)
-          .toString()
-          .padStart(2, "0"),
-        seconds: Math.floor((difference / 1000) % 60)
-          .toString()
-          .padStart(2, "0"),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
       };
     }
 
@@ -39,9 +40,17 @@ export function Countdown({ targetDate }: CountdownProps) {
     return () => clearTimeout(timer);
   });
 
+  const render = props.render ?? defaultRender;
+  return render(timeLeft);
+}
+
+function defaultRender(timeLeft: TimeLeft) {
+  const hours = timeLeft.hours.toString().padStart(2, "0");
+  const minutes = timeLeft.minutes.toString().padStart(2, "0");
+  const seconds = timeLeft.seconds.toString().padStart(2, "0");
   return (
     <div className="font-mono">
-      {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+      {hours}h {minutes}m {seconds}seconds
     </div>
   );
 }
