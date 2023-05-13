@@ -9,17 +9,20 @@ import { DownloadAudioButton } from "./DownloadAudioButton";
 import { VerseStatus } from "./VerseStatus";
 import { VerseLearningMenu } from "./VerseLearningMenu";
 import { api } from "../utils/trpc";
+import { VerseToUser } from "@prisma/client";
+import { DaoVerse } from "../types";
 
 export function VerseHeader({
-  verseId,
+  verse,
   verseMediaSource,
   verseStatus,
 }: {
-  verseId: number;
+  verse: DaoVerse;
   verseMediaSource: string;
-  verseStatus: string | null;
+  verseStatus: VerseToUser | null;
 }) {
   const utils = api.useContext();
+  const verseId = verse.id;
 
   const updateStatusMutation = api.verseStatus.updateStatus.useMutation({
     onSuccess: async () => {
@@ -41,12 +44,12 @@ export function VerseHeader({
       </div>
       <div className="flex items-center gap-x-2">
         <VerseStatus
-          verseStatus={verseStatus}
+          verseStatus={verseStatus?.status || "not-fetched"}
           verseId={verseId}
           updateStatusMutation={updateStatusMutation}
         />
         <VerseLearningMenu
-          verseId={verseId}
+          verse={verse}
           verseStatus={verseStatus}
           updateStatusMutation={updateStatusMutation}
         />

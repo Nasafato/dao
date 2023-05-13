@@ -16,6 +16,26 @@ export const verseStatusRouter = createTRPCRouter({
     return verseStatuses;
   }),
 
+  findOne: protectedProcedure
+    .input(
+      z.object({
+        verseId: z.number(),
+      })
+    )
+    .query(async ({ ctx, input: { verseId } }) => {
+      const userId = ctx.session.user.id;
+      const verseStatus = await prisma.verseToUser.findUnique({
+        where: {
+          verseId_userId: {
+            verseId,
+            userId,
+          },
+        },
+      });
+
+      return verseStatus;
+    }),
+
   updateStatus: protectedProcedure
     .input(
       z.object({
@@ -41,8 +61,6 @@ export const verseStatusRouter = createTRPCRouter({
           userId,
         },
       });
-
-      console.log("finishing up");
 
       return verseToUser;
     }),

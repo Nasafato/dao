@@ -22,6 +22,7 @@ import {
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { usePopover } from "./VersesPopover";
 import { VerseHeader } from "./VerseHeader";
+import { VerseToUser } from "@prisma/client";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -36,7 +37,7 @@ export function Verse({
   verseStatus,
 }: {
   verse: DaoVerse;
-  verseStatus: string | null;
+  verseStatus: VerseToUser | null;
 }) {
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
@@ -52,7 +53,7 @@ export function Verse({
   return (
     <div className="text-xl">
       <VerseHeader
-        verseId={verse.id}
+        verse={verse}
         verseMediaSource={verseMediaSource}
         verseStatus={verseStatus}
       />

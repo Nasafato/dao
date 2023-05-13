@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "studio": "dotenv -e .env.development.local prisma studio",
+    "dev:db:push": "dotenv -e .env.development.local prisma db push",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -43,7 +44,8 @@
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4",
     "workbox": "^0.0.0",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",

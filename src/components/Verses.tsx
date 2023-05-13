@@ -5,6 +5,7 @@ import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { Popover, PopoverContextProvider } from "./VersesPopover";
 import { api } from "../utils/trpc";
+import { VerseToUser } from "@prisma/client";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -29,9 +30,9 @@ export function Verses({ verses }: VerseProps) {
 
   const verseStatusesQuery = api.verseStatus.findMany.useQuery();
   const verseStatuses = verseStatusesQuery.data ?? [];
-  const statusMap: Record<string, string> = {};
+  const statusMap: Record<string, VerseToUser> = {};
   for (const status of verseStatuses) {
-    statusMap[status.verseId] = status.status;
+    statusMap[status.verseId] = status;
   }
 
   return (
@@ -40,11 +41,13 @@ export function Verses({ verses }: VerseProps) {
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-6">
         {verses.map((verse) => {
-          let status = "not-fetched";
-          if (statusMap[verse.id]) {
-            status = statusMap[verse.id];
-          }
-          return <Verse key={verse.id} verse={verse} verseStatus={status} />;
+          return (
+            <Verse
+              key={verse.id}
+              verse={verse}
+              verseStatus={statusMap[verse.id]}
+            />
+          );
         })}
         <Popover />
       </div>
