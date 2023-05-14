@@ -23,31 +23,31 @@ export function useLogPropChanges(props: any) {
   });
 }
 
-const VerseToUserArraySchema = z.array(VerseToUserSchema);
+// const VerseToUserArraySchema = z.array(VerseToUserSchema);
 
-export function useVerseStatuses() {
-  const { status, data } = useSession();
-  const queryResult = useQuery({
-    queryKey: ["verseStatuses"],
-    queryFn: async () => {
-      const res = await fetch("/api/verse");
-      const json = await res.json();
-      return VerseToUserArraySchema.parse(json.data);
-    },
-    enabled: status === "authenticated" && !!data,
-  });
+// export function useVerseStatuses() {
+//   const { status, data } = useSession();
+//   const queryResult = useQuery({
+//     queryKey: ["verseStatuses"],
+//     queryFn: async () => {
+//       const res = await fetch("/api/verse");
+//       const json = await res.json();
+//       return VerseToUserArraySchema.parse(json.data);
+//     },
+//     enabled: status === "authenticated" && !!data,
+//   });
 
-  if (!queryResult.data) {
-    return {};
-  }
+//   if (!queryResult.data) {
+//     return {};
+//   }
 
-  const result: Record<string, string> = {};
-  for (const verseToUser of queryResult.data) {
-    result[verseToUser.verseId] = verseToUser.status;
-  }
+//   const result: Record<string, string> = {};
+//   for (const verseToUser of queryResult.data) {
+//     result[verseToUser.verseId] = verseToUser.status;
+//   }
 
-  return {
-    verseStatuses: result,
-    isFetched: queryResult.isFetched,
-  };
-}
+//   return {
+//     verseStatuses: result,
+//     isFetched: queryResult.isFetched,
+//   };
+// }

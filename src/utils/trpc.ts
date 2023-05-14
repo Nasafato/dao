@@ -10,6 +10,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
 import { type AppRouter } from "../server/routers/_app";
+import { queryClient } from "./reactQuery";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -21,6 +22,7 @@ const getBaseUrl = () => {
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
+      queryClient,
       /**
        * Transformer used for data de-serialization from the server.
        *
