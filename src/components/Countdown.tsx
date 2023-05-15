@@ -30,7 +30,7 @@ export function Countdown({ targetDate, ...props }: CountdownProps) {
       timeLeft = {
         years: Math.floor(difference / (1000 * 60 * 60 * 24 * 365)),
         months: Math.floor(difference / (1000 * 60 * 60 * 24 * 30)),
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)) % 30,
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
@@ -66,7 +66,7 @@ function defaultRender(timeLeft: TimeLeft) {
   const seconds = timeLeft.seconds.toString().padStart(2, "0");
   const display = [];
   if (timeLeft.years > 0) display.push(`${years}y`);
-  if (timeLeft.months > 0) display.push(`${months}m`);
+  if (timeLeft.months > 0) display.push(`${months}mo`);
   if (timeLeft.days > 0) display.push(`${days}d`);
   if (timeLeft.hours > 0) display.push(`${hours}h`);
   if (timeLeft.minutes > 0) display.push(`${minutes}m`);

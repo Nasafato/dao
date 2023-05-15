@@ -56,7 +56,7 @@ export function VerseStatus({
                 display = `${years}y`;
               } else if (timeLeft.months > 0) {
                 const months = timeLeft.months.toString().padStart(2, "0");
-                display = `${months}m`;
+                display = `${months}mo`;
               } else if (timeLeft.days > 0) {
                 const days = timeLeft.days.toString().padStart(2, "0");
                 display = `${days}d`;

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { prisma } from "../../lib/prisma";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { DATE_CONSTS } from "../../consts";
 
 export const verseLearningRouter = createTRPCRouter({
   recordTest: protectedProcedure
@@ -43,7 +44,10 @@ export const verseLearningRouter = createTRPCRouter({
       // Next review should be max(0.25, numSuccess^1.8) hours from now.
       const nextReview = new Date(
         Date.now() +
-          Math.max(0.25, Math.pow(numSuccesses, 1.8)) * 60 * 60 * 1000
+          Math.max(
+            Math.max(0.25, Math.pow(1.8, numSuccesses)) * 60 * 60 * 1000,
+            DATE_CONSTS.ONE_MONTH
+          )
       );
 
       const result = await prisma.verseToUser.upsert({
