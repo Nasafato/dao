@@ -6,10 +6,10 @@ import { api } from "../utils/trpc";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </SessionProvider>
+    // <SessionProvider session={pageProps.session}>
+    <Component {...pageProps} />
+    // <ReactQueryDevtools initialIsOpen={false} />
+    // </SessionProvider>
   );
 }
 

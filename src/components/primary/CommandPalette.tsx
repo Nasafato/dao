@@ -12,8 +12,8 @@ import React, {
   Ref,
   MutableRefObject,
 } from "react";
-import { useLogPropChanges } from "../hooks";
-import { tryParseDaoIndex } from "../utils";
+import { useLogPropChanges } from "../../hooks";
+import { tryParseDaoIndex } from "../../utils";
 // import MediaControls from "./MediaControls";
 // import { AudioPlayer } from "./HeadlessAudioPlayer";
 

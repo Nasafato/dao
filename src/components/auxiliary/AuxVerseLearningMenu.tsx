@@ -5,14 +5,14 @@ import {
   PlusCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { useDaoStore } from "../state/store";
-import { api } from "../utils/trpc";
-import { Spinner } from "./Spinner";
-import { VerseMemoryTestModal } from "./VerseMemoryTestModal";
+import { useDaoStore } from "../../state/store";
+import { api } from "../../utils/trpc";
+import { Spinner } from "../shared/Spinner";
+import { AuxVerseMemoryTestModal } from "./AuxVerseMemoryTestModal";
 import { VerseToUser } from "@prisma/client";
-import { DaoVerse } from "../types";
+import { DaoVerse } from "../../types";
 
-export function VerseLearningMenu({
+export function AuxVerseLearningMenu({
   verse,
   verseStatus,
   updateStatusMutation,

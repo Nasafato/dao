@@ -1,13 +1,13 @@
 import { AcademicCapIcon } from "@heroicons/react/20/solid";
 import { VerseToUser } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { useDaoStore } from "../state/store";
-import { api } from "../utils/trpc";
-import { Countdown } from "./Countdown";
-import { Spinner } from "./Spinner";
-import { DaoVerse } from "../types";
+import { useDaoStore } from "../../state/store";
+import { api } from "../../utils/trpc";
+import { Countdown } from "../shared/Countdown";
+import { Spinner } from "../shared/Spinner";
+import { DaoVerse } from "../../types";
 
-export function VerseStatus({
+export function AuxVerseStatus({
   verse,
   updateStatusMutation,
   verseStatus,

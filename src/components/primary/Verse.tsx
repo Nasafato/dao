@@ -8,17 +8,17 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { CDN_URL, punctuation } from "../consts";
+import { CDN_URL, punctuation } from "../../consts";
 import {
   changeMediaSourceAtom,
   isPlayingAtom,
   mediaSourceAtom,
-} from "../state/mediaAtoms";
+} from "../../state/mediaAtoms";
 import {
   DaoVerse,
   DictionaryEntrySchema,
   DictionarySchemaType,
-} from "../types";
+} from "../../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { usePopover } from "./VersesPopover";
 import { VerseHeader } from "./VerseHeader";

@@ -1,16 +1,16 @@
 import { Dialog } from "@headlessui/react";
-import { DaoVerse } from "../types";
+import { DaoVerse } from "../../types";
 import {
   CheckCircleIcon,
   CheckIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { api } from "../utils/trpc";
-import { useDaoStore } from "../state/store";
-import { Spinner } from "./Spinner";
-import { Countdown } from "./Countdown";
+import { api } from "../../utils/trpc";
+import { useDaoStore } from "../../state/store";
+import { Spinner } from "../shared/Spinner";
+import { Countdown } from "../shared/Countdown";
 
-export function VerseMemoryTestModal() {
+export function AuxVerseMemoryTestModal() {
   const verse = useDaoStore((state) => state.verseBeingTested);
   const setVerseBeingTested = useDaoStore((state) => state.setVerseBeingTested);
   const utils = api.useContext();

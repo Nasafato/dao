@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { DaoVerse, DictionarySchema } from "../types";
+import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { Popover, PopoverContextProvider } from "./VersesPopover";
-import { api } from "../utils/trpc";
+import { api } from "../../utils/trpc";
 import { VerseToUser } from "@prisma/client";
 
 interface VerseProps {
