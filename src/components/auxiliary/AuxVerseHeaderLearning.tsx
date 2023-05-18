@@ -16,7 +16,7 @@ import {
   setVerseMemoryStatus,
   updateStatus,
 } from "../../lib/localDb";
-import { queryClient } from "../../utils/reactQuery";
+import { queryClient } from "../../lib/reactQuery";
 
 interface AuxVerseHeaderLearningProps {
   verse: DaoVerse;
@@ -34,9 +34,9 @@ export function AuxVerseHeaderLearning({
       return memoryStatus;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["indexedDB"]);
+      queryClient.invalidateQueries(["indexedDb", INDEXED_DB_NAME]);
       queryClient.invalidateQueries([
-        "indexedDB",
+        "indexedDb",
         INDEXED_DB_NAME,
         INDEXED_DB_VERSION,
         VerseMemoryStatus.tableName,

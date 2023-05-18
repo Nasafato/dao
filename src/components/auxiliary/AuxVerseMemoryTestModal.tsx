@@ -9,68 +9,78 @@ import { api } from "../../utils/trpc";
 import { useDaoStore } from "../../state/store";
 import { Spinner } from "../shared/Spinner";
 import { Countdown } from "../shared/Countdown";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
 
 export function AuxVerseMemoryTestModal() {
   const verse = useDaoStore((state) => state.verseBeingTested);
   const setVerseBeingTested = useDaoStore((state) => state.setVerseBeingTested);
-  const utils = api.useContext();
-  const reportFailureMutation = api.verseLearning.recordTest.useMutation();
-  const reportSuccessMutation = api.verseLearning.recordTest.useMutation();
+  const verseMemoryStatusQuery = useVerseMemoryStatusQuery({
+    verseId: verse?.id ?? 0,
+    opts: {
+      enabled: !!verse,
+    },
+  });
+
+  const reportSuccessMutation = useMutation(async () => {});
+
   const reportResult = (result: "success" | "failure") => {
     if (!verse) {
       throw new Error("No verse to report result for");
     }
-
-    let mutation = reportFailureMutation;
-    if (result === "success") {
-      mutation = reportSuccessMutation;
-    }
-
-    mutation.mutate(
-      {
-        verseId: verse.id,
-        result,
-        time: Date.now(),
-      },
-      {
-        onSuccess: (verseStatus) => {
-          utils.verseStatus.findOne.setData(
-            {
-              verseId: verseStatus.verseId,
-            },
-            {
-              ...verseStatus,
-            }
-          );
-          utils.verseStatus.findMany.setData(undefined, (old) => {
-            if (!old) {
-              return [verseStatus];
-            }
-            const newData = [...old];
-            for (let i = 0; i < newData.length; i++) {
-              if (newData[i].verseId === verseStatus.verseId) {
-                newData[i] = verseStatus;
-                break;
-              }
-            }
-            return newData;
-          });
-          utils.verseStatus.findOne.invalidate({ verseId: verse?.id });
-          utils.verseStatus.findMany.invalidate();
-        },
-      }
-    );
   };
+  // const utils = api.useContext();
+  // const reportFailureMutation = api.verseLearning.recordTest.useMutation();
+  // const reportSuccessMutation = api.verseLearning.recordTest.useMutation();
+  // const reportResult = (result: "success" | "failure") => {
+  //   if (!verse) {
+  //     throw new Error("No verse to report result for");
+  //   }
 
-  const verseStatusQuery = api.verseStatus.findOne.useQuery(
-    {
-      verseId: verse?.id ?? 0,
-    },
-    {
-      enabled: !!verse,
-    }
-  );
-  const nextReview = verseStatusQuery.data?.nextReview;
+  //   let mutation = reportFailureMutation;
+  //   if (result === "success") {
+  //     mutation = reportSuccessMutation;
+  //   }
+
+  //   mutation.mutate(
+  //     {
+  //       verseId: verse.id,
+  //       result,
+  //       time: Date.now(),
+  //     },
+  //     {
+  //       onSuccess: (verseStatus) => {
+  //         utils.verseStatus.findOne.setData(
+  //           {
+  //             verseId: verseStatus.verseId,
+  //           },
+  //           {
+  //             ...verseStatus,
+  //           }
+  //         );
+  //         utils.verseStatus.findMany.setData(undefined, (old) => {
+  //           if (!old) {
+  //             return [verseStatus];
+  //           }
+  //           const newData = [...old];
+  //           for (let i = 0; i < newData.length; i++) {
+  //             if (newData[i].verseId === verseStatus.verseId) {
+  //               newData[i] = verseStatus;
+  //               break;
+  //             }
+  //           }
+  //           return newData;
+  //         });
+  //         utils.verseStatus.findOne.invalidate({ verseId: verse?.id });
+  //         utils.verseStatus.findMany.invalidate();
+  //       },
+  //     }
+  //   );
+  // };
+
+  const nextReviewValue =
+    verseMemoryStatusQuery.data?.nextReviewDatetime ?? null;
+  const nextReview = nextReviewValue ? new Date(nextReviewValue) : null;
 
   const onClose = () => {
     setVerseBeingTested(null);
@@ -110,27 +120,27 @@ export function AuxVerseMemoryTestModal() {
               <button
                 className="flex relative justify-center items-center bg-green-500 px-3 py-2  text-white hover:bg-green-600 w-32"
                 onClick={() => {
-                  reportResult("success");
+                  // reportResult("success");
                 }}
               >
-                {reportSuccessMutation.isLoading && (
-                  <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
-                    <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
-                  </div>
-                )}
+                {/* {reportSuccessMutation.isLoading && ( */}
+                <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
+                  <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
+                </div>
+                {/* )} */}
                 Success
               </button>
               <button
                 className="flex relative justify-center items-center bg-red-500 text-white px-3 py-2 hover:bg-red-600 w-32"
                 onClick={() => {
-                  reportResult("failure");
+                  // reportResult("failure");
                 }}
               >
-                {reportFailureMutation.isLoading && (
-                  <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
-                    <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
-                  </div>
-                )}
+                {/* {reportFailureMutation.isLoading && ( */}
+                <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
+                  <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
+                </div>
+                {/* )} */}
                 Failure
               </button>
             </div>

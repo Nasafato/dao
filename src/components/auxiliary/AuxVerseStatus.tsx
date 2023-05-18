@@ -41,11 +41,11 @@ export function AuxVerseStatus({
   if (verseStatus.status === MEMORY_STATUS.LEARNING) {
     return (
       <div className="text-xs">
-        <button
+        <div
           className="flex items-center gap-x-1 ring-1 ring-gray-950/5 rounded-full px-3 py-1"
-          onClick={() => {
-            setVerseBeingTested(verse);
-          }}
+          // onClick={() => {
+          // setVerseBeingTested(verse);
+          // }}
         >
           {updateStatusMutation.isLoading ? (
             <Spinner className="h-3 w-3 text-gray-200 fill-gray-800" />
@@ -83,7 +83,7 @@ export function AuxVerseStatus({
               return <div className="font-mono">{display}</div>;
             }}
           />
-        </button>
+        </div>
       </div>
     );
   }

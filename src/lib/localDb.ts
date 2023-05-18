@@ -19,24 +19,6 @@ export const INDEXED_DB_VERSION = 1;
 let openRequest: IDBOpenDBRequest;
 export let initializeDbPromise: Promise<IDBDatabase> | null;
 
-// export function initializeDb() {
-//   initializeDbPromise = _initDb();
-// }
-
-// async function _initDb() {
-//   localDb = await openDB(INDEXED_DB_NAME, INDEXED_DB_VERSION, {
-//     upgrade(db, oldVersion, newVersion, transaction, event) {
-//       console.log("Upgrading", db, oldVersion, newVersion, transaction, event);
-//       const store = db.createObjectStore(VerseMemoryStatus.tableName, {
-//         keyPath: "id",
-//       });
-//       store.createIndex("userId_verseId", ["userId", "verseId"], {
-//         unique: true,
-//       });
-//     },
-//   });
-// }
-
 export function initializeDb() {
   console.log("Setting up");
   if (initializeDbPromise) {
@@ -129,8 +111,7 @@ export async function getVerseMemoryStatus(userId: string, verseId: number) {
   });
 
   if (!verseMemoryStatus) {
-    console.log("None found");
-    return null;
+    throw new Error("None found");
   }
   const memoryStatus = VerseMemoryStatusSchema.parse(verseMemoryStatus);
   return memoryStatus;

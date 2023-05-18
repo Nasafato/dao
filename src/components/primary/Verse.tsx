@@ -30,6 +30,7 @@ import {
   USER_ID,
 } from "../../lib/localDb";
 import { VerseMemoryStatus } from "../../lib/localSchema";
+import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -46,19 +47,8 @@ export function Verse({
   verse: DaoVerse;
   // verseStatus: VerseToUser | null;
 }) {
-  const verseMemoryStatusQuery = useQuery({
-    queryKey: [
-      "indexedDB",
-      INDEXED_DB_NAME,
-      INDEXED_DB_VERSION,
-      VerseMemoryStatus.tableName,
-      verse.id,
-    ],
-    enabled: verse.id === 1,
-    queryFn: async () => {
-      const res = await getVerseMemoryStatus(USER_ID, verse.id);
-      return res;
-    },
+  const verseMemoryStatusQuery = useVerseMemoryStatusQuery({
+    verseId: verse.id,
   });
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");

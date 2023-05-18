@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { DaoVerse } from "../types";
 import { getQueryKey } from "@trpc/react-query";
-import { queryClient } from "../utils/reactQuery";
+import { queryClient } from "../lib/reactQuery";
 import { api } from "../utils/trpc";
 import { VerseToUser } from "@prisma/client";
 
