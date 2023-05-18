@@ -1,6 +1,4 @@
-import { useRouter } from "next/router";
-import { api } from "../../utils/trpc";
-import { GetStaticProps, GetStaticPropsContext } from "next";
+import { GetStaticPropsContext } from "next";
 import { DAO_VERSES } from "../../lib/daoText";
 
 export default function VersePage({
@@ -8,9 +6,6 @@ export default function VersePage({
 }: {
   verse: { id: number; text: string };
 }) {
-  // const router = useRouter();
-  // @ts-ignore
-  // const verse = api.verse.findOne.useQuery(router.query.verseId as number);
   return (
     <div>
       <div>Verse {verse.id}</div>

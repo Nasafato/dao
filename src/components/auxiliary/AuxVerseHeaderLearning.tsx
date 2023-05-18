@@ -27,7 +27,6 @@ export function AuxVerseHeaderLearning({
   verse,
   verseStatus,
 }: AuxVerseHeaderLearningProps) {
-  // const utils = api.useContext();
   const updateStatusMutation = useMutation({
     mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
       const { status } = args;

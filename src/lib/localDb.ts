@@ -64,16 +64,17 @@ export function initializeDb() {
           keyPath: "id",
         }
       );
-      verseMemoryStatusObjectStore.createIndex(
-        "userId_verseId",
-        ["userId", "verseId"],
-        {
-          unique: true,
+      for (const index of VerseMemoryStatus.indexes) {
+        if (
+          !verseMemoryStatusObjectStore.indexNames.contains(index.indexName)
+        ) {
+          verseMemoryStatusObjectStore.createIndex(
+            index.indexName,
+            index.keyPath,
+            index.opts
+          );
         }
-      );
-      // localDb.createObjectStore(VerseMemoryTest.tableName, {
-      //   keyPath: "id",
-      // });
+      }
     };
 
     openRequest.onerror = () => {
@@ -83,18 +84,6 @@ export function initializeDb() {
     openRequest.onsuccess = () => {
       localDb = openRequest.result;
       resolve(localDb);
-
-      // const storeNames = localDb.objectStoreNames;
-      // if (!storeNames.contains(VerseMemoryStatus.tableName)) {
-      //   localDb.createObjectStore(VerseMemoryStatus.tableName, {
-      //     keyPath: "id",
-      //   });
-      // }
-      // if (!storeNames.contains(VerseMemoryTest.tableName)) {
-      //   localDb.createObjectStore(VerseMemoryTest.tableName, {
-      //     keyPath: "id",
-      //   });
-      // }
 
       localDb.onversionchange = () => {
         localDb.close();
@@ -128,31 +117,22 @@ export async function getVerseMemoryStatus(userId: string, verseId: number) {
       .objectStore(VerseMemoryStatus.tableName)
       .index("userId_verseId");
 
-    index.getAllKeys().onsuccess = (event) => {
-      // @ts-ignore
-      console.log("allKeys", event.target.result);
-    };
     const request = index.get([userId, verseId]);
     request.onsuccess = (event) => {
-      // @ts-ignore
-      resolve(event.target.result);
+      const req = event.target as IDBRequest;
+      resolve(req.result);
     };
     request.onerror = (event) => {
-      // @ts-ignore
-      reject(event.target.error);
+      const req = event.target as IDBRequest;
+      reject(req.error);
     };
   });
-  // console.log("getVerseMemoryStatus", verseId);
-  // const verseMemoryStatus = await get(
-  //   VerseMemoryStatus.tableName,
-  //   verseId.toString()
-  // );
+
   if (!verseMemoryStatus) {
     console.log("None found");
     return null;
   }
   const memoryStatus = VerseMemoryStatusSchema.parse(verseMemoryStatus);
-  console.log("memoryStatus", memoryStatus);
   return memoryStatus;
 }
 
@@ -189,17 +169,6 @@ export async function updateStatus(
   console.log("newMemoryStatus", newMemoryStatus);
   return newMemoryStatus;
 }
-
-// async function get<T = unknown>(
-//   tableName: string,
-//   key: IDBValidKey
-// ): Promise<T> {
-//   await initializeDbPromise;
-//   if (!localDb) {
-//     throw new Error("localDb is not initialized");
-//   }
-//   return await localDb.get(tableName, key);
-// }
 
 async function get<T = unknown>(tableName: string, key: IDBValidKey) {
   await initializeDbPromise;

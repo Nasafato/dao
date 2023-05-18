@@ -15,6 +15,13 @@ export const VerseMemoryStatusSchema = z.object({
 });
 export const VerseMemoryStatus = {
   tableName: "verse-memory-status",
+  indexes: [
+    {
+      indexName: "userId_verseId",
+      keyPath: ["userId", "verseId"],
+      opts: { unique: true },
+    },
+  ],
 };
 export type VerseMemoryStatusType = z.infer<typeof VerseMemoryStatusSchema>;
 
