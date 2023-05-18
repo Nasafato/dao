@@ -28,12 +28,12 @@ export function Verses({ verses }: VerseProps) {
     cacheTime: Infinity,
   });
 
-  const verseStatusesQuery = api.verseStatus.findMany.useQuery();
-  const verseStatuses = verseStatusesQuery.data ?? [];
-  const statusMap: Record<string, VerseToUser> = {};
-  for (const status of verseStatuses) {
-    statusMap[status.verseId] = status;
-  }
+  // const verseStatusesQuery = api.verseStatus.findMany.useQuery();
+  // const verseStatuses = verseStatusesQuery.data ?? [];
+  // const statusMap: Record<string, VerseToUser> = {};
+  // for (const status of verseStatuses) {
+  //   statusMap[status.verseId] = status;
+  // }
 
   return (
     <PopoverContextProvider>
@@ -45,7 +45,7 @@ export function Verses({ verses }: VerseProps) {
             <Verse
               key={verse.id}
               verse={verse}
-              verseStatus={statusMap[verse.id]}
+              // verseStatus={statusMap[verse.id]}
             />
           );
         })}

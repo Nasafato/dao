@@ -3,22 +3,49 @@ import { DaoVerse } from "../../types";
 import { api } from "../../utils/trpc";
 import { AuxVerseLearningMenu } from "./AuxVerseLearningMenu";
 import { AuxVerseStatus as AuxVerseStatus } from "./AuxVerseStatus";
+import {
+  MEMORY_STATUS,
+  VerseMemoryStatus,
+  VerseMemoryStatusType,
+} from "../../lib/localSchema";
+import { useMutation } from "@tanstack/react-query";
+import {
+  INDEXED_DB_NAME,
+  INDEXED_DB_VERSION,
+  USER_ID,
+  setVerseMemoryStatus,
+  updateStatus,
+} from "../../lib/localDb";
+import { queryClient } from "../../utils/reactQuery";
 
 interface AuxVerseHeaderLearningProps {
   verse: DaoVerse;
-  verseStatus: VerseToUser;
+  verseStatus: VerseMemoryStatusType | null;
 }
 
 export function AuxVerseHeaderLearning({
   verse,
   verseStatus,
 }: AuxVerseHeaderLearningProps) {
-  const utils = api.useContext();
-  const updateStatusMutation = api.verseStatus.updateStatus.useMutation({
-    onSuccess: async () => {
-      await utils.verseStatus.findMany.invalidate();
+  // const utils = api.useContext();
+  const updateStatusMutation = useMutation({
+    mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
+      const { status } = args;
+      const memoryStatus = await updateStatus(USER_ID, verse.id, status);
+      return memoryStatus;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["indexedDB"]);
+      queryClient.invalidateQueries([
+        "indexedDB",
+        INDEXED_DB_NAME,
+        INDEXED_DB_VERSION,
+        VerseMemoryStatus.tableName,
+        verse.id,
+      ]);
     },
   });
+
   return (
     <div className="flex items-center gap-x-2">
       <AuxVerseStatus

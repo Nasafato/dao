@@ -23,6 +23,13 @@ import { DownloadAudioButton } from "./DownloadAudioButton";
 import { usePopover } from "./VersesPopover";
 import { VerseHeader } from "./VerseHeader";
 import { VerseToUser } from "@prisma/client";
+import {
+  INDEXED_DB_NAME,
+  INDEXED_DB_VERSION,
+  getVerseMemoryStatus,
+  USER_ID,
+} from "../../lib/localDb";
+import { VerseMemoryStatus } from "../../lib/localSchema";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -34,11 +41,25 @@ function fetchVerseMediaSource(
 
 export function Verse({
   verse,
-  verseStatus,
-}: {
+}: // verseStatus,
+{
   verse: DaoVerse;
-  verseStatus: VerseToUser | null;
+  // verseStatus: VerseToUser | null;
 }) {
+  const verseMemoryStatusQuery = useQuery({
+    queryKey: [
+      "indexedDB",
+      INDEXED_DB_NAME,
+      INDEXED_DB_VERSION,
+      VerseMemoryStatus.tableName,
+      verse.id,
+    ],
+    enabled: verse.id === 1,
+    queryFn: async () => {
+      const res = await getVerseMemoryStatus(USER_ID, verse.id);
+      return res;
+    },
+  });
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
   const text = chars.map((char, index) => {
@@ -55,7 +76,7 @@ export function Verse({
       <VerseHeader
         verse={verse}
         verseMediaSource={verseMediaSource}
-        verseStatus={verseStatus}
+        verseStatus={verseMemoryStatusQuery.data ?? null}
       />
       <div>{text}</div>
       {/* <hr className="mt-2" /> */}

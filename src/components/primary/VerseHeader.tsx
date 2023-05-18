@@ -8,6 +8,8 @@ import {
 } from "../../state/mediaAtoms";
 import { DaoVerse } from "../../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
+import { VerseMemoryStatusType } from "../../lib/localSchema";
+import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 
 export function VerseHeader({
   verse,
@@ -16,7 +18,7 @@ export function VerseHeader({
 }: {
   verse: DaoVerse;
   verseMediaSource: string;
-  verseStatus: VerseToUser | null;
+  verseStatus: VerseMemoryStatusType | null;
 }) {
   const verseId = verse.id;
 
@@ -33,7 +35,9 @@ export function VerseHeader({
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>
-      {/* <VerseHeaderLearning verse={verse} verseStatus={verseStatus} /> */}
+      {/* {verseStatus && ( */}
+      <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
+      {/* )} */}
     </div>
   );
 }

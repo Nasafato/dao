@@ -3,13 +3,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { api } from "../utils/trpc";
+import { useEffect } from "react";
+import { initializeDb } from "../lib/localDb";
 
 function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    initializeDb();
+  }, []);
   return (
-    // <SessionProvider session={pageProps.session}>
-    <Component {...pageProps} />
-    // <ReactQueryDevtools initialIsOpen={false} />
-    // </SessionProvider>
+    <>
+      <Component {...pageProps} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </>
   );
 }
 

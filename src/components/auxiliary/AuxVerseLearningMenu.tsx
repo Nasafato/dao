@@ -11,6 +11,9 @@ import { Spinner } from "../shared/Spinner";
 import { AuxVerseMemoryTestModal } from "./AuxVerseMemoryTestModal";
 import { VerseToUser } from "@prisma/client";
 import { DaoVerse } from "../../types";
+import { MEMORY_STATUS, VerseMemoryStatusType } from "../../lib/localSchema";
+import { getVerseMemoryStatus } from "../../lib/localDb";
+import { UseMutationResult } from "@tanstack/react-query";
 
 export function AuxVerseLearningMenu({
   verse,
@@ -18,24 +21,27 @@ export function AuxVerseLearningMenu({
   updateStatusMutation,
 }: {
   verse: DaoVerse;
-  verseStatus: VerseToUser | null;
-  updateStatusMutation: ReturnType<
-    typeof api.verseStatus.updateStatus.useMutation
+  verseStatus: VerseMemoryStatusType | null;
+  updateStatusMutation: UseMutationResult<
+    {
+      id: string;
+      verseId: number;
+      status: "LEARNING" | "NOT_LEARNING";
+      nextReviewDatetime: number;
+    },
+    unknown,
+    {
+      status: keyof typeof MEMORY_STATUS;
+    },
+    unknown
   >;
 }) {
-  const verseId = verse.id;
   const onUnlearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "not-learning",
-    });
+    updateStatusMutation.mutate({ status: MEMORY_STATUS.NOT_LEARNING });
   };
 
   const onLearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "learning",
-    });
+    updateStatusMutation.mutate({ status: MEMORY_STATUS.LEARNING });
   };
 
   const setVerseBeingTested = useDaoStore((state) => state.setVerseBeingTested);
@@ -70,13 +76,12 @@ export function AuxVerseLearningMenu({
                 {({ active }) => {
                   if (
                     !verseStatus ||
-                    verseStatus.status === "not-fetched" ||
-                    verseStatus.status === "not-learning"
+                    verseStatus.status === MEMORY_STATUS.NOT_LEARNING
                   ) {
                     return (
                       <button
                         onClick={onLearnClick}
-                        disabled={!verseStatus}
+                        // disabled={!verseStatus}
                         className={`${
                           active
                             ? "bg-green-500 text-white disabled:bg-gray200"
@@ -87,7 +92,7 @@ export function AuxVerseLearningMenu({
                         Learn
                       </button>
                     );
-                  } else if (verseStatus.status === "learning") {
+                  } else if (verseStatus.status === MEMORY_STATUS.LEARNING) {
                     return (
                       <div className="text-xs">
                         <button
