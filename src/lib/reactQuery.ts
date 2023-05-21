@@ -5,10 +5,28 @@ import {
   INDEXED_DB_VERSION,
   getVerseMemoryStatus,
   USER_ID,
+  getVerseMemoryStatuses,
 } from "./localDb";
-import { VerseMemoryStatus, VerseMemoryStatusType } from "./localSchema";
+import { VerseMemoryStatusTable, VerseMemoryStatusType } from "./localSchema";
 
 export const queryClient = new QueryClient();
+
+export function useVerseMemoryStatusesQuery() {
+  const query = useQuery(
+    [
+      "indexedDb",
+      INDEXED_DB_NAME,
+      INDEXED_DB_VERSION,
+      VerseMemoryStatusTable.tableName,
+    ],
+    async () => {
+      const res = await getVerseMemoryStatuses(USER_ID);
+      return res;
+    }
+  );
+
+  return query;
+}
 
 interface UseVerseMemoryStatusQueryProps {
   verseId: number;
@@ -27,7 +45,7 @@ export function useVerseMemoryStatusQuery({
       "indexedDb",
       INDEXED_DB_NAME,
       INDEXED_DB_VERSION,
-      VerseMemoryStatus.tableName,
+      VerseMemoryStatusTable.tableName,
       verseId,
     ],
     async () => {

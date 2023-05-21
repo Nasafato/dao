@@ -5,7 +5,7 @@ import { AuxVerseLearningMenu } from "./AuxVerseLearningMenu";
 import { AuxVerseStatus as AuxVerseStatus } from "./AuxVerseStatus";
 import {
   MEMORY_STATUS,
-  VerseMemoryStatus,
+  VerseMemoryStatusTable,
   VerseMemoryStatusType,
 } from "../../lib/localSchema";
 import { useMutation } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ export function AuxVerseHeaderLearning({
         "indexedDb",
         INDEXED_DB_NAME,
         INDEXED_DB_VERSION,
-        VerseMemoryStatus.tableName,
+        VerseMemoryStatusTable.tableName,
         verse.id,
       ]);
     },

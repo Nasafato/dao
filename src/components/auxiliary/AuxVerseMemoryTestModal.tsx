@@ -1,16 +1,16 @@
 import { Dialog } from "@headlessui/react";
-import { DaoVerse } from "../../types";
+import { useMutation } from "@tanstack/react-query";
 import {
-  CheckCircleIcon,
-  CheckIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid";
-import { api } from "../../utils/trpc";
+  INDEXED_DB_NAME,
+  INDEXED_DB_VERSION,
+  USER_ID,
+  reportMemoryTestResult,
+} from "../../lib/localDb";
+import { VerseMemoryStatusTable } from "../../lib/localSchema";
+import { queryClient, useVerseMemoryStatusQuery } from "../../lib/reactQuery";
 import { useDaoStore } from "../../state/store";
-import { Spinner } from "../shared/Spinner";
 import { Countdown } from "../shared/Countdown";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
+import { Spinner } from "../shared/Spinner";
 
 export function AuxVerseMemoryTestModal() {
   const verse = useDaoStore((state) => state.verseBeingTested);
@@ -22,61 +22,44 @@ export function AuxVerseMemoryTestModal() {
     },
   });
 
-  const reportSuccessMutation = useMutation(async () => {});
+  const reportPassMutation = useMutation(async () => {
+    if (!verse?.id) {
+      throw new Error("No verse to report result for");
+    }
+    const result = await reportMemoryTestResult(USER_ID, verse.id, {
+      type: "total",
+      result: "pass",
+    });
+  });
+  const reportFailMutation = useMutation(async () => {
+    if (!verse?.id) {
+      throw new Error("No verse to report result for");
+    }
+    const result = await reportMemoryTestResult(USER_ID, verse.id, {
+      type: "total",
+      result: "fail",
+    });
+  });
 
-  const reportResult = (result: "success" | "failure") => {
+  const reportResult = (result: "pass" | "fail") => {
     if (!verse) {
       throw new Error("No verse to report result for");
     }
+    let mutation = reportFailMutation;
+    if (result === "pass") {
+      mutation = reportPassMutation;
+    }
+    mutation.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "indexedDb",
+          INDEXED_DB_NAME,
+          INDEXED_DB_VERSION,
+          VerseMemoryStatusTable.tableName,
+        ]);
+      },
+    });
   };
-  // const utils = api.useContext();
-  // const reportFailureMutation = api.verseLearning.recordTest.useMutation();
-  // const reportSuccessMutation = api.verseLearning.recordTest.useMutation();
-  // const reportResult = (result: "success" | "failure") => {
-  //   if (!verse) {
-  //     throw new Error("No verse to report result for");
-  //   }
-
-  //   let mutation = reportFailureMutation;
-  //   if (result === "success") {
-  //     mutation = reportSuccessMutation;
-  //   }
-
-  //   mutation.mutate(
-  //     {
-  //       verseId: verse.id,
-  //       result,
-  //       time: Date.now(),
-  //     },
-  //     {
-  //       onSuccess: (verseStatus) => {
-  //         utils.verseStatus.findOne.setData(
-  //           {
-  //             verseId: verseStatus.verseId,
-  //           },
-  //           {
-  //             ...verseStatus,
-  //           }
-  //         );
-  //         utils.verseStatus.findMany.setData(undefined, (old) => {
-  //           if (!old) {
-  //             return [verseStatus];
-  //           }
-  //           const newData = [...old];
-  //           for (let i = 0; i < newData.length; i++) {
-  //             if (newData[i].verseId === verseStatus.verseId) {
-  //               newData[i] = verseStatus;
-  //               break;
-  //             }
-  //           }
-  //           return newData;
-  //         });
-  //         utils.verseStatus.findOne.invalidate({ verseId: verse?.id });
-  //         utils.verseStatus.findMany.invalidate();
-  //       },
-  //     }
-  //   );
-  // };
 
   const nextReviewValue =
     verseMemoryStatusQuery.data?.nextReviewDatetime ?? null;
@@ -120,27 +103,27 @@ export function AuxVerseMemoryTestModal() {
               <button
                 className="flex relative justify-center items-center bg-green-500 px-3 py-2  text-white hover:bg-green-600 w-32"
                 onClick={() => {
-                  // reportResult("success");
+                  reportResult("pass");
                 }}
               >
-                {/* {reportSuccessMutation.isLoading && ( */}
-                <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
-                  <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
-                </div>
-                {/* )} */}
+                {reportPassMutation.isLoading && (
+                  <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
+                    <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
+                  </div>
+                )}
                 Success
               </button>
               <button
                 className="flex relative justify-center items-center bg-red-500 text-white px-3 py-2 hover:bg-red-600 w-32"
                 onClick={() => {
-                  // reportResult("failure");
+                  reportResult("fail");
                 }}
               >
-                {/* {reportFailureMutation.isLoading && ( */}
-                <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
-                  <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
-                </div>
-                {/* )} */}
+                {reportFailMutation.isLoading && (
+                  <div className="absolute top-1/2 transform -translate-y-1/2 left-3">
+                    <Spinner className="h-3 w-3 text-gray-300 fill-gray-400" />
+                  </div>
+                )}
                 Failure
               </button>
             </div>

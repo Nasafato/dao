@@ -1,36 +1,16 @@
-import {
-  ArrowDownIcon,
-  PauseIcon,
-  PlayIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid";
+import { ArrowDownIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
-import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { CDN_URL, punctuation } from "../../consts";
-import {
-  changeMediaSourceAtom,
-  isPlayingAtom,
-  mediaSourceAtom,
-} from "../../state/mediaAtoms";
+import { VerseMemoryStatusType } from "../../lib/localSchema";
 import {
   DaoVerse,
   DictionaryEntrySchema,
   DictionarySchemaType,
 } from "../../types";
-import { DownloadAudioButton } from "./DownloadAudioButton";
-import { usePopover } from "./VersesPopover";
 import { VerseHeader } from "./VerseHeader";
-import { VerseToUser } from "@prisma/client";
-import {
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-  getVerseMemoryStatus,
-  USER_ID,
-} from "../../lib/localDb";
-import { VerseMemoryStatus } from "../../lib/localSchema";
-import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
+import { usePopover } from "./VersesPopover";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -42,14 +22,11 @@ function fetchVerseMediaSource(
 
 export function Verse({
   verse,
-}: // verseStatus,
-{
+  verseStatus,
+}: {
   verse: DaoVerse;
-  // verseStatus: VerseToUser | null;
+  verseStatus: VerseMemoryStatusType | null;
 }) {
-  const verseMemoryStatusQuery = useVerseMemoryStatusQuery({
-    verseId: verse.id,
-  });
   const [showDescription, setShowDescription] = useState(false);
   const chars = verse.text.split("");
   const text = chars.map((char, index) => {
@@ -66,10 +43,9 @@ export function Verse({
       <VerseHeader
         verse={verse}
         verseMediaSource={verseMediaSource}
-        verseStatus={verseMemoryStatusQuery.data ?? null}
+        verseStatus={verseStatus}
       />
       <div>{text}</div>
-      {/* <hr className="mt-2" /> */}
       <button
         className="mb-2 mt-4 text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 dark:hover:bg-gray-800 flex items-center gap-x-1"
         onClick={() => {
@@ -196,7 +172,7 @@ function Definition({ char }: { char: string }) {
   return (
     <div
       className={clsx(
-        "bg-white dark:bg-gray-950 border-gray-500 dark:border-gray-200 dark:text-gray-100 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
+        "bg-white dark:bg-gray-950 border-gray-500 dark:border-gray-200/20 dark:text-gray-100 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
       )}
     >
       <h3>{char}</h3>
