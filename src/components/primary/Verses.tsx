@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { VerseMemoryStatusType } from "../../lib/localSchema";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 import { useVerseMemoryStatusesQuery } from "../../lib/reactQuery";
 import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";

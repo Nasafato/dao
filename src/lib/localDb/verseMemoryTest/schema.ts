@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 
 export const VerseTotalMemoryTestSchema = z.object({
   id: z.string(),
@@ -40,3 +40,33 @@ export const VerseMemoryTestSchema = z.discriminatedUnion("type", [
 export const VerseMemoryTestSchemaArray = z.array(VerseMemoryTestSchema);
 
 export type VerseMemoryTestType = z.infer<typeof VerseMemoryTestSchema>;
+
+export const VerseMemoryTestTableName = "verse-memory-test" as const;
+export const VerserMemoryTestIndexes = {
+  userId_verseId: {
+    indexName: "userId_verseId",
+    keyPath: ["userId", "verseId"],
+    opts: { unique: false },
+  },
+  createdAt: {
+    indexName: "createdAt",
+    keyPath: "createdAt",
+    opts: { unique: false },
+  },
+} as const;
+
+export function createVerseMemoryTestV1Store(db: IDBDatabase) {
+  const verseMemoryStatusObjectStore = db.createObjectStore(
+    VerseMemoryTestTableName,
+    {
+      keyPath: "id",
+    }
+  );
+  for (const [indexName, { keyPath, opts }] of Object.entries(
+    VerserMemoryTestIndexes
+  )) {
+    if (!verseMemoryStatusObjectStore.indexNames.contains(indexName)) {
+      verseMemoryStatusObjectStore.createIndex(indexName, keyPath, opts);
+    }
+  }
+}

@@ -16,7 +16,6 @@ export default function VersePage({
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
   const verse = DAO_VERSES.find((v) => v.id.toString() === params?.verseId);
-  console.log("verse");
   return {
     props: {
       verse,

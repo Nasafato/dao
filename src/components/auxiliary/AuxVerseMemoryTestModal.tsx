@@ -6,7 +6,7 @@ import {
   USER_ID,
   reportMemoryTestResult,
 } from "../../lib/localDb";
-import { VerseMemoryStatusTable } from "../../lib/localSchema";
+import { VerseMemoryStatus } from "../../lib/localDb/verseMemoryStatus";
 import { queryClient, useVerseMemoryStatusQuery } from "../../lib/reactQuery";
 import { useDaoStore } from "../../state/store";
 import { Countdown } from "../shared/Countdown";
@@ -19,6 +19,14 @@ export function AuxVerseMemoryTestModal() {
     verseId: verse?.id ?? 0,
     opts: {
       enabled: !!verse,
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "indexedDb",
+          INDEXED_DB_NAME,
+          INDEXED_DB_VERSION,
+          VerseMemoryStatus.tableName,
+        ]);
+      },
     },
   });
 
@@ -26,18 +34,27 @@ export function AuxVerseMemoryTestModal() {
     if (!verse?.id) {
       throw new Error("No verse to report result for");
     }
-    const result = await reportMemoryTestResult(USER_ID, verse.id, {
-      type: "total",
-      result: "pass",
+    await reportMemoryTestResult({
+      userId: USER_ID,
+      verseId: verse.id,
+      test: {
+        type: "total",
+        result: "pass",
+      },
     });
   });
+
   const reportFailMutation = useMutation(async () => {
     if (!verse?.id) {
       throw new Error("No verse to report result for");
     }
-    const result = await reportMemoryTestResult(USER_ID, verse.id, {
-      type: "total",
-      result: "fail",
+    await reportMemoryTestResult({
+      userId: USER_ID,
+      verseId: verse.id,
+      test: {
+        type: "total",
+        result: "fail",
+      },
     });
   });
 
@@ -49,16 +66,7 @@ export function AuxVerseMemoryTestModal() {
     if (result === "pass") {
       mutation = reportPassMutation;
     }
-    mutation.mutate(undefined, {
-      onSuccess: () => {
-        queryClient.invalidateQueries([
-          "indexedDb",
-          INDEXED_DB_NAME,
-          INDEXED_DB_VERSION,
-          VerseMemoryStatusTable.tableName,
-        ]);
-      },
-    });
+    mutation.mutate();
   };
 
   const nextReviewValue =

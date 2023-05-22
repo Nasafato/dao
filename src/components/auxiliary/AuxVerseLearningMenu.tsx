@@ -1,19 +1,16 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ChevronDownIcon,
   PlusCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { useDaoStore } from "../../state/store";
-import { api } from "../../utils/trpc";
-import { Spinner } from "../shared/Spinner";
-import { AuxVerseMemoryTestModal } from "./AuxVerseMemoryTestModal";
-import { VerseToUser } from "@prisma/client";
-import { DaoVerse } from "../../types";
-import { MEMORY_STATUS, VerseMemoryStatusType } from "../../lib/localSchema";
-import { getVerseMemoryStatus } from "../../lib/localDb";
 import { UseMutationResult } from "@tanstack/react-query";
+import { Fragment } from "react";
+import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import { useDaoStore } from "../../state/store";
+import { DaoVerse } from "../../types";
+import { Spinner } from "../shared/Spinner";
 
 export function AuxVerseLearningMenu({
   verse,

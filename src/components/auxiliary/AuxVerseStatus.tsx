@@ -1,10 +1,11 @@
 import { AcademicCapIcon } from "@heroicons/react/20/solid";
 import { UseMutationResult } from "@tanstack/react-query";
-import { MEMORY_STATUS, VerseMemoryStatusType } from "../../lib/localSchema";
+import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { useDaoStore } from "../../state/store";
 import { DaoVerse } from "../../types";
 import { Spinner } from "../shared/Spinner";
 import { Countdown } from "../shared/Countdown";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 
 export function AuxVerseStatus({
   verse,

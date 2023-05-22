@@ -5,7 +5,7 @@ import { Header } from "../components/primary/Header";
 import { Verses } from "../components/primary/Verses";
 import { IndexedDbViewer } from "../debugging/IndexedDbViewer";
 import { DAO_VERSES } from "../lib/daoText";
-import { INDEXED_DB_NAME, INDEXED_DB_VERSION } from "../lib/localDb";
+import { INDEXED_DB_NAME, INDEXED_DB_VERSION } from "../lib/localDb/db";
 
 const inter = Inter({ subsets: ["latin"] });
 

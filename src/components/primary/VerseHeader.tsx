@@ -8,8 +8,8 @@ import {
 } from "../../state/mediaAtoms";
 import { DaoVerse } from "../../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
-import { VerseMemoryStatusType } from "../../lib/localSchema";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 
 export function VerseHeader({
   verse,

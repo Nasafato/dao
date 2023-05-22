@@ -3,7 +3,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { CDN_URL, punctuation } from "../../consts";
-import { VerseMemoryStatusType } from "../../lib/localSchema";
 import {
   DaoVerse,
   DictionaryEntrySchema,
@@ -11,6 +10,7 @@ import {
 } from "../../types";
 import { VerseHeader } from "./VerseHeader";
 import { usePopover } from "./VersesPopover";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 
 function fetchVerseMediaSource(
   verseId: number,

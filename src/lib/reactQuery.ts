@@ -1,13 +1,9 @@
 import { QueryClient, UseQueryOptions, useQuery } from "@tanstack/react-query";
-import verse from "../pages/api/verse";
+import { INDEXED_DB_NAME, INDEXED_DB_VERSION, USER_ID } from "./localDb/db";
 import {
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-  getVerseMemoryStatus,
-  USER_ID,
-  getVerseMemoryStatuses,
-} from "./localDb";
-import { VerseMemoryStatusTable, VerseMemoryStatusType } from "./localSchema";
+  VerseMemoryStatus,
+  VerseMemoryStatusType,
+} from "./localDb/verseMemoryStatus";
 
 export const queryClient = new QueryClient();
 
@@ -17,10 +13,10 @@ export function useVerseMemoryStatusesQuery() {
       "indexedDb",
       INDEXED_DB_NAME,
       INDEXED_DB_VERSION,
-      VerseMemoryStatusTable.tableName,
+      VerseMemoryStatus.tableName,
     ],
     async () => {
-      const res = await getVerseMemoryStatuses(USER_ID);
+      const res = await VerseMemoryStatus.getAll({ userId: USER_ID });
       return res;
     }
   );
@@ -45,11 +41,13 @@ export function useVerseMemoryStatusQuery({
       "indexedDb",
       INDEXED_DB_NAME,
       INDEXED_DB_VERSION,
-      VerseMemoryStatusTable.tableName,
+      VerseMemoryStatus.tableName,
       verseId,
     ],
     async () => {
-      const res = await getVerseMemoryStatus(USER_ID, verseId);
+      const res = await VerseMemoryStatus.get({
+        userId_verseId: [USER_ID, verseId],
+      });
       return res;
     },
     opts

@@ -3,20 +3,18 @@ import { DaoVerse } from "../../types";
 import { api } from "../../utils/trpc";
 import { AuxVerseLearningMenu } from "./AuxVerseLearningMenu";
 import { AuxVerseStatus as AuxVerseStatus } from "./AuxVerseStatus";
-import {
-  MEMORY_STATUS,
-  VerseMemoryStatusTable,
-  VerseMemoryStatusType,
-} from "../../lib/localSchema";
 import { useMutation } from "@tanstack/react-query";
 import {
   INDEXED_DB_NAME,
   INDEXED_DB_VERSION,
   USER_ID,
-  setVerseMemoryStatus,
-  updateStatus,
-} from "../../lib/localDb";
+} from "../../lib/localDb/db";
 import { queryClient } from "../../lib/reactQuery";
+import {
+  VerseMemoryStatus,
+  VerseMemoryStatusType,
+} from "../../lib/localDb/verseMemoryStatus";
+import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 
 interface AuxVerseHeaderLearningProps {
   verse: DaoVerse;
@@ -30,7 +28,10 @@ export function AuxVerseHeaderLearning({
   const updateStatusMutation = useMutation({
     mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
       const { status } = args;
-      const memoryStatus = await updateStatus(USER_ID, verse.id, status);
+      const memoryStatus = await VerseMemoryStatus.update({
+        userId_verseId: [USER_ID, verse.id],
+        data: { status },
+      });
       return memoryStatus;
     },
     onSuccess: () => {
@@ -39,7 +40,7 @@ export function AuxVerseHeaderLearning({
         "indexedDb",
         INDEXED_DB_NAME,
         INDEXED_DB_VERSION,
-        VerseMemoryStatusTable.tableName,
+        VerseMemoryStatus.tableName,
         verse.id,
       ]);
     },
