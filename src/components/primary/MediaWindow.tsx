@@ -5,7 +5,7 @@ import {
   isPlayingAtom,
   mediaSourceAtom,
   mediaTypeAtom,
-} from "../state/mediaAtoms";
+} from "../../state/mediaAtoms";
 
 export function MediaWindow() {
   const [mediaSource] = useAtom(mediaSourceAtom);

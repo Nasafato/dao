@@ -1,41 +1,44 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ChevronDownIcon,
   PlusCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { useDaoStore } from "../state/store";
-import { api } from "../utils/trpc";
-import { Spinner } from "./Spinner";
-import { VerseMemoryTestModal } from "./VerseMemoryTestModal";
-import { VerseToUser } from "@prisma/client";
-import { DaoVerse } from "../types";
+import { UseMutationResult } from "@tanstack/react-query";
+import { Fragment } from "react";
+import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import { useDaoStore } from "../../state/store";
+import { DaoVerse } from "../../types";
+import { Spinner } from "../shared/Spinner";
 
-export function VerseLearningMenu({
+export function AuxVerseLearningMenu({
   verse,
   verseStatus,
   updateStatusMutation,
 }: {
   verse: DaoVerse;
-  verseStatus: VerseToUser | null;
-  updateStatusMutation: ReturnType<
-    typeof api.verseStatus.updateStatus.useMutation
+  verseStatus: VerseMemoryStatusType | null;
+  updateStatusMutation: UseMutationResult<
+    {
+      id: string;
+      verseId: number;
+      status: "LEARNING" | "NOT_LEARNING";
+      nextReviewDatetime: number;
+    },
+    unknown,
+    {
+      status: keyof typeof MEMORY_STATUS;
+    },
+    unknown
   >;
 }) {
-  const verseId = verse.id;
   const onUnlearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "not-learning",
-    });
+    updateStatusMutation.mutate({ status: MEMORY_STATUS.NOT_LEARNING });
   };
 
   const onLearnClick = () => {
-    updateStatusMutation.mutate({
-      verseId,
-      status: "learning",
-    });
+    updateStatusMutation.mutate({ status: MEMORY_STATUS.LEARNING });
   };
 
   const setVerseBeingTested = useDaoStore((state) => state.setVerseBeingTested);
@@ -64,35 +67,36 @@ export function VerseLearningMenu({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+          <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-950 dark:ring-gray-200/20 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
             <div className="px-1 py-1 text-xs">
               <Menu.Item>
                 {({ active }) => {
                   if (
                     !verseStatus ||
-                    verseStatus.status === "not-fetched" ||
-                    verseStatus.status === "not-learning"
+                    verseStatus.status === MEMORY_STATUS.NOT_LEARNING
                   ) {
                     return (
                       <button
                         onClick={onLearnClick}
-                        disabled={!verseStatus}
+                        // disabled={!verseStatus}
                         className={`${
                           active
-                            ? "bg-green-500 text-white disabled:bg-gray200"
-                            : "text-gray-900"
+                            ? "bg-green-500 text-white disabled:bg-gray-200"
+                            : "text-gray-900 dark:text-gray-200"
                         } group flex w-full items-center rounded-md px-2 py-1 disabled:line-through`}
                       >
                         <PlusCircleIcon className="mr-2 h-3 w-3 text-green-500" />
                         Learn
                       </button>
                     );
-                  } else if (verseStatus.status === "learning") {
+                  } else if (verseStatus.status === MEMORY_STATUS.LEARNING) {
                     return (
                       <div className="text-xs">
                         <button
                           className={`${
-                            active ? "bg-green-500 text-white" : "text-gray-900"
+                            active
+                              ? "bg-green-500 text-white"
+                              : "text-gray-900 dark:text-gray-200"
                           } group flex w-full items-center rounded-md px-2 py-1`}
                           onClick={onUnlearnClick}
                         >
@@ -116,7 +120,9 @@ export function VerseLearningMenu({
                   return (
                     <button
                       className={`${
-                        active ? "bg-green-500 text-white" : "text-gray-900"
+                        active
+                          ? "bg-green-500 text-white"
+                          : "text-gray-900 dark:text-gray-200"
                       } group flex w-full items-center rounded-md px-2 py-1`}
                       onClick={onTestClick}
                     >

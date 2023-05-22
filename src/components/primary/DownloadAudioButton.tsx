@@ -4,8 +4,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { useCallback, useEffect, useState } from "react";
-import { DAO_CDN_MP3_CACHE } from "../consts";
-import { Spinner } from "./Spinner";
+import { DAO_CDN_MP3_CACHE } from "../../consts";
+import { Spinner } from "../shared/Spinner";
 import clsx from "clsx";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {

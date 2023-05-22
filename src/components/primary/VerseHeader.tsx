@@ -1,16 +1,15 @@
 import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
+import { VerseToUser } from "@prisma/client";
 import { useAtom } from "jotai";
 import {
   changeMediaSourceAtom,
-  mediaSourceAtom,
   isPlayingAtom,
-} from "../state/mediaAtoms";
+  mediaSourceAtom,
+} from "../../state/mediaAtoms";
+import { DaoVerse } from "../../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
-import { VerseStatus } from "./VerseStatus";
-import { VerseLearningMenu } from "./VerseLearningMenu";
-import { api } from "../utils/trpc";
-import { VerseToUser } from "@prisma/client";
-import { DaoVerse } from "../types";
+import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 
 export function VerseHeader({
   verse,
@@ -19,16 +18,10 @@ export function VerseHeader({
 }: {
   verse: DaoVerse;
   verseMediaSource: string;
-  verseStatus: VerseToUser | null;
+  verseStatus: VerseMemoryStatusType | null;
 }) {
-  const utils = api.useContext();
   const verseId = verse.id;
 
-  const updateStatusMutation = api.verseStatus.updateStatus.useMutation({
-    onSuccess: async () => {
-      await utils.verseStatus.findMany.invalidate();
-    },
-  });
   return (
     <div className="flex items-center py-1 justify-between">
       <div className="flex items-center gap-x-2">
@@ -42,18 +35,9 @@ export function VerseHeader({
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>
-      <div className="flex items-center gap-x-2">
-        <VerseStatus
-          verse={verse}
-          verseStatus={verseStatus}
-          updateStatusMutation={updateStatusMutation}
-        />
-        <VerseLearningMenu
-          verse={verse}
-          verseStatus={verseStatus}
-          updateStatusMutation={updateStatusMutation}
-        />
-      </div>
+      {/* {verseStatus && ( */}
+      <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
+      {/* )} */}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "../trpc";
+import { verseRouter } from "./verse";
 import { verseLearningRouter } from "./verseLearning";
 // import { exampleRouter } from "~/server/api/routers/example";
 import { verseStatusRouter } from "./verseStatus";
@@ -9,6 +10,7 @@ import { verseStatusRouter } from "./verseStatus";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  verse: verseRouter,
   verseStatus: verseStatusRouter,
   verseLearning: verseLearningRouter,
 });

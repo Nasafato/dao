@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { DaoVerse, DictionarySchema } from "../types";
+import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import { useVerseMemoryStatusesQuery } from "../../lib/reactQuery";
+import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { Popover, PopoverContextProvider } from "./VersesPopover";
-import { api } from "../utils/trpc";
-import { VerseToUser } from "@prisma/client";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -28,10 +28,9 @@ export function Verses({ verses }: VerseProps) {
     cacheTime: Infinity,
   });
 
-  const verseStatusesQuery = api.verseStatus.findMany.useQuery();
-  const verseStatuses = verseStatusesQuery.data ?? [];
-  const statusMap: Record<string, VerseToUser> = {};
-  for (const status of verseStatuses) {
+  const verseMemoryStatusesQuery = useVerseMemoryStatusesQuery();
+  const statusMap: Record<string, VerseMemoryStatusType> = {};
+  for (const status of verseMemoryStatusesQuery.data ?? []) {
     statusMap[status.verseId] = status;
   }
 
