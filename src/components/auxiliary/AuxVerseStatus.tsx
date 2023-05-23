@@ -30,14 +30,15 @@ export function AuxVerseStatus({
 }) {
   const setVerseBeingTested = useDaoStore((state) => state.setVerseBeingTested);
   if (!verseStatus || verseStatus.status === MEMORY_STATUS.NOT_LEARNING)
-    return updateStatusMutation.isLoading ? (
-      <div className="text-xs ring-1 ring-gray-950/5 rounded-full px-3 py-1">
-        <div className="flex w-full gap-x-1 items-center">
-          <Spinner className="mr-1 h-3 w-3 text-gray-200 fill-gray-800" />
-          Learning
-        </div>
-      </div>
-    ) : null;
+    return null;
+  // return updateStatusMutation.isLoading ? (
+  //   <div className="text-xs ring-1 ring-gray-950/5 rounded-full px-3 py-1">
+  //     <div className="flex w-full gap-x-1 items-center">
+  //       <Spinner className="mr-1 h-3 w-3 text-gray-200 fill-gray-800" />
+  //       Learning
+  //     </div>
+  //   </div>
+  // ) : null;
 
   if (verseStatus.status === MEMORY_STATUS.LEARNING) {
     return (
@@ -48,11 +49,7 @@ export function AuxVerseStatus({
           // setVerseBeingTested(verse);
           // }}
         >
-          {updateStatusMutation.isLoading ? (
-            <Spinner className="h-3 w-3 text-gray-200 fill-gray-800" />
-          ) : (
-            <AcademicCapIcon className="h-3 w-3 text-gray-600" />
-          )}
+          <AcademicCapIcon className="h-3 w-3 text-gray-600" />
           Learning:
           <Countdown
             targetDate={new Date(verseStatus.nextReviewDatetime)}

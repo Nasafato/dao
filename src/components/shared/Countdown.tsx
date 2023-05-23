@@ -1,4 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 interface CountdownProps {
   targetDate: Date;
@@ -41,7 +46,7 @@ export function Countdown({ targetDate, ...props }: CountdownProps) {
   }, [targetDate]);
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeLeft(calculateTimeLeft());
   }, [calculateTimeLeft]);
 
