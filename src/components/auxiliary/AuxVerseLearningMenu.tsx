@@ -46,11 +46,13 @@ export function AuxVerseLearningMenu({
     setVerseBeingTested(verse);
   };
 
+  const shouldShowTestButton = verseStatus?.status === MEMORY_STATUS.LEARNING;
+
   return (
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex items-center">
-          <Menu.Button className="inline-flex w-full items-center justify-center ring-1 ring-gray-950/5 rounded-full px-2 py-1 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:text-gray-500">
+          <Menu.Button className="inline-flex w-full items-center justify-center ring-1 ring-gray-950/5 rounded-full px-2 py-1 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:text-gray-500">
             Options
             <ChevronDownIcon
               className="ml-1 -mr-1 h-4 w-4 text-gray-300 hover:text-gray-200"
@@ -115,22 +117,24 @@ export function AuxVerseLearningMenu({
                   return <div className="text-sm">Unrecognized state</div>;
                 }}
               </Menu.Item>
-              <Menu.Item>
-                {({ active }) => {
-                  return (
-                    <button
-                      className={`${
-                        active
-                          ? "bg-green-500 text-white"
-                          : "text-gray-900 dark:text-gray-200"
-                      } group flex w-full items-center rounded-md px-2 py-1`}
-                      onClick={onTestClick}
-                    >
-                      Test
-                    </button>
-                  );
-                }}
-              </Menu.Item>
+              {shouldShowTestButton && (
+                <Menu.Item>
+                  {({ active }) => {
+                    return (
+                      <button
+                        className={`${
+                          active
+                            ? "bg-green-500 text-white"
+                            : "text-gray-900 dark:text-gray-200"
+                        } group flex w-full items-center rounded-md px-2 py-1`}
+                        onClick={onTestClick}
+                      >
+                        Test
+                      </button>
+                    );
+                  }}
+                </Menu.Item>
+              )}
             </div>
           </Menu.Items>
         </Transition>

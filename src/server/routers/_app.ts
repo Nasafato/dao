@@ -1,3 +1,4 @@
+import { inferRouterOutputs } from "@trpc/server";
 import { createTRPCRouter } from "../trpc";
 import { verseRouter } from "./verse";
 import { verseLearningRouter } from "./verseLearning";
@@ -17,3 +18,7 @@ export const appRouter = createTRPCRouter({
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
+
+export type RouterOutput = inferRouterOutputs<AppRouter>;
+
+export type DescriptionOutput = RouterOutput["verse"]["findDescription"];
