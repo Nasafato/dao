@@ -59,6 +59,7 @@ function isAllowedOrigin(origin: string) {
   }
   const allowedOrigins = [
     "http://localhost:3000",
+    "http://localhost:3001",
     /^https:\/\/dao.*nasafato\.vercel\.app$/,
     "https://daodejing.app",
   ];

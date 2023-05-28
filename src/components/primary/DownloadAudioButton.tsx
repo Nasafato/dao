@@ -7,41 +7,50 @@ import { useCallback, useEffect, useState } from "react";
 import { DAO_CDN_MP3_CACHE } from "../../consts";
 import { Spinner } from "../shared/Spinner";
 import clsx from "clsx";
+import { useDaoStore } from "../../state/store";
+import { useMutation } from "@tanstack/react-query";
 
 export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
-  const [isCached, setIsCached] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
+  const cachedAudio = useDaoStore((state) => state.cachedAudio);
+  const setAudioCached = useDaoStore((state) => state.setAudioCached);
+  const isCached = !!cachedAudio[audioUrl];
 
   const checkCache = useCallback(async () => {
     const isCached = await checkAudioCached(audioUrl);
-    setIsCached(isCached);
-  }, [audioUrl]);
+    setAudioCached(audioUrl, isCached);
+  }, [audioUrl, setAudioCached]);
 
   useEffect(() => {
     checkCache();
   }, [checkCache]);
 
-  const onClick = async () => {
-    const isCached = await checkAudioCached(audioUrl);
-    if (isCached) {
-      setIsCached(true);
-      return;
+  const fetchAudioMutation = useMutation(
+    async () => {
+      const isCached = await checkAudioCached(audioUrl);
+      if (isCached) {
+        setAudioCached(audioUrl, true);
+        return;
+      }
+      await fetch(audioUrl);
+    },
+    {
+      onSuccess: () => {
+        setAudioCached(audioUrl, true);
+      },
+      onError: (err) => {
+        console.error(err);
+      },
     }
+  );
 
-    setIsDownloading(true);
-    setTimeout(() => {
-      setIsDownloading(false);
-    }, 10000);
-    await fetch(audioUrl);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await checkCache();
-    setIsDownloading(false);
+  const onClick = () => {
+    fetchAudioMutation.mutate();
   };
 
   const onClearDownloadClick = async () => {
     const cache = await caches.open(DAO_CDN_MP3_CACHE);
     await cache.delete(audioUrl);
-    await checkCache();
+    setAudioCached(audioUrl, false);
   };
 
   if (isCached) {
@@ -53,7 +62,7 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
     );
   }
 
-  if (isDownloading) {
+  if (fetchAudioMutation.isLoading) {
     return (
       <button className="group">
         <Spinner
