@@ -15,6 +15,7 @@ import { api } from "../../utils/trpc";
 import { DescriptionOutput } from "../../server/routers/_app";
 import { VerseDescription } from "./VerseDescription";
 import { VerseChar } from "./VerseChar";
+import { Spinner } from "../shared/Spinner";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -61,8 +62,10 @@ export function Verse({
           setShowDescription(!showDescription);
         }}
       >
-        Description{" "}
-        {showDescription ? (
+        Description
+        {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
+          <Spinner className="h-2 w-2 text-gray-200 fill-gray-400" />
+        ) : showDescription ? (
           <XMarkIcon className="h-2 w-2" />
         ) : (
           <ArrowDownIcon className="h-2 w-2" />
