@@ -6,13 +6,14 @@ import { DescriptionOutput } from "../../server/routers/_app";
 import { DictionarySchemaType, DictionaryEntrySchema } from "../../types";
 import { usePopover } from "./VersesPopover";
 import { VerseChar } from "./VerseChar";
+import { capitalize } from "../../utils";
 
 export function VerseDescription({
   verseId,
   data,
 }: {
   verseId: number;
-  data: DescriptionOutput;
+  data: { description: string; translations: Record<string, string> };
 }) {
   const { description, translations } = data;
 
@@ -35,8 +36,18 @@ export function VerseDescription({
   return (
     <div>
       <div className="text-[0.95rem]/[22px] space-y-4">
-        <p className="text-xl">{descriptionText}</p>
-        <div>
+        <p className="text-lg">{descriptionText}</p>
+        {Object.entries(translations).map(([translator, text]) => {
+          return (
+            <div key={translator}>
+              <h5 className={TranslationHeaderStyle}>
+                {capitalize(translator)}
+              </h5>
+              <p>{text}</p>
+            </div>
+          );
+        })}
+        {/* <div>
           <h5 className={TranslationHeaderStyle}>Legge</h5>
           <p>{legge}</p>
         </div>
@@ -47,7 +58,7 @@ export function VerseDescription({
         <div>
           <h5 className={TranslationHeaderStyle}>Susuki</h5>
           <p>{susuki}</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -10,3 +10,15 @@ export function tryParseDaoIndex(i: unknown) {
 
   return result;
 }
+
+export function forceQueryParamString(param: string | string[] | undefined) {
+  if (Array.isArray(param)) {
+    return param.join(",");
+  }
+
+  return param;
+}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

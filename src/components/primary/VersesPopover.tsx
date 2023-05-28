@@ -147,7 +147,6 @@ export function PopoverContextProvider({
       };
       // For each orientation, check if the popover overlaps the viewport.
       // If it doesn't, use that orientation.
-
       const farthestCorner = buildFarthestCorner();
       const hasOverlap = checkOverlapsViewport(farthestCorner);
       if (!hasOverlap) {

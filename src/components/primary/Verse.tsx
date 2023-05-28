@@ -1,21 +1,15 @@
 import { ArrowDownIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import { CDN_URL, punctuation } from "../../consts";
-import {
-  DaoVerse,
-  DictionaryEntrySchema,
-  DictionarySchemaType,
-} from "../../types";
-import { VerseHeader } from "./VerseHeader";
-import { usePopover } from "./VersesPopover";
 import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import { DaoVerse } from "../../types";
 import { api } from "../../utils/trpc";
-import { DescriptionOutput } from "../../server/routers/_app";
-import { VerseDescription } from "./VerseDescription";
-import { VerseChar } from "./VerseChar";
 import { Spinner } from "../shared/Spinner";
+import { VerseChar } from "./VerseChar";
+import { VerseDescription } from "./VerseDescription";
+import { VerseHeader } from "./VerseHeader";
+import { VerseText } from "./VerseText";
 
 function fetchVerseMediaSource(
   verseId: number,
@@ -33,15 +27,6 @@ export function Verse({
   verseStatus: VerseMemoryStatusType | null;
 }) {
   const [showDescription, setShowDescription] = useState(false);
-  const chars = verse.text.split("");
-  const text = chars.map((char, index) => {
-    if (punctuation.includes(char)) {
-      return char;
-    }
-    return (
-      <VerseChar key={index} char={char} charId={`${verse.id}-${index}`} />
-    );
-  });
 
   const verseMediaSource = fetchVerseMediaSource(verse.id);
   const moreQuery = api.verse.findDescription.useQuery(verse.id, {
@@ -55,22 +40,27 @@ export function Verse({
         verseMediaSource={verseMediaSource}
         verseStatus={verseStatus}
       />
-      <div>{text}</div>
-      <button
-        className="mb-2 mt-4 text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 dark:hover:bg-gray-800 flex items-center gap-x-1"
-        onClick={() => {
-          setShowDescription(!showDescription);
-        }}
-      >
-        Description
-        {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-          <Spinner className="h-2 w-2 text-gray-200 fill-gray-400" />
-        ) : showDescription ? (
-          <XMarkIcon className="h-2 w-2" />
-        ) : (
-          <ArrowDownIcon className="h-2 w-2" />
-        )}
-      </button>
+      <VerseText text={verse.text} verseId={verse.id} />
+      <div className="items-center flex mb-2 mt-4 gap-x-6">
+        <button
+          className="text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 dark:hover:bg-gray-800 flex items-center gap-x-1"
+          onClick={() => {
+            setShowDescription(!showDescription);
+          }}
+        >
+          Description
+          {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
+            <Spinner className="h-2 w-2 text-gray-200 fill-gray-400" />
+          ) : showDescription ? (
+            <XMarkIcon className="h-2 w-2" />
+          ) : (
+            <ArrowDownIcon className="h-2 w-2" />
+          )}
+        </button>
+        <Link href={`/verse/${verse.id}`} className="text-xs hover:underline">
+          Go to
+        </Link>
+      </div>
       {showDescription && moreQuery.data && (
         <VerseDescription verseId={verse.id} data={moreQuery.data} />
       )}

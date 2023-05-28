@@ -37,9 +37,7 @@ export function VerseHeader({
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>
-      {/* {verseStatus && ( */}
       <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
-      {/* )} */}
     </div>
   );
 }
