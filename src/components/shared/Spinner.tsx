@@ -4,7 +4,9 @@ interface SpinnerProps {
   className?: string;
 }
 
-export function Spinner({ className }: SpinnerProps) {
+export function Spinner({
+  className = "text-gray-300 fill-gray-400",
+}: SpinnerProps) {
   return (
     <div role="status">
       <svg
