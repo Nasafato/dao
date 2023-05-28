@@ -25,13 +25,15 @@ export function VerseHeader({
   return (
     <div className="flex items-center py-1 justify-between">
       <div className="flex items-center gap-x-2">
-        <a
-          id={`dao${verseId}`}
-          href={`#dao${verseId}`}
-          className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
-        >
-          第{verseId}章
-        </a>
+        <div>
+          <a
+            id={`dao${verseId}`}
+            href={`#dao${verseId}`}
+            className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
+          >
+            第{verseId}章
+          </a>
+        </div>
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />
       </div>

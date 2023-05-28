@@ -38,7 +38,7 @@ export function Verses({ verses }: VerseProps) {
     <PopoverContextProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
-      <div className="space-y-6">
+      <div className="space-y-5">
         {verses.map((verse) => {
           return (
             <Verse
