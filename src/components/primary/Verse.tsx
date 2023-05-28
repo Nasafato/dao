@@ -11,14 +11,6 @@ import { VerseDescription } from "./VerseDescription";
 import { VerseHeader } from "./VerseHeader";
 import { VerseText } from "./VerseText";
 
-function fetchVerseMediaSource(
-  verseId: number,
-  options: { type: "human" | "generated" } = { type: "human" }
-) {
-  const type = options.type === "human" ? "human" : "generated";
-  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
-}
-
 export function Verse({
   verse,
   verseStatus,
@@ -34,16 +26,16 @@ export function Verse({
 
   return (
     <div>
-      <VerseHeader verse={verse} verseStatus={verseStatus} />
+      <VerseHeader verse={verse} verseStatus={verseStatus} hasAnchor />
       <VerseText text={verse.text} verseId={verse.id} />
-      <div className="items-center flex mb-2 mt-4 gap-x-6">
+      <div className="items-center flex mt-1 gap-x-6 justify-end">
         <button
-          className="text-xs px-2 py-1 border-gray-200 border hover:bg-gray-200 dark:hover:bg-gray-800 flex items-center gap-x-1"
+          className="text-xs flex items-center gap-x-1 hover:underline"
           onClick={() => {
             setShowDescription(!showDescription);
           }}
         >
-          Description
+          Expand
           {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
             <Spinner className="h-2 w-2 text-gray-200 fill-gray-400" />
           ) : showDescription ? (
@@ -57,7 +49,10 @@ export function Verse({
         </Link>
       </div>
       {showDescription && moreQuery.data && (
-        <VerseDescription verseId={verse.id} data={moreQuery.data} />
+        <div className="pl-8">
+          <div className="text-gray-400 mt-6">简介</div>
+          <VerseDescription verseId={verse.id} data={moreQuery.data} />
+        </div>
       )}
     </div>
   );

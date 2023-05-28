@@ -12,12 +12,17 @@ import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 import { CDN_URL } from "../../consts";
 
+const HeaderStyle =
+  "text-gray-400 dark:text-gray-200 text-base whitespace-nowrap";
+
 export function VerseHeader({
   verse,
   verseStatus,
+  hasAnchor = false,
 }: {
   verse: DaoVerse;
   verseStatus: VerseMemoryStatusType | null;
+  hasAnchor?: boolean;
 }) {
   const verseId = verse.id;
   const verseMediaSource = buildVerseMediaSourceUrl(verseId);
@@ -26,13 +31,17 @@ export function VerseHeader({
     <div className="flex items-center py-1 justify-between">
       <div className="flex items-center gap-x-2">
         <div>
-          <a
-            id={`dao${verseId}`}
-            href={`#dao${verseId}`}
-            className="text-gray-400 dark:text-gray-200 text-base whitespace-nowrap"
-          >
-            第{verseId}章
-          </a>
+          {hasAnchor ? (
+            <a
+              id={`dao${verseId}`}
+              href={`#dao${verseId}`}
+              className={HeaderStyle}
+            >
+              第{verseId}章
+            </a>
+          ) : (
+            <h4 className={HeaderStyle}>第{verseId}章</h4>
+          )}
         </div>
         <PlayPauseButton verseMediaSource={verseMediaSource} />
         <DownloadAudioButton audioUrl={verseMediaSource} />

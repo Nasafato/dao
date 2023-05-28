@@ -28,8 +28,8 @@ export default function VersePage({
     <Container>
       <VerseHeader verse={verse} verseStatus={verseStatus.data ?? null} />
       <VerseText text={verse.text} verseId={verse.id} />
-      <HorizontalRule />
-      <div className="mb-4">
+      {/* <HorizontalRule /> */}
+      <div className="mt-1 flex justify-end">
         <button
           className="hover:underline text-xs"
           onClick={() => router.back()}
@@ -37,7 +37,7 @@ export default function VersePage({
           Back
         </button>
       </div>
-      <div className="text-gray-400">简介</div>
+      <div className="text-gray-400 mt-6">简介</div>
       <VerseDescription data={description} verseId={verse.id} />
     </Container>
   );
