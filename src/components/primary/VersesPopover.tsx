@@ -127,7 +127,9 @@ export function PopoverContextProvider({
       };
 
       const checkOverlapsViewport = (corner: { x: number; y: number }) => {
-        if (yAxis === "T" && corner.y < 0) {
+        const topOffset = window.scrollY;
+        const minDistance = 30;
+        if (yAxis === "T" && corner.y - topOffset < 0 + minDistance) {
           console.log("Overlaps top");
           return true;
         } else if (yAxis === "B" && corner.y > window.innerHeight) {
