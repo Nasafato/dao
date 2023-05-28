@@ -28,18 +28,13 @@ export function Verse({
 }) {
   const [showDescription, setShowDescription] = useState(false);
 
-  const verseMediaSource = fetchVerseMediaSource(verse.id);
   const moreQuery = api.verse.findDescription.useQuery(verse.id, {
     enabled: showDescription,
   });
 
   return (
-    <div className="text-xl">
-      <VerseHeader
-        verse={verse}
-        verseMediaSource={verseMediaSource}
-        verseStatus={verseStatus}
-      />
+    <div>
+      <VerseHeader verse={verse} verseStatus={verseStatus} />
       <VerseText text={verse.text} verseId={verse.id} />
       <div className="items-center flex mb-2 mt-4 gap-x-6">
         <button

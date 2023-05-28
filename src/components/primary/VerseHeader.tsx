@@ -10,17 +10,17 @@ import { DaoVerse } from "../../types";
 import { DownloadAudioButton } from "./DownloadAudioButton";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import { CDN_URL } from "../../consts";
 
 export function VerseHeader({
   verse,
-  verseMediaSource,
   verseStatus,
 }: {
   verse: DaoVerse;
-  verseMediaSource: string;
   verseStatus: VerseMemoryStatusType | null;
 }) {
   const verseId = verse.id;
+  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
 
   return (
     <div className="flex items-center py-1 justify-between">
@@ -68,4 +68,12 @@ function PlayPauseButton({ verseMediaSource }: { verseMediaSource: string }) {
       )}
     </button>
   );
+}
+
+function buildVerseMediaSourceUrl(
+  verseId: number,
+  options: { type: "human" | "generated" } = { type: "human" }
+) {
+  const type = options.type === "human" ? "human" : "generated";
+  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
 }

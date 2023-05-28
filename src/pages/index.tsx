@@ -6,20 +6,21 @@ import { Verses } from "../components/primary/Verses";
 import { IndexedDbViewer } from "../debugging/IndexedDbViewer";
 import { DAO_VERSES } from "../lib/daoText";
 import { INDEXED_DB_NAME, INDEXED_DB_VERSION } from "../lib/localDb/db";
+import { Container } from "../components/shared/PageLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home({ verses }: { verses: Verse[] }) {
   return (
     <>
-      <div className="w-full m-auto max-w-xl items-center justify-between text-sm">
+      <Container>
         <AuxVerseMemoryTestModal />
         {/* <IndexedDbViewer
             dbName={INDEXED_DB_NAME}
             version={INDEXED_DB_VERSION}
           /> */}
         <Verses verses={verses} />
-      </div>
+      </Container>
     </>
   );
 }

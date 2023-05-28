@@ -8,6 +8,9 @@ import { VerseDescription } from "../../components/primary/VerseDescription";
 import { HorizontalRule } from "../../components/shared/HorizontalRule";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { VerseHeader } from "../../components/primary/VerseHeader";
+import { CDN_URL } from "../../consts";
+import { Container } from "../../components/shared/PageLayout";
 
 export default function VersePage({
   verse,
@@ -22,13 +25,12 @@ export default function VersePage({
   const router = useRouter();
   const verseStatus = useVerseMemoryStatusQuery({ verseId: verse.id });
   return (
-    <div>
-      <div>第{verse.id}章</div>
+    <Container>
+      <VerseHeader verse={verse} verseStatus={verseStatus.data ?? null} />
       <VerseText text={verse.text} verseId={verse.id} />
       <HorizontalRule />
       <div className="mb-4">
         <button
-          // href={"/"}
           className="hover:underline text-xs"
           onClick={() => router.back()}
         >
@@ -37,7 +39,7 @@ export default function VersePage({
       </div>
       <div className="text-gray-400">简介</div>
       <VerseDescription data={description} verseId={verse.id} />
-    </div>
+    </Container>
   );
 }
 
