@@ -22,11 +22,11 @@ export function Header() {
   };
 
   let right = null;
-  right = (
-    <button onClick={toggleReaderMode}>
-      {readerMode ? "Disable reader mode" : "Enable reader mode"}
-    </button>
-  );
+  // right = (
+  //   <button onClick={toggleReaderMode}>
+  //     {readerMode ? "Disable reader mode" : "Enable reader mode"}
+  //   </button>
+  // );
   // if (session) {
   //   right = (
   //     <div className="flex items-center gap-x-2 text-xs">
