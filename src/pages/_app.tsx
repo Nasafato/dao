@@ -15,7 +15,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Header />
-      <main className="px-8 pb-16 lg:px-24 lg:pb-24 pt-4 lg:pt-8 mt-12">
+      <main className="px-5 pb-16 lg:px-24 lg:pb-24 pt-4 lg:pt-8 mt-12">
         <Component {...pageProps} />
       </main>
       <ReactQueryDevtools initialIsOpen={false} />

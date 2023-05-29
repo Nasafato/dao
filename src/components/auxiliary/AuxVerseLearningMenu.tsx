@@ -52,10 +52,10 @@ export function AuxVerseLearningMenu({
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex items-center">
-          <Menu.Button className="inline-flex w-full items-center justify-center ring-1 ring-gray-950/5 rounded-full px-2 py-1 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:text-gray-500">
+          <Menu.Button className="inline-flex w-full items-center justify-center rounded-full py-1 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 underline-offset-2 hover:underline">
             Options
             <ChevronDownIcon
-              className="ml-1 -mr-1 h-4 w-4 text-gray-300 hover:text-gray-200"
+              className="h-3 w-3 text-gray-500 ml-[2px]"
               aria-hidden="true"
             />
           </Menu.Button>

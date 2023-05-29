@@ -1,15 +1,35 @@
-import { ArrowDownIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowDownIcon,
+  ArrowRightIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useState } from "react";
 import { CDN_URL, punctuation } from "../../consts";
-import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
+import {
+  VerseMemoryStatus,
+  VerseMemoryStatusType,
+} from "../../lib/localDb/verseMemoryStatus";
 import { DaoVerse } from "../../types";
 import { api } from "../../utils/trpc";
 import { Spinner } from "../shared/Spinner";
 import { VerseChar } from "./VerseChar";
 import { VerseDescription } from "./VerseDescription";
-import { VerseHeader } from "./VerseHeader";
+import { VerseHeader, VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
+import { PlayPauseButton } from "./PlayPauseButton";
+import { buildVerseMediaSourceUrl } from "../../utils";
+import { useDaoStore } from "../../state/store";
+import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
+import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
+import { useMutation } from "@tanstack/react-query";
+import {
+  USER_ID,
+  INDEXED_DB_NAME,
+  INDEXED_DB_VERSION,
+} from "../../lib/localDb";
+import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
+import { queryClient } from "../../lib/reactQuery";
 
 export function Verse({
   verse,
@@ -19,35 +39,88 @@ export function Verse({
   verseStatus: VerseMemoryStatusType | null;
 }) {
   const [showDescription, setShowDescription] = useState(false);
+  const verseId = verse.id;
+  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
+  const readerMode = useDaoStore((state) => state.readerMode);
 
   const moreQuery = api.verse.findDescription.useQuery(verse.id, {
     enabled: showDescription,
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
+      const { status } = args;
+      const memoryStatus = await VerseMemoryStatus.update({
+        userId_verseId: [USER_ID, verse.id],
+        data: { status },
+      });
+      return memoryStatus;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["indexedDb", INDEXED_DB_NAME]);
+      queryClient.invalidateQueries([
+        "indexedDb",
+        INDEXED_DB_NAME,
+        INDEXED_DB_VERSION,
+        VerseMemoryStatus.tableName,
+        verse.id,
+      ]);
+    },
+  });
+
   return (
     <div>
-      <VerseHeader verse={verse} verseStatus={verseStatus} hasAnchor />
-      <VerseText text={verse.text} verseId={verse.id} />
-      <div className="items-center flex mt-1 gap-x-6 justify-end">
-        <button
-          className="text-xs flex items-center gap-x-1 hover:underline"
-          onClick={() => {
-            setShowDescription(!showDescription);
-          }}
-        >
-          Expand
-          {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-            <Spinner className="h-2 w-2 text-gray-200 fill-gray-400" />
-          ) : showDescription ? (
-            <XMarkIcon className="h-2 w-2" />
-          ) : (
-            <ArrowDownIcon className="h-2 w-2" />
-          )}
-        </button>
-        <Link href={`/verse/${verse.id}`} className="text-xs hover:underline">
-          Go to
-        </Link>
+      <div className="flex items-center">
+        <div>
+          <a
+            id={`dao${verseId}`}
+            href={`#dao${verseId}`}
+            className={VerseHeaderStyle}
+          >
+            第{verseId}章
+          </a>
+        </div>
+        <PlayPauseButton verseMediaSource={verseMediaSource} className="ml-2" />
+        {!readerMode && (
+          <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
+        )}
+
+        <div className="grid items-center justify-self-end flex-1">
+          <div className="items-center flex gap-x-2 justify-end">
+            <AuxVerseLearningMenu
+              verse={verse}
+              verseStatus={verseStatus}
+              updateStatusMutation={updateStatusMutation}
+            />
+            <button
+              className="text-xs flex items-center hover:underline text-gray-600"
+              onClick={() => {
+                setShowDescription(!showDescription);
+              }}
+            >
+              Expand
+              <span className="ml-[1px]">
+                {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
+                  <Spinner className="h-2 w-2 text-gray-200 fill-gray-500" />
+                ) : showDescription ? (
+                  <XMarkIcon className="h-2 w-2 text-gray-500" />
+                ) : (
+                  <ArrowDownIcon className="h-2 w-2 text-gray-500" />
+                )}
+              </span>
+            </button>
+            <Link
+              href={`/verse/${verse.id}#dao${verse.id}`}
+              className="text-xs hover:underline text-gray-600 flex items-center gap-x-1"
+            >
+              Go to
+              <ArrowRightIcon className="h-2 w-2 text-gray-500" />
+            </Link>
+          </div>
+        </div>
       </div>
+      <VerseText text={verse.text} verseId={verse.id} />
+
       {showDescription && moreQuery.data && (
         <div className="pl-8">
           <div className="text-gray-400 mt-6">简介</div>

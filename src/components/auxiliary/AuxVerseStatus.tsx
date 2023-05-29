@@ -42,15 +42,17 @@ export function AuxVerseStatus({
 
   if (verseStatus.status === MEMORY_STATUS.LEARNING) {
     return (
-      <div className="text-xs">
+      <div className="text-xs ml-1">
         <div
-          className="flex items-center gap-x-1 ring-1 ring-gray-950/5 rounded-full px-3 py-1"
+          className="h-4 flex items-center gap-x-1 ring-1 ring-gray-200 rounded-full px-3"
           // onClick={() => {
           // setVerseBeingTested(verse);
           // }}
         >
-          <AcademicCapIcon className="h-3 w-3 text-gray-600" />
-          Learning:
+          <AcademicCapIcon className="h-3 w-3 text-gray-400" />
+          <span className="font-mono text-[0.6rem] text-gray-500">
+            Learning:
+          </span>
           <Countdown
             targetDate={new Date(verseStatus.nextReviewDatetime)}
             render={(timeLeft) => {
@@ -75,10 +77,14 @@ export function AuxVerseStatus({
                 const seconds = timeLeft.seconds.toString().padStart(2, "0");
                 display = `${seconds}s`;
               } else {
-                display = "Now";
+                display = `0s`;
               }
 
-              return <div className="font-mono">{display}</div>;
+              return (
+                <div className="font-mono text-gray-500 text-[0.6rem]">
+                  {display}
+                </div>
+              );
             }}
           />
         </div>

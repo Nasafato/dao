@@ -53,11 +53,6 @@ export function AuxVerseHeaderLearning({
         verseStatus={verseStatus}
         updateStatusMutation={updateStatusMutation}
       />
-      <AuxVerseLearningMenu
-        verse={verse}
-        verseStatus={verseStatus}
-        updateStatusMutation={updateStatusMutation}
-      />
     </div>
   );
 }

@@ -10,6 +10,8 @@ interface DaoStore {
   setVerseBeingTested: (verse: DaoVerse | null) => void;
   cachedAudio: Record<string, boolean>;
   setAudioCached: (audioUrl: string, status: boolean) => void;
+  readerMode: boolean;
+  setReaderMode: (status: boolean) => void;
 }
 export const useDaoStore = create<DaoStore>((set) => ({
   verseBeingTested: null,
@@ -50,4 +52,6 @@ export const useDaoStore = create<DaoStore>((set) => ({
       return newState;
     });
   },
+  readerMode: false,
+  setReaderMode: (status: boolean) => set({ readerMode: status }),
 }));

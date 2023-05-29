@@ -3,6 +3,7 @@ import { useTheme } from "../../state/theme";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useDaoStore } from "../../state/store";
 
 export function Header() {
   // const { data: session, status } = useSession();
@@ -10,7 +11,22 @@ export function Header() {
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
+  const readerMode = useDaoStore((state) => state.readerMode);
+  const setReaderMode = useDaoStore((state) => state.setReaderMode);
+  const toggleReaderMode = () => {
+    if (readerMode) {
+      setReaderMode(false);
+    } else {
+      setReaderMode(true);
+    }
+  };
+
   let right = null;
+  right = (
+    <button onClick={toggleReaderMode}>
+      {readerMode ? "Disable reader mode" : "Enable reader mode"}
+    </button>
+  );
   // if (session) {
   //   right = (
   //     <div className="flex items-center gap-x-2 text-xs">

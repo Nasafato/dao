@@ -1,3 +1,5 @@
+import { CDN_URL } from "./consts";
+
 export function tryParseDaoIndex(i: unknown) {
   const result = Number.parseInt(i as string, 10);
   if (Number.isNaN(result)) {
@@ -21,4 +23,12 @@ export function forceQueryParamString(param: string | string[] | undefined) {
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function buildVerseMediaSourceUrl(
+  verseId: number,
+  options: { type: "human" | "generated" } = { type: "human" }
+) {
+  const type = options.type === "human" ? "human" : "generated";
+  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
 }
