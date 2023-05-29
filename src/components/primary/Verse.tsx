@@ -100,7 +100,7 @@ export function Verse({
               }}
             >
               {/* Expand */}
-              <span className="group">
+              <span className="group hover:bg-gray-200 rounded-full py-1">
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
                   <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (

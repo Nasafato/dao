@@ -21,7 +21,7 @@ export function PlayPauseButton({
   return (
     <button
       className={clsx(
-        "h-4 w-4 ring-1 ring-gray-200 rounded-full flex justify-center items-center text-gray-400 hover:bg-gray-300",
+        "h-4 w-4 ring-1 ring-gray-200 rounded-full flex justify-center items-center text-gray-400 hover:bg-gray-200",
         className
       )}
       onClick={() => {
