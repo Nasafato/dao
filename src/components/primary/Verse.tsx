@@ -1,6 +1,7 @@
 import {
   ArrowDownIcon,
   ArrowRightIcon,
+  ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
@@ -98,14 +99,14 @@ export function Verse({
                 setShowDescription(!showDescription);
               }}
             >
-              Expand
-              <span className="ml-[1px]">
+              {/* Expand */}
+              <span className="group">
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-                  <Spinner className="h-2 w-2 text-gray-200 fill-gray-500" />
+                  <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
-                  <XMarkIcon className="h-2 w-2 text-gray-500" />
+                  <XMarkIcon className="h-3 w-3 text-gray-500 group-hover:text-gray-400" />
                 ) : (
-                  <ArrowDownIcon className="h-2 w-2 text-gray-500" />
+                  <ChevronUpDownIcon className="h-3 w-3 text-gray-500 group-hover:text-gray-400" />
                 )}
               </span>
             </button>
@@ -113,8 +114,8 @@ export function Verse({
               href={`/verse/${verse.id}#dao${verse.id}`}
               className="text-xs hover:underline text-gray-600 flex items-center gap-x-1"
             >
-              Go to
-              <ArrowRightIcon className="h-2 w-2 text-gray-500" />
+              Go{" "}
+              <ArrowRightIcon className="h-2 w-2 text-gray-500 hover:text-gray-400" />
             </Link>
           </div>
         </div>
