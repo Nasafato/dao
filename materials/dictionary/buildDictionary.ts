@@ -76,8 +76,8 @@ async function readTestDict() {
 }
 
 async function buildDictionary() {
-  // const dict = await readDict();
-  const dict = await readTestDict();
+  const dict = await readDict();
+  // const dict = await readTestDict();
 
   const dictionary: Record<string, DictionaryEntry> = {};
   for (let l of dict) {
