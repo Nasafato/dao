@@ -1,0 +1,66 @@
+{
+  "行": {
+    "spelling": "simplified",
+    "source": "cedict",
+    "character": "行",
+    "variants": [
+      {
+        "spelling": "traditional",
+        "source": "cedict",
+        "character": "行",
+        "pronunciation": ["hang2"]
+      },
+      {
+        "spelling": "simplified",
+        "source": "cedict",
+        "character": "行",
+        "pronunciation": ["hang2"]
+      },
+      {
+        "spelling": "simplified",
+        "source": "cedict",
+        "character": "行",
+        "pronunciation": ["xing2"]
+      }
+    ],
+    "definitions": [
+      {
+        "pronunciation": ["hang2"],
+        "english": [
+          "row",
+          "line",
+          "commercial firm",
+          "line of business",
+          "profession",
+          "to rank (first, second etc) among one's siblings (by age)",
+          "(in data tables) row",
+          "(Tw) column"
+        ]
+      },
+      {
+        "pronunciation": ["xing2"],
+        "english": [
+          "to walk",
+          "to go",
+          "to travel",
+          "a visit",
+          "temporary",
+          "makeshift",
+          "current",
+          "in circulation",
+          "to do",
+          "to perform",
+          "capable",
+          "competent",
+          "effective",
+          "all right",
+          "OK!",
+          "will do",
+          "behavior",
+          "conduct",
+          "Taiwan pr. [xing4] for the behavior-conduct sense"
+        ]
+      }
+    ]
+  }
+}
