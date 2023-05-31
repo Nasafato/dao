@@ -21,19 +21,6 @@ export const prisma =
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-// interface DictionaryEntry {
-//   spelling: "traditional" | "simplified";
-//   source: "cedict";
-//   simplified: string;
-//   traditional: string;
-//   word: string;
-//   pinyin: string[];
-//   definitions: {
-//     english: string[];
-//   };
-// }
-
-// const VARIANT_OF_REGEX = /variant of (.*)/;
 const VARIANT_OF_REGEX = /variant of (.*?)\[(.*)\]/g;
 
 const TEST_DICT = `

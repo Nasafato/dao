@@ -1,18 +1,7 @@
-import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
-import { VerseToUser } from "@prisma/client";
-import { useAtom } from "jotai";
-import {
-  changeMediaSourceAtom,
-  isPlayingAtom,
-  mediaSourceAtom,
-} from "../../state/mediaAtoms";
-import { DaoVerse } from "../../types";
-import { DownloadAudioButton } from "./DownloadAudioButton";
-import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
-import { CDN_URL } from "../../consts";
 import { useDaoStore } from "../../state/store";
-import { PlayPauseButton } from "./PlayPauseButton";
+import { DaoVerse } from "../../types";
+import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 
 export const VerseHeaderStyle =
   "text-gray-400 dark:text-gray-200 text-base whitespace-nowrap";

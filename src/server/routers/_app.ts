@@ -1,9 +1,7 @@
 import { inferRouterOutputs } from "@trpc/server";
 import { createTRPCRouter } from "../trpc";
 import { verseRouter } from "./verse";
-import { verseLearningRouter } from "./verseLearning";
 // import { exampleRouter } from "~/server/api/routers/example";
-import { verseStatusRouter } from "./verseStatus";
 import { definitionRouter } from "./definition";
 
 /**
@@ -14,8 +12,6 @@ import { definitionRouter } from "./definition";
 export const appRouter = createTRPCRouter({
   definition: definitionRouter,
   verse: verseRouter,
-  verseStatus: verseStatusRouter,
-  verseLearning: verseLearningRouter,
 });
 
 // export type definition of API
