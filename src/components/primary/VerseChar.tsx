@@ -3,6 +3,9 @@ import clsx from "clsx";
 import { useRef, useEffect } from "react";
 import { DictionarySchemaType, DictionaryEntrySchema } from "../../types";
 import { usePopover } from "./VersesPopover";
+import { api } from "../../utils/trpc";
+import { SingleCharDefinition } from "./SingleCharDefinition";
+import { Spinner } from "../shared/Spinner";
 
 export function VerseChar({ char, charId }: { char: string; charId: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -54,29 +57,7 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
 }
 
 function Definition({ char }: { char: string }) {
-  const queryClient = useQueryClient();
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["definition", char],
-    queryFn: async () => {
-      const dictionary = queryClient.getQueryData<DictionarySchemaType>([
-        "dictionary",
-      ]);
-      if (dictionary) {
-        const entry = dictionary[char];
-        return entry;
-      }
-      if (!char) return;
-      const r = await fetch(`/api/definition?char=${char}`);
-      const result = await r.json();
-      return DictionaryEntrySchema.parse(result);
-    },
-    networkMode: "always",
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    // staleTime: Infinity,
-    enabled: !!char,
-  });
+  const { data, isLoading, isError } = api.definition.findOne.useQuery(char);
 
   return (
     <div
@@ -84,25 +65,15 @@ function Definition({ char }: { char: string }) {
         "bg-white dark:bg-gray-950 border-gray-500 dark:border-gray-200/20 dark:text-gray-100 border px-3 py-2 rounded-md shadow-md text-gray-800 overflow-scroll hyphens-auto h-full"
       )}
     >
-      <h3>{char}</h3>
-      <div className="text-sm">{data?.pinyin.join(" ")}</div>
-      {isLoading && <div>Loading...</div>}
-      <ul className="list-decimal list-inside">
-        {data &&
-          data.definitions.english.map((def, index) => (
-            <li className="text-xs" key={index}>
-              {def}
-            </li>
-          ))}
-      </ul>
-      <ul>
-        {data &&
-          data.definitions.chinese?.map((def, index) => (
-            <li className="text-xs" key={index}>
-              {def}
-            </li>
-          ))}
-      </ul>
+      {isLoading ? (
+        <Spinner className="h-4 w-4" />
+      ) : isError ? (
+        "Error"
+      ) : data ? (
+        <SingleCharDefinition definition={data} className="text-xs" />
+      ) : (
+        "No definition found"
+      )}
     </div>
   );
 }
