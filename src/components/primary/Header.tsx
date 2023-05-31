@@ -5,6 +5,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDaoStore } from "../../state/store";
 
+const links = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Dictionary",
+    href: "/dictionary",
+  },
+];
+
 export function Header() {
   // const { data: session, status } = useSession();
   const router = useRouter();
@@ -22,6 +33,18 @@ export function Header() {
   };
 
   let right = null;
+  right = (
+    <ul className="flex text-sm items-center font-sans">
+      {links.map((link) => (
+        <li
+          key={link.href}
+          className="first-of-type:border-r border-gray-300 pr-2 pl-2 hover:underline"
+        >
+          <Link href={link.href}>{link.name}</Link>
+        </li>
+      ))}
+    </ul>
+  );
   // right = (
   //   <button onClick={toggleReaderMode}>
   //     {readerMode ? "Disable reader mode" : "Enable reader mode"}
@@ -54,7 +77,7 @@ export function Header() {
   // }
 
   return (
-    <nav className="h-12 px-8 lg:px-24 py-2 fixed top-0 w-full bg-white dark:bg-gray-950 z-20 border-b border-gray-200/10">
+    <nav className="h-12 px-5 lg:px-24 py-2 fixed top-0 w-full bg-white dark:bg-gray-950 z-20 border-b border-gray-200/10">
       <div className="m-auto max-w-xl font-mono text-sm h-full flex items-center">
         <div className="flex justify-between items-center flex-1">
           <ModeToggle />
