@@ -20,6 +20,9 @@ export default function Dictionary() {
   const query = useQueryParam("query");
   useEffect(() => {
     setSearchTerm(query ?? "");
+    if (inputRef.current) {
+      inputRef.current.value = query ?? "";
+    }
   }, [query]);
 
   const updateSearchTerm = useCallback(
@@ -31,6 +34,9 @@ export default function Dictionary() {
         router.push("/dictionary");
       }
       setSearchTerm(searchTerm);
+      if (inputRef.current) {
+        inputRef.current.value = searchTerm;
+      }
     },
     // See https://github.com/vercel/next.js/issues/18127.
     // eslint-disable-next-line react-hooks/exhaustive-deps
