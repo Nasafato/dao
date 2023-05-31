@@ -31,8 +31,6 @@ export function VerseDescription({
     );
   });
 
-  const { legge, goddard, susuki } = translations;
-
   return (
     <div>
       <div className="text-[0.95rem]/[22px] space-y-4">
@@ -47,18 +45,6 @@ export function VerseDescription({
             </div>
           );
         })}
-        {/* <div>
-          <h5 className={TranslationHeaderStyle}>Legge</h5>
-          <p>{legge}</p>
-        </div>
-        <div>
-          <h5 className={TranslationHeaderStyle}>Goddard</h5>
-          <p>{goddard}</p>
-        </div>
-        <div>
-          <h5 className={TranslationHeaderStyle}>Susuki</h5>
-          <p>{susuki}</p>
-        </div> */}
       </div>
     </div>
   );

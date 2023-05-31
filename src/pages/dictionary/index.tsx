@@ -9,6 +9,7 @@ import {
   useQueryParam,
 } from "../../utils";
 import { api } from "../../utils/trpc";
+import { SingleCharDefinition } from "../../components/primary/SingleCharDefinition";
 
 const LiStyle = "ring-1 ring-gray-300 rounded-md hover:bg-gray-100";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
@@ -106,51 +107,6 @@ export default function Dictionary() {
         ) : searchTerm.length > 0 ? (
           <div>Nothing found</div>
         ) : null}
-      </div>
-    </div>
-  );
-}
-
-export function SingleCharDefinition({
-  definition,
-}: {
-  definition: DefinitionOutput;
-}) {
-  const { character, spellingVariants, pronunciationVariants } = definition;
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-x-4">
-        <h4 className="font-bold text-xl">{character}</h4>
-        <div>
-          <h5>Variants</h5>
-          <ul className="space-y-1">
-            {spellingVariants.map((variant) => (
-              <li key={variant.id} className="flex gap-x-1 items-center">
-                <div>{variant.variant}</div>
-                <div>{variant.simplified ? "simplified" : "traditional"}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div>
-        <h5 className="underline font-medium">Definitions</h5>
-        <ul className="space-y-1">
-          {pronunciationVariants.map((variant) => (
-            <li key={variant.id} className="gap-x-1 items-center">
-              <div>{`${character} ${buildPinyinWithTones(
-                variant.pronunciation
-              )}`}</div>
-              <ul>
-                {variant.definitions.map((definition) => (
-                  <li key={definition.id} className="ml-8 list-disc">
-                    {replaceNumericalPinyin(definition.definition)}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
