@@ -2,6 +2,11 @@ import { MagnifyingGlassCircleIcon } from "@heroicons/react/20/solid";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Spinner } from "../../components/shared/Spinner";
 import { api } from "../../utils/trpc";
+import { DefinitionOutput } from "../../server/routers/_app";
+import { dedupe } from "../../utils";
+
+const LiStyle = "ring-1 ring-gray-300 rounded-md px-2 py-1 hover:bg-gray-100";
+const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export default function Dictionary() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +32,25 @@ export default function Dictionary() {
 
   return (
     <div className="py-2 max-w-sm mx-auto">
+      <div className="mb-4">
+        <h3 className="text-sm font-semibold mb-1">Common search terms</h3>
+        <ul className="flex gap-x-2">
+          {commonSearchTerms.map((term) => (
+            <li className={LiStyle} key={term}>
+              <button
+                onClick={() => {
+                  setSearchTerm(term);
+                  if (inputRef.current) {
+                    inputRef.current.value = term;
+                  }
+                }}
+              >
+                {term}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="relative w-full max-w-md">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <MagnifyingGlassCircleIcon
@@ -43,13 +67,62 @@ export default function Dictionary() {
           />
         </form>
       </div>
-      <div>
+      <div className="mt-8">
         {searchQuery.isLoading && !(searchQuery.fetchStatus === "idle") ? (
-          <Spinner />
-        ) : (
-          <pre>{JSON.stringify(searchQuery.data, null, 2)}</pre>
-        )}
+          <div className="flex items-center gap-x-1">
+            Searching... <Spinner className="h-4 w-4" />
+          </div>
+        ) : searchQuery.data ? (
+          <SingleCharDefinition definition={searchQuery.data} />
+        ) : searchTerm.length > 0 ? (
+          <div>Nothing found</div>
+        ) : null}
       </div>
     </div>
   );
+}
+
+export function SingleCharDefinition({
+  definition,
+}: {
+  definition: DefinitionOutput;
+}) {
+  const { id, character, spellingVariants, pronunciationVariants } = definition;
+  // const dedupedSpellingVariants = dedupe(spellingVariants, (v) => v.variant);
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-x-4">
+        <h4 className="font-bold text-xl">{character}</h4>
+        <div>
+          <h5>Variants</h5>
+          <ul className="space-y-1">
+            {spellingVariants.map((variant) => (
+              <li key={variant.id} className="flex gap-x-1 items-center">
+                <div>{variant.variant}</div>
+                <div>{variant.simplified ? "simplified" : "traditional"}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h5 className="underline font-medium">Definitions</h5>
+        <ul className="space-y-1">
+          {pronunciationVariants.map((variant) => (
+            <li key={variant.id} className="gap-x-1 items-center">
+              <div>{`${character} ${variant.pronunciation}`}</div>
+              <ul>
+                {variant.definitions.map((definition) => (
+                  <li key={definition.id} className="ml-8 list-disc">
+                    {definition.definition}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+  // return <pre>{JSON.stringify(definition, null, 2)}</pre>;
 }

@@ -32,3 +32,17 @@ export function buildVerseMediaSourceUrl(
   const type = options.type === "human" ? "human" : "generated";
   return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
 }
+
+export function dedupe<T, K>(array: T[], predicate: (item: T) => K): T[] {
+  const seen = new Map<K, T>();
+  for (const item of array) {
+    const key = predicate(item);
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.set(key, item);
+  }
+
+  return Array.from(seen.values());
+}

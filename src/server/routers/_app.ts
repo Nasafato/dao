@@ -24,3 +24,4 @@ export type AppRouter = typeof appRouter;
 export type RouterOutput = inferRouterOutputs<AppRouter>;
 
 export type DescriptionOutput = RouterOutput["verse"]["findDescription"];
+export type DefinitionOutput = RouterOutput["definition"]["findOne"];
