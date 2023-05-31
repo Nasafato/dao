@@ -87,8 +87,7 @@ export function SingleCharDefinition({
 }: {
   definition: DefinitionOutput;
 }) {
-  const { id, character, spellingVariants, pronunciationVariants } = definition;
-  // const dedupedSpellingVariants = dedupe(spellingVariants, (v) => v.variant);
+  const { character, spellingVariants, pronunciationVariants } = definition;
   return (
     <div className="space-y-4">
       <div className="flex gap-x-4">
