@@ -1,14 +1,41 @@
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/20/solid";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Spinner } from "../../components/shared/Spinner";
-import { api } from "../../utils/trpc";
 import { DefinitionOutput } from "../../server/routers/_app";
+import {
+  buildPinyinWithTones,
+  replaceNumericalPinyin,
+  useQueryParam,
+} from "../../utils";
+import { api } from "../../utils/trpc";
 
 const LiStyle = "ring-1 ring-gray-300 rounded-md hover:bg-gray-100";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export default function Dictionary() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+
+  const query = useQueryParam("query");
+  useEffect(() => {
+    setSearchTerm(query ?? "");
+  }, [query]);
+
+  const updateSearchTerm = useCallback(
+    (searchTerm: string) => {
+      if (searchTerm) {
+        // console.log("pushing", searchTerm);
+        router.push(`/dictionary?query=${encodeURIComponent(searchTerm)}`);
+      } else {
+        router.push("/dictionary");
+      }
+      setSearchTerm(searchTerm);
+    },
+    // See https://github.com/vercel/next.js/issues/18127.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const searchQuery = api.definition.findOne.useQuery(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
@@ -20,7 +47,7 @@ export default function Dictionary() {
     if (!value) {
       return;
     }
-    setSearchTerm(value);
+    updateSearchTerm(value);
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +62,7 @@ export default function Dictionary() {
               <button
                 className="px-2 py-1"
                 onClick={() => {
-                  setSearchTerm(term);
+                  updateSearchTerm(term);
                   if (inputRef.current) {
                     inputRef.current.value = term;
                   }
@@ -105,11 +132,13 @@ export function SingleCharDefinition({
         <ul className="space-y-1">
           {pronunciationVariants.map((variant) => (
             <li key={variant.id} className="gap-x-1 items-center">
-              <div>{`${character} ${variant.pronunciation}`}</div>
+              <div>{`${character} ${buildPinyinWithTones(
+                variant.pronunciation
+              )}`}</div>
               <ul>
                 {variant.definitions.map((definition) => (
                   <li key={definition.id} className="ml-8 list-disc">
-                    {definition.definition}
+                    {replaceNumericalPinyin(definition.definition)}
                   </li>
                 ))}
               </ul>
