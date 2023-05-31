@@ -55,10 +55,6 @@ export function AuxVerseLearningMenu({
         <div className="flex items-center">
           <Menu.Button className="inline-flex w-full items-center justify-center rounded-full text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 py-1 underline-offset-2 hover:underline group hover:bg-gray-200">
             <EllipsisVerticalIcon className="h-3 w-3 text-gray-500 group-hover:text-gray-400" />
-            {/* <ChevronDownIcon
-              className="h-3 w-3 text-gray-500 ml-[2px]"
-              aria-hidden="true"
-            /> */}
           </Menu.Button>
         </div>
         <Transition

@@ -1,20 +1,17 @@
-import { VerseToUser } from "@prisma/client";
-import { DaoVerse } from "../../types";
-import { api } from "../../utils/trpc";
-import { AuxVerseLearningMenu } from "./AuxVerseLearningMenu";
-import { AuxVerseStatus as AuxVerseStatus } from "./AuxVerseStatus";
 import { useMutation } from "@tanstack/react-query";
 import {
   INDEXED_DB_NAME,
   INDEXED_DB_VERSION,
   USER_ID,
 } from "../../lib/localDb/db";
-import { queryClient } from "../../lib/reactQuery";
 import {
   VerseMemoryStatus,
   VerseMemoryStatusType,
 } from "../../lib/localDb/verseMemoryStatus";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
+import { queryClient } from "../../lib/reactQuery";
+import { DaoVerse } from "../../types";
+import { AuxVerseStatus } from "./AuxVerseStatus";
 
 interface AuxVerseHeaderLearningProps {
   verse: DaoVerse;

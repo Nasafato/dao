@@ -1,3 +1,5 @@
+import { tv } from "tailwind-variants";
+import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
 
 export function useTheme() {
@@ -33,3 +35,12 @@ export function useTheme() {
     theme,
   };
 }
+
+export const button = tv({
+  base: "px-4 py-2 rounded-md",
+  variants: {
+    primary: "bg-blue-500 text-white",
+  },
+});
+
+export const tw = twMerge;

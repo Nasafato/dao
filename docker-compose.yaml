@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: daodejing-app
+    environment:
+      POSTGRES_USER: daouser
+      POSTGRES_PASSWORD: daouser
+      POSTGRES_DB: daodejing_db
+    ports:
+      - "5433:5432"
