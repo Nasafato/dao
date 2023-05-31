@@ -57,30 +57,7 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
 }
 
 function Definition({ char }: { char: string }) {
-  // const queryClient = useQueryClient();
   const { data, isLoading, isError } = api.definition.findOne.useQuery(char);
-  // const { data, isLoading, isError } = useQuery({
-  //   queryKey: ["definition", char],
-  //   queryFn: async () => {
-  //     const dictionary = queryClient.getQueryData<DictionarySchemaType>([
-  //       "dictionary",
-  //     ]);
-  //     if (dictionary) {
-  //       const entry = dictionary[char];
-  //       return entry;
-  //     }
-  //     if (!char) return;
-  //     const r = await fetch(`/api/definition?char=${char}`);
-  //     const result = await r.json();
-  //     return DictionaryEntrySchema.parse(result);
-  //   },
-  //   networkMode: "always",
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchOnReconnect: false,
-  //   // staleTime: Infinity,
-  //   enabled: !!char,
-  // });
 
   return (
     <div
