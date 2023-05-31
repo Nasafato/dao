@@ -3,17 +3,12 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Spinner } from "../../components/shared/Spinner";
 import { api } from "../../utils/trpc";
 import { DefinitionOutput } from "../../server/routers/_app";
-import { dedupe } from "../../utils";
 
-const LiStyle = "ring-1 ring-gray-300 rounded-md px-2 py-1 hover:bg-gray-100";
+const LiStyle = "ring-1 ring-gray-300 rounded-md hover:bg-gray-100";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export default function Dictionary() {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
 
   const searchQuery = api.definition.findOne.useQuery(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
@@ -38,6 +33,7 @@ export default function Dictionary() {
           {commonSearchTerms.map((term) => (
             <li className={LiStyle} key={term}>
               <button
+                className="px-2 py-1"
                 onClick={() => {
                   setSearchTerm(term);
                   if (inputRef.current) {
@@ -123,5 +119,4 @@ export function SingleCharDefinition({
       </div>
     </div>
   );
-  // return <pre>{JSON.stringify(definition, null, 2)}</pre>;
 }
