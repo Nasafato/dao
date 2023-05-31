@@ -6,6 +6,7 @@
     "regenerate-dao": "",
     "dev": "next dev -p 3001",
     "build": "next build",
+    "build:show-type-errors": "tsc --noEmit",
     "start": "next start",
     "lint": "next lint",
     "studio": "dotenv -e .env.development.local prisma studio",
