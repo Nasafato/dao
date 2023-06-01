@@ -16,6 +16,7 @@ export let initializeDbPromise: Promise<IDBDatabase> | null;
 export function initializeDb() {
   console.log("Setting up");
   if (initializeDbPromise) {
+    console.log("Already setting up");
     return;
   }
   initializeDbPromise = new Promise((resolve, reject) => {
