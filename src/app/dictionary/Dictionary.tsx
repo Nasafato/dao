@@ -1,7 +1,6 @@
 "use client";
 
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/20/solid";
-// import { useRouter } from "next/router";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Spinner } from "../../components/shared/Spinner";
@@ -15,14 +14,12 @@ import { api } from "../../utils/trpc";
 import { SingleCharDefinition } from "../../components/primary/SingleCharDefinition";
 import { trpcClient } from "../../lib/trpcClient";
 import { useQuery } from "@tanstack/react-query";
-import { Providers } from "../Providers";
 
 const LiStyle = "ring-1 ring-gray-300 rounded-md hover:bg-gray-100";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export function Dictionary() {
   const router = useRouter();
-  //   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   //   const query = useQueryParam("query");
@@ -50,10 +47,6 @@ export function Dictionary() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
-  //   const searchQuery = api.definition.findOne.useQuery(searchTerm, {
-  //     enabled: !!searchTerm && searchTerm.length > 0,
-  //   });
 
   const searchQuery = useQuery({
     queryKey: ["search", searchTerm],

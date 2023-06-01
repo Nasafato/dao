@@ -5,7 +5,8 @@ import SuperJSON from "superjson";
 export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: "http://localhost:3001/api/trpc",
+      url: "/api/trpc",
+      //   url: "http://localhost:3001/api/trpc",
     }),
   ],
   transformer: SuperJSON,
