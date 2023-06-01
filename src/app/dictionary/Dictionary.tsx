@@ -21,17 +21,25 @@ const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 export function Dictionary() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const searchParams = useSearchParams();
+  console.log("searchparams", searchParams?.get("query"));
+  const query = searchParams?.get("query");
+  useEffect(() => {
+    if (!query || query.length < 1) {
+      return;
+    }
 
-  //   const query = useQueryParam("query");
-  //   useEffect(() => {
-  //     setSearchTerm(query ?? "");
-  //     if (inputRef.current) {
-  //       inputRef.current.value = query ?? "";
-  //     }
-  //   }, [query]);
+    setSearchTerm(query);
+    if (inputRef.current) {
+      inputRef.current.value = query;
+    }
+  }, [query]);
 
   const updateSearchTerm = useCallback(
     (searchTerm: string) => {
+      if (searchTerm) {
+        router.push(`/dictionary?query=${encodeURIComponent(searchTerm)}`);
+      }
       //   if (searchTerm) {
       //     // console.log("pushing", searchTerm);
       //     router.push(`/dictionary?query=${encodeURIComponent(searchTerm)}`);
