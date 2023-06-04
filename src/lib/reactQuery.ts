@@ -17,7 +17,11 @@ export function useVerseMemoryStatusesQuery() {
     ],
     async () => {
       const res = await VerseMemoryStatus.getAll({ userId: USER_ID });
+      console.log("res", res);
       return res;
+    },
+    {
+      networkMode: "always",
     }
   );
 
@@ -36,6 +40,7 @@ export function useVerseMemoryStatusQuery({
   verseId,
   opts = {},
 }: UseVerseMemoryStatusQueryProps) {
+  const baseOptions = { offlineFirst: true };
   const verseMemoryStatusQuery = useQuery(
     [
       "indexedDb",
@@ -50,7 +55,10 @@ export function useVerseMemoryStatusQuery({
       });
       return res;
     },
-    opts
+    { ...opts, ...baseOptions } as Omit<
+      UseQueryOptions<VerseMemoryStatusType, Error>,
+      "queryKey" | "queryFn"
+    >
   );
 
   return verseMemoryStatusQuery;

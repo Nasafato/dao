@@ -18,8 +18,8 @@ const RESPONSIVE_DIMENSIONS = {
     height: 120,
   },
   desktop: {
-    width: 200,
-    height: 160,
+    width: 400,
+    height: 260,
   },
 };
 

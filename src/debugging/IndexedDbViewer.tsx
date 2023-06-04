@@ -17,6 +17,7 @@ export function IndexedDbViewer({ dbName, version }: IndexedDbViewerProps) {
         stores,
       };
     },
+    networkMode: "offlineFirst",
   });
   const stores = query.data?.stores ? Array.from(query.data.stores) : [];
   return (
@@ -72,6 +73,7 @@ export function IndexedDbStoreViewer({
         values,
       };
     },
+    networkMode: "offlineFirst",
   });
   return (
     <div>

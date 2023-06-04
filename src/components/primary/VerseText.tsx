@@ -16,5 +16,9 @@ export function VerseText({
     return <VerseChar key={index} char={char} charId={`${verseId}-${index}`} />;
   });
 
-  return <p className="text-xl font-normal text-gray-800">{textNodes}</p>;
+  return (
+    <p className="text-xl font-normal text-gray-800 dark:text-gray-50">
+      {textNodes}
+    </p>
+  );
 }

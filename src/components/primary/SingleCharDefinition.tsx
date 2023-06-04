@@ -29,7 +29,7 @@ export function SingleCharDefinition({
       <div>
         <h5 className="underline font-medium">Definitions</h5>
         <ul className="space-y-1">
-          {pronunciationVariants.map((variant) => (
+          {pronunciationVariants.reverse().map((variant) => (
             <li key={variant.id} className="gap-x-1 items-center">
               <div>{`${character} ${buildPinyinWithTones(
                 variant.pronunciation

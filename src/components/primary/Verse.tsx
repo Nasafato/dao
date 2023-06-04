@@ -31,6 +31,8 @@ import {
 } from "../../lib/localDb";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
+import { SecondaryButtonStyles, SecondaryDarkModeText } from "../../styles";
+import { twMerge } from "tailwind-merge";
 
 export function Verse({
   verse,
@@ -42,10 +44,11 @@ export function Verse({
   const [showDescription, setShowDescription] = useState(false);
   const verseId = verse.id;
   const verseMediaSource = buildVerseMediaSourceUrl(verseId);
-  const readerMode = useDaoStore((state) => state.readerMode);
+  // const readerMode = useDaoStore((state) => state.readerMode);
 
   const moreQuery = api.verse.findDescription.useQuery(verse.id, {
     enabled: showDescription,
+    networkMode: "offlineFirst",
   });
 
   const updateStatusMutation = useMutation({
@@ -82,9 +85,7 @@ export function Verse({
           </a>
         </div>
         <PlayPauseButton verseMediaSource={verseMediaSource} className="ml-2" />
-        {!readerMode && (
-          <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
-        )}
+        <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
 
         <div className="grid items-center justify-self-end flex-1">
           <div className="items-center flex gap-x-2 justify-end">
@@ -94,28 +95,33 @@ export function Verse({
               updateStatusMutation={updateStatusMutation}
             />
             <button
-              className="text-xs flex items-center hover:underline text-gray-600"
+              className="text-xs flex items-center hover:underline text-gray-600 dark:text-gray-50"
               onClick={() => {
                 setShowDescription(!showDescription);
               }}
             >
               {/* Expand */}
-              <span className="group hover:bg-gray-200 rounded-full py-1">
+              <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
                   <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
-                  <XMarkIcon className="h-3 w-3 text-gray-500 group-hover:text-gray-400" />
+                  <XMarkIcon className={SecondaryButtonStyles} />
                 ) : (
-                  <ChevronUpDownIcon className="h-3 w-3 text-gray-500 group-hover:text-gray-400" />
+                  <ChevronUpDownIcon className={SecondaryButtonStyles} />
                 )}
               </span>
             </button>
             <Link
               href={`/verse/${verse.id}#dao${verse.id}`}
-              className="text-xs hover:underline text-gray-600 flex items-center gap-x-1"
+              className={twMerge(
+                SecondaryDarkModeText,
+                "text-xs flex items-center hover:underline gap-x-1"
+              )}
             >
               Go{" "}
-              <ArrowRightIcon className="h-2 w-2 text-gray-500 hover:text-gray-400" />
+              <ArrowRightIcon
+                className={twMerge("h-2 w-2", SecondaryDarkModeText)}
+              />
             </Link>
           </div>
         </div>

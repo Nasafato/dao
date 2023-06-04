@@ -48,6 +48,7 @@ export function Dictionary() {
       const result = await trpcClient.definition.findOne.query(searchTerm);
       return result;
     },
+    networkMode: "offlineFirst",
     enabled: !!searchTerm && searchTerm.length > 0,
   });
 

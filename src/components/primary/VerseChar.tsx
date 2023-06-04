@@ -57,7 +57,9 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
 }
 
 function Definition({ char }: { char: string }) {
-  const { data, isLoading, isError } = api.definition.findOne.useQuery(char);
+  const { data, isLoading, isError } = api.definition.findOne.useQuery(char, {
+    networkMode: "offlineFirst",
+  });
 
   return (
     <div

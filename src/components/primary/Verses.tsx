@@ -29,6 +29,7 @@ export function Verses({ verses }: VerseProps) {
   });
 
   const verseMemoryStatusesQuery = useVerseMemoryStatusesQuery();
+  console.log("verseMemoryStatus", verseMemoryStatusesQuery.data);
   const statusMap: Record<string, VerseMemoryStatusType> = {};
   for (const status of verseMemoryStatusesQuery.data ?? []) {
     statusMap[status.verseId] = status;

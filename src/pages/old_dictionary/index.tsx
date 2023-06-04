@@ -46,6 +46,7 @@ export default function Dictionary() {
 
   const searchQuery = api.definition.findOne.useQuery(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
+    networkMode: "offlineFirst",
   });
 
   const handleSubmit = (event: FormEvent) => {
