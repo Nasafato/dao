@@ -30,6 +30,7 @@ type PopoverDimensions = {
 
 type DataContext = {
   popoverDimensions: PopoverDimensions;
+  arrow: Arrow;
   anchor: HTMLElement | null;
   content: React.ReactNode | null;
   coordinates: Coordinates;
@@ -41,6 +42,11 @@ type ApiContext = {
   renderPopover: (args: RenderPopoverArgs) => void;
   closePopover: (anchorElement: HTMLElement) => void;
   // openPopover: () => void;
+};
+
+export type Arrow = {
+  orientation: "facingUp" | "facingDown";
+  left: number;
 };
 
 export const PopoverDataContext = createContext<DataContext>({} as DataContext);
@@ -67,6 +73,10 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     left: 0,
     top: 0,
   });
+  const [arrow, setArrow] = useState<Arrow>({
+    orientation: "facingUp",
+    left: 0,
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [popoverDimensions, setPopoverDimensions] = useState<{
     width: number;
@@ -91,12 +101,13 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       setAnchor(anchor);
       setContent(content);
       const desiredDimensions = computePopoverDimensions();
-      const { position, computedDimensions } = computePosition({
+      const { position, computedDimensions, arrow } = computePosition({
         anchorElement: anchor,
         desiredDimensions: desiredDimensions,
       });
       setCoordinates(position);
       setIsOpen(true);
+      setArrow(arrow);
       setPopoverDimensions(computedDimensions);
     };
 
@@ -120,11 +131,12 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
           anchor.style.color = colors.green["500"];
         }
         const desiredDimensions = computePopoverDimensions();
-        const { position, computedDimensions } = computePosition({
+        const { position, computedDimensions, arrow } = computePosition({
           anchorElement: anchor,
           desiredDimensions,
         });
         setCoordinates(position);
+        setArrow(arrow);
         setPopoverDimensions(computedDimensions);
       }
     };
@@ -144,8 +156,17 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       popoverRef,
       isOpen,
       anchor,
+      arrow,
     };
-  }, [coordinates, content, popoverRef, isOpen, popoverDimensions, anchor]);
+  }, [
+    coordinates,
+    content,
+    popoverRef,
+    isOpen,
+    popoverDimensions,
+    anchor,
+    arrow,
+  ]);
 
   return (
     <PopoverApiContext.Provider value={api}>
