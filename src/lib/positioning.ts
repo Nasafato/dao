@@ -1,3 +1,5 @@
+import { Arrow } from "../components/primary/PopoverProvider";
+
 interface ComputePositionArgs {
   anchorElement: HTMLElement;
   desiredDimensions: {
@@ -44,6 +46,7 @@ export function computePosition({
   const rect = anchor.getBoundingClientRect();
   const rectMiddle = rect.left + rect.width / 2;
   const desiredWidth = desiredDimensions.width;
+  let arrowOrientation: Arrow["orientation"] = "facingUp";
 
   // First, try to place the rectangle where it should be, which is centered on the middle.
   let left = rectMiddle - desiredWidth / 2;
@@ -72,6 +75,7 @@ export function computePosition({
   if (bottom > window.innerHeight + window.scrollY) {
     // flip the orientation.
     top = rect.top - desiredDimensions.height - VERTICAL_GAP + window.scrollY;
+    arrowOrientation = "facingDown";
   }
 
   const position = {
@@ -84,8 +88,18 @@ export function computePosition({
     height: desiredDimensions.height,
   };
 
+  const anchorRect = anchor.getBoundingClientRect();
+  // Relative to viewport.
+  const anchorMiddle = rect.left + rect.width / 2;
+
+  const arrow: Arrow = {
+    orientation: arrowOrientation,
+    left: anchorMiddle - position.left,
+  };
+
   return {
     computedDimensions,
     position,
+    arrow,
   };
 }

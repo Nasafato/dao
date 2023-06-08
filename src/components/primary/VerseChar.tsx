@@ -1,20 +1,9 @@
 import clsx from "clsx";
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import { api } from "../../utils/trpc";
 import { Spinner } from "../shared/Spinner";
 import { usePopoverApi } from "./PopoverProvider";
 import { SingleCharDefinition } from "./SingleCharDefinition";
-
-const withPopover = (Component: any) => {
-  const MemoComponent = memo(Component);
-  const Wrapped = (props: any) => {
-    const { renderPopover } = usePopoverApi();
-
-    return <MemoComponent renderPopover={renderPopover} {...props} />;
-  };
-  Wrapped.displayName = `withPopover(${Component.displayName})`;
-  return Wrapped;
-};
 
 export function VerseChar({ char, charId }: { char: string; charId: string }) {
   const { renderPopover } = usePopoverApi();
@@ -32,9 +21,6 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
           anchor: ref.current,
         });
       }}
-      className={clsx("relative", {
-        // "text-green-600": popover.currentCharId === charId && popover.isOpen,
-      })}
     >
       {char}
     </span>
