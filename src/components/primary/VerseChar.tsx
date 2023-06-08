@@ -21,13 +21,6 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
       onClick={() => {
         if (!ref.current) return;
         renderCharId(charId);
-        // renderPopover({
-        //   content: <Definition char={char} />,
-        //   anchor: ref.current,
-        //   meta: {
-        //     charId,
-        //   },
-        // });
       }}
     >
       {char}

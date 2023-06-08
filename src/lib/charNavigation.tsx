@@ -67,11 +67,6 @@ export function useCharNavigation() {
       content: (
         <Definition.Wrapper>
           <Definition char={char} />
-          {/* <Definition.Navigation
-            char={char}
-            charId={charId}
-            className="h-[10%]"
-          /> */}
         </Definition.Wrapper>
       ),
       meta: {
