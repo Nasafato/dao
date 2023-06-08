@@ -28,8 +28,12 @@ type PopoverDimensions = {
   height: number;
 };
 
+type Meta = {
+  charId: string;
+};
+
 type DataContext = {
-  meta: Record<string, any>;
+  meta: Meta | null;
   popoverDimensions: PopoverDimensions;
   arrow: Arrow;
   anchor: HTMLElement | null;
@@ -59,7 +63,7 @@ interface RenderPopoverArgs {
   /** The element over which the popover is positioned. */
   anchor: HTMLElement;
   /** Any metadata to pass */
-  meta?: Record<string, any>;
+  meta?: { charId: string };
 }
 
 type Coordinates = {
@@ -97,7 +101,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     width: number;
     height: number;
   }>(computePopoverDimensions());
-  const [meta, setMeta] = useState<Record<string, any>>({});
+  const [meta, setMeta] = useState<{ charId: string } | null>(null);
 
   const popoverRef = React.useRef<HTMLDivElement>(null);
   const prevAnchor = React.useRef<HTMLElement | null>(null);
@@ -126,7 +130,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       setIsOpen(true);
       setArrow(arrow);
       setPopoverDimensions(computedDimensions);
-      setMeta(args.meta || {});
+      setMeta(args.meta ?? null);
     };
 
     const closePopover = (anchorElement: HTMLElement) => {

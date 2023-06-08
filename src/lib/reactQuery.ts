@@ -17,7 +17,6 @@ export function useVerseMemoryStatusesQuery() {
     ],
     async () => {
       const res = await VerseMemoryStatus.getAll({ userId: USER_ID });
-      console.log("res", res);
       return res;
     },
     {
