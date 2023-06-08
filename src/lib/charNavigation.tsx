@@ -35,7 +35,6 @@ export function useRenderNextOrPrevChar() {
   const popover = usePopoverData();
   const { renderNextChar, renderPrevChar } = useCharNavigation();
   const meta = CharMetaSchema.safeParse(popover.meta);
-  console.log("meta", meta, "popover", popover);
   let charId: string | null;
   if (meta.success) {
     charId = meta.data.charId;
@@ -51,6 +50,32 @@ export function useRenderNextOrPrevChar() {
       if (!charId) return;
       renderPrevChar(charId);
     },
+  };
+}
+
+export function useCharInfo() {
+  const { meta } = usePopoverData();
+  if (!meta) {
+    return {};
+  }
+
+  const nextCharId = getNextCharId(meta.charId);
+  const nextChar = nextCharId ? CharMap.get(nextCharId) : null;
+  const prevCharId = getPrevCharId(meta.charId);
+  const prevChar = prevCharId ? CharMap.get(prevCharId) : null;
+
+  return {
+    nextChar: nextChar
+      ? {
+          charId: nextCharId,
+          char: nextChar,
+        }
+      : null,
+    currChar: {
+      charId: meta.charId,
+      char: CharMap.get(meta.charId),
+    },
+    prevChar: prevChar ? { charId: prevCharId, char: prevChar } : null,
   };
 }
 

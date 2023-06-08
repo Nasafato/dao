@@ -18,6 +18,7 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
     <span
       id={charId}
       ref={ref}
+      className="character"
       onClick={() => {
         if (!ref.current) return;
         renderCharId(charId);

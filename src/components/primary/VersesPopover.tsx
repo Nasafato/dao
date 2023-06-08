@@ -10,7 +10,7 @@ export function Popover() {
   const { closePopover } = usePopoverApi();
   const ref = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { renderPrevChar, renderNextChar } = useCharNavigation();
+  const { renderPrevChar, renderNextChar, renderCharId } = useCharNavigation();
 
   useEffect(() => {
     ref.current = document.getElementById("popover-portal");
@@ -24,7 +24,13 @@ export function Popover() {
       const target = event.target as HTMLElement;
       const clickedOnPopover = target.closest("#popover-portal-root");
       const clickedOnFooter = target.closest("#footer");
+      const clickedOnCharacter = target.closest(".character");
+
       if (clickedOnPopover || clickedOnFooter) return;
+      if (clickedOnCharacter) {
+        renderCharId(clickedOnCharacter.id);
+        return;
+      }
       if (popover.isOpen && ref.current && popover.anchor) {
         closePopover(popover.anchor);
       }
@@ -34,7 +40,7 @@ export function Popover() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [closePopover, popover]);
+  }, [closePopover, popover, renderCharId]);
 
   useEffect(() => {
     if (popover.isOpen && popover.popoverRef.current) {

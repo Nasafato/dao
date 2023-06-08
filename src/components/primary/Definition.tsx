@@ -10,6 +10,7 @@ import {
   TextStyle,
 } from "../../styles";
 import {
+  useCharInfo,
   useCharNavigation,
   useRenderNextOrPrevChar,
 } from "../../lib/charNavigation";
@@ -66,17 +67,29 @@ export const DefinitionWrapper = (Definition.Wrapper = function Wrapper({
 export const DefinitionNavigation = (Definition.Navigation =
   function DefinitionNavigation({ className }: { className?: string }) {
     const { renderNextChar, renderPrevChar } = useRenderNextOrPrevChar();
+    const { currChar, nextChar, prevChar } = useCharInfo();
     return (
-      <div className={twJoin("flex gap-x-3", className)}>
-        <button className={CharNavButtonStyle} onClick={renderPrevChar}>
+      <div className={twJoin("flex gap-x-3 items-center", className)}>
+        <span className={SurroundingCharStyle}>{prevChar?.char}</span>
+        <button
+          className={twJoin(CharNavButtonStyle, !prevChar && "opacity-30")}
+          onClick={renderPrevChar}
+        >
           <ArrowLeftIcon className={CharNavArrowStyle} />
         </button>
-        <button className={CharNavButtonStyle} onClick={renderNextChar}>
+        <span className="font-medium w-4">{currChar?.char}</span>
+        <button
+          className={twJoin(CharNavButtonStyle, !nextChar && "opacity-30")}
+          onClick={renderNextChar}
+        >
           <ArrowRightIcon className={CharNavArrowStyle} />
         </button>
+        <span className={SurroundingCharStyle}>{nextChar?.char}</span>
       </div>
     );
   });
 
 const CharNavButtonStyle = "text-sm";
 const CharNavArrowStyle = "h-5 w-5 hover:text-gray-400";
+
+const SurroundingCharStyle = "text-xs text-gray-500 w-3";
