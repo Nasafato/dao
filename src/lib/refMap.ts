@@ -24,5 +24,4 @@ export function getPrevCharId(charId: string) {
 
 export const CharMetaSchema = z.object({
   charId: z.string(),
-  char: z.string(),
 });
