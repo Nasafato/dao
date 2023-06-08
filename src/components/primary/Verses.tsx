@@ -5,7 +5,8 @@ import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
-import { Popover, PopoverContextProvider } from "./VersesPopover";
+import { PopoverProvider } from "./PopoverProvider";
+import { Popover } from "./VersesPopover";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -36,7 +37,7 @@ export function Verses({ verses }: VerseProps) {
   }
 
   return (
-    <PopoverContextProvider>
+    <PopoverProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-5">
@@ -53,6 +54,6 @@ export function Verses({ verses }: VerseProps) {
       </div>
       <MediaWindow />
       <CommandPalette />
-    </PopoverContextProvider>
+    </PopoverProvider>
   );
 }
