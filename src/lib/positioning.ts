@@ -6,7 +6,7 @@ interface ComputePositionArgs {
   };
 }
 
-const HEADER_HEIGHT = 30;
+// const HEADER_HEIGHT = 30;
 const MOBILE_BREAKPOINT = 560;
 const RESPONSIVE_DIMENSIONS = {
   mobile: {
@@ -64,8 +64,15 @@ export function computePosition({
 
   let width = right - left;
 
+  let top = rect.bottom + window.scrollY;
+  let bottom = top + desiredDimensions.height;
+  if (bottom > window.innerHeight + window.scrollY) {
+    // flip the orientation.
+    top = rect.top - desiredDimensions.height + window.scrollY;
+  }
+
   const position = {
-    top: rect.bottom + window.scrollY,
+    top,
     left,
   };
 
