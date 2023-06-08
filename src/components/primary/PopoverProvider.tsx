@@ -10,6 +10,7 @@ import {
   computePopoverDimensions,
   computePosition,
 } from "../../lib/positioning";
+import { useDaoStore } from "../../state/store";
 
 export type Popover = {
   content: React.ReactNode;
@@ -78,6 +79,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     left: 0,
   });
   const [isOpen, setIsOpen] = useState(false);
+  const setFooterOpen = useDaoStore((s) => s.setFooterOpen);
   const [popoverDimensions, setPopoverDimensions] = useState<{
     width: number;
     height: number;
@@ -104,6 +106,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
         anchorElement: anchor,
         desiredDimensions: desiredDimensions,
       });
+      setFooterOpen(true);
       setAnchor(anchor);
       setContent(content);
       setCoordinates(position);
@@ -116,10 +119,11 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     const closePopover = (anchorElement: HTMLElement) => {
       anchorElement.style.color = "inherit";
       setIsOpen(false);
+      setFooterOpen(false);
     };
 
     return { renderPopover, closePopover };
-  }, []);
+  }, [setFooterOpen]);
 
   useEffect(() => {
     const handleResize = () => {

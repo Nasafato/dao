@@ -37,7 +37,7 @@ export function Verses({ verses }: VerseProps) {
   }
 
   return (
-    <PopoverProvider>
+    <>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-5">
@@ -54,6 +54,6 @@ export function Verses({ verses }: VerseProps) {
       </div>
       <MediaWindow />
       <CommandPalette />
-    </PopoverProvider>
+    </>
   );
 }

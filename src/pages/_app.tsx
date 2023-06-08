@@ -6,6 +6,8 @@ import { api } from "../utils/trpc";
 import { useEffect } from "react";
 import { initializeDb } from "../lib/localDb/db";
 import { Header } from "../components/primary/Header";
+import { Footer } from "../components/primary/Footer";
+import { PopoverProvider } from "../components/primary/PopoverProvider";
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -13,13 +15,14 @@ function App({ Component, pageProps }: AppProps) {
     initializeDb();
   }, []);
   return (
-    <>
+    <PopoverProvider>
       <Header />
       <main className="px-5 pb-16 lg:px-24 lg:pb-24 pt-4 lg:pt-8 mt-12">
         <Component {...pageProps} />
       </main>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </>
+      <Footer />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+    </PopoverProvider>
   );
 }
 
