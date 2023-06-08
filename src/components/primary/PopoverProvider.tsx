@@ -1,16 +1,15 @@
 import React, {
   createContext,
-  useState,
-  useMemo,
   useContext,
   useEffect,
+  useMemo,
+  useState,
 } from "react";
+import colors from "tailwindcss/colors";
 import {
   computePopoverDimensions,
   computePosition,
 } from "../../lib/positioning";
-import { set } from "zod";
-import colors from "tailwindcss/colors";
 
 export type Popover = {
   content: React.ReactNode;
@@ -29,6 +28,7 @@ type PopoverDimensions = {
 };
 
 type DataContext = {
+  meta: Record<string, any>;
   popoverDimensions: PopoverDimensions;
   arrow: Arrow;
   anchor: HTMLElement | null;
@@ -57,8 +57,8 @@ interface RenderPopoverArgs {
   content: React.ReactNode;
   /** The element over which the popover is positioned. */
   anchor: HTMLElement;
-  /** The ID of the character. */
-  currentCharId: string;
+  /** Any metadata to pass */
+  meta?: Record<string, any>;
 }
 
 type Coordinates = {
@@ -82,6 +82,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     width: number;
     height: number;
   }>(computePopoverDimensions());
+  const [meta, setMeta] = useState<Record<string, any>>({});
 
   const popoverRef = React.useRef<HTMLDivElement>(null);
   const prevAnchor = React.useRef<HTMLElement | null>(null);
@@ -98,17 +99,18 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
         prevAnchor.current = anchor;
         anchor.style.color = colors.green["500"];
       }
-      setAnchor(anchor);
-      setContent(content);
       const desiredDimensions = computePopoverDimensions();
       const { position, computedDimensions, arrow } = computePosition({
         anchorElement: anchor,
         desiredDimensions: desiredDimensions,
       });
+      setAnchor(anchor);
+      setContent(content);
       setCoordinates(position);
       setIsOpen(true);
       setArrow(arrow);
       setPopoverDimensions(computedDimensions);
+      setMeta(args.meta || {});
     };
 
     const closePopover = (anchorElement: HTMLElement) => {
@@ -157,6 +159,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       isOpen,
       anchor,
       arrow,
+      meta,
     };
   }, [
     coordinates,
@@ -166,6 +169,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     popoverDimensions,
     anchor,
     arrow,
+    meta,
   ]);
 
   return (

@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { CharMap, addToRefMap } from "../../lib/refMap";
 import { api } from "../../utils/trpc";
 import { Spinner } from "../shared/Spinner";
 import { usePopoverApi } from "./PopoverProvider";
@@ -8,6 +9,11 @@ import { SingleCharDefinition } from "./SingleCharDefinition";
 export function VerseChar({ char, charId }: { char: string; charId: string }) {
   const { renderPopover } = usePopoverApi();
   const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    addToRefMap(charId, ref.current);
+    CharMap.set(charId, char);
+  }, [charId, char]);
 
   return (
     <span
@@ -17,8 +23,10 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
         if (!ref.current) return;
         renderPopover({
           content: <Definition char={char} />,
-          currentCharId: charId,
           anchor: ref.current,
+          meta: {
+            charId,
+          },
         });
       }}
     >
