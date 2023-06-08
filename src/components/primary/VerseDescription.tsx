@@ -1,12 +1,6 @@
-import { useQueryClient, useQuery } from "@tanstack/react-query";
-import clsx from "clsx";
-import { useRef, useEffect } from "react";
 import { punctuation } from "../../consts";
-import { DescriptionOutput } from "../../server/routers/_app";
-import { DictionarySchemaType, DictionaryEntrySchema } from "../../types";
-import { usePopoverApi } from "./VersesPopover";
-import { VerseChar } from "./VerseChar";
 import { capitalize } from "../../utils";
+import { VerseChar } from "./VerseChar";
 
 export function VerseDescription({
   verseId,
