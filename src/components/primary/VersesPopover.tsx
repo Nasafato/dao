@@ -19,8 +19,8 @@ export function Popover() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const closest = target.closest("#popover-portal-root");
-      if (popover.isOpen && ref.current && !closest) {
-        closePopover();
+      if (popover.isOpen && ref.current && !closest && popover.anchor) {
+        closePopover(popover.anchor);
       }
     };
 

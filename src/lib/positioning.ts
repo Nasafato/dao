@@ -34,6 +34,9 @@ export function computePopoverDimensions() {
   };
 }
 
+/** This will eventually be the height of the arrow. */
+const VERTICAL_GAP = 5;
+
 export function computePosition({
   anchorElement: anchor,
   desiredDimensions,
@@ -64,11 +67,11 @@ export function computePosition({
 
   let width = right - left;
 
-  let top = rect.bottom + window.scrollY;
+  let top = rect.bottom + window.scrollY + VERTICAL_GAP;
   let bottom = top + desiredDimensions.height;
   if (bottom > window.innerHeight + window.scrollY) {
     // flip the orientation.
-    top = rect.top - desiredDimensions.height + window.scrollY;
+    top = rect.top - desiredDimensions.height - VERTICAL_GAP + window.scrollY;
   }
 
   const position = {

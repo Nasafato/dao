@@ -10,6 +10,7 @@ import {
   computePosition,
 } from "../../lib/positioning";
 import { set } from "zod";
+import colors from "tailwindcss/colors";
 
 export type Popover = {
   content: React.ReactNode;
@@ -29,6 +30,7 @@ type PopoverDimensions = {
 
 type DataContext = {
   popoverDimensions: PopoverDimensions;
+  anchor: HTMLElement | null;
   content: React.ReactNode | null;
   coordinates: Coordinates;
   isOpen: boolean;
@@ -37,8 +39,8 @@ type DataContext = {
 
 type ApiContext = {
   renderPopover: (args: RenderPopoverArgs) => void;
-  closePopover: () => void;
-  openPopover: () => void;
+  closePopover: (anchorElement: HTMLElement) => void;
+  // openPopover: () => void;
 };
 
 export const PopoverDataContext = createContext<DataContext>({} as DataContext);
@@ -72,11 +74,20 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
   }>(computePopoverDimensions());
 
   const popoverRef = React.useRef<HTMLDivElement>(null);
+  const prevAnchor = React.useRef<HTMLElement | null>(null);
 
   const api = useMemo(() => {
     const renderPopover = (args: RenderPopoverArgs) => {
       if (!popoverRef.current) return;
       const { anchor, content } = args;
+      if (prevAnchor.current && prevAnchor.current !== anchor) {
+        prevAnchor.current.style.color = "inherit";
+        prevAnchor.current = anchor;
+        anchor.style.color = colors.green["500"];
+      } else if (!prevAnchor.current) {
+        prevAnchor.current = anchor;
+        anchor.style.color = colors.green["500"];
+      }
       setAnchor(anchor);
       setContent(content);
       const desiredDimensions = computePopoverDimensions();
@@ -89,19 +100,25 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       setPopoverDimensions(computedDimensions);
     };
 
-    const closePopover = () => {
+    const closePopover = (anchorElement: HTMLElement) => {
+      anchorElement.style.color = "inherit";
       setIsOpen(false);
     };
-    const openPopover = () => {
-      setIsOpen(true);
-    };
 
-    return { renderPopover, closePopover, openPopover };
+    return { renderPopover, closePopover };
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
       if (anchor && popoverRef.current && isOpen) {
+        if (prevAnchor.current && prevAnchor.current !== anchor) {
+          prevAnchor.current.style.color = "inherit";
+          prevAnchor.current = anchor;
+          anchor.style.color = colors.green["500"];
+        } else if (!prevAnchor.current) {
+          prevAnchor.current = anchor;
+          anchor.style.color = colors.green["500"];
+        }
         const desiredDimensions = computePopoverDimensions();
         const { position, computedDimensions } = computePosition({
           anchorElement: anchor,
@@ -126,8 +143,9 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       content,
       popoverRef,
       isOpen,
+      anchor,
     };
-  }, [coordinates, content, popoverRef, isOpen, popoverDimensions]);
+  }, [coordinates, content, popoverRef, isOpen, popoverDimensions, anchor]);
 
   return (
     <PopoverApiContext.Provider value={api}>
