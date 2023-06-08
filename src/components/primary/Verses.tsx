@@ -5,7 +5,8 @@ import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";
 import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
-import { Popover, PopoverContextProvider } from "./VersesPopover";
+import { PopoverProvider } from "./PopoverProvider";
+import { Popover } from "./VersesPopover";
 
 interface VerseProps {
   verses: DaoVerse[];
@@ -29,13 +30,14 @@ export function Verses({ verses }: VerseProps) {
   });
 
   const verseMemoryStatusesQuery = useVerseMemoryStatusesQuery();
+  console.log("verseMemoryStatus", verseMemoryStatusesQuery.data);
   const statusMap: Record<string, VerseMemoryStatusType> = {};
   for (const status of verseMemoryStatusesQuery.data ?? []) {
     statusMap[status.verseId] = status;
   }
 
   return (
-    <PopoverContextProvider>
+    <PopoverProvider>
       {/* <DebugAtom atom={mediaAtom} /> */}
       {/* <DebugContext context={DefinitionPopoverContext} /> */}
       <div className="space-y-5">
@@ -52,6 +54,6 @@ export function Verses({ verses }: VerseProps) {
       </div>
       <MediaWindow />
       <CommandPalette />
-    </PopoverContextProvider>
+    </PopoverProvider>
   );
 }

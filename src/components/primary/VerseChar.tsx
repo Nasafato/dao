@@ -1,37 +1,24 @@
-import { useQueryClient, useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { useRef, useEffect } from "react";
-import { DictionarySchemaType, DictionaryEntrySchema } from "../../types";
-import { usePopover } from "./VersesPopover";
+import { memo, useRef } from "react";
 import { api } from "../../utils/trpc";
-import { SingleCharDefinition } from "./SingleCharDefinition";
 import { Spinner } from "../shared/Spinner";
+import { usePopoverApi } from "./PopoverProvider";
+import { SingleCharDefinition } from "./SingleCharDefinition";
+
+const withPopover = (Component: any) => {
+  const MemoComponent = memo(Component);
+  const Wrapped = (props: any) => {
+    const { renderPopover } = usePopoverApi();
+
+    return <MemoComponent renderPopover={renderPopover} {...props} />;
+  };
+  Wrapped.displayName = `withPopover(${Component.displayName})`;
+  return Wrapped;
+};
 
 export function VerseChar({ char, charId }: { char: string; charId: string }) {
+  const { renderPopover } = usePopoverApi();
   const ref = useRef<HTMLSpanElement>(null);
-  const { renderPopover, popover } = usePopover();
-  useEffect(() => {
-    if (charId !== popover.currentCharId || !ref.current || !popover.isOpen) {
-      return;
-    }
-
-    const handleResize = () => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      renderPopover({
-        content: <Definition char={char} />,
-        currentCharId: charId,
-        element: ref.current,
-        rect,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [charId, popover.currentCharId, char, renderPopover, popover.isOpen]);
 
   return (
     <span
@@ -39,16 +26,14 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
       ref={ref}
       onClick={() => {
         if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
         renderPopover({
           content: <Definition char={char} />,
           currentCharId: charId,
-          element: ref.current,
-          rect,
+          anchor: ref.current,
         });
       }}
       className={clsx("relative", {
-        "text-green-600": popover.currentCharId === charId && popover.isOpen,
+        // "text-green-600": popover.currentCharId === charId && popover.isOpen,
       })}
     >
       {char}
@@ -56,8 +41,10 @@ export function VerseChar({ char, charId }: { char: string; charId: string }) {
   );
 }
 
-function Definition({ char }: { char: string }) {
-  const { data, isLoading, isError } = api.definition.findOne.useQuery(char);
+export function Definition({ char }: { char: string }) {
+  const { data, isLoading, isError } = api.definition.findOne.useQuery(char, {
+    networkMode: "offlineFirst",
+  });
 
   return (
     <div
