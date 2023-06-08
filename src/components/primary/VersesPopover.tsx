@@ -2,10 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
 import { twMerge } from "tailwind-merge";
+import {
+  CharMap,
+  CharMetaSchema,
+  RefMap,
+  getNextCharId,
+  getPrevCharId,
+} from "../../lib/refMap";
+import { Definition } from "./VerseChar";
 
 export function Popover() {
   const popover = usePopoverData();
-  const { closePopover } = usePopoverApi();
+  const { closePopover, renderPopover } = usePopoverApi();
   const ref = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -31,6 +39,63 @@ export function Popover() {
     };
   }, [closePopover, popover]);
 
+  useEffect(() => {
+    if (popover.isOpen && popover.popoverRef.current) {
+      popover.popoverRef.current.focus();
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          if (popover.anchor) {
+            closePopover(popover.anchor);
+          }
+        }
+
+        if (event.key === "Tab") {
+          event.preventDefault();
+          if (popover.anchor) {
+            closePopover(popover.anchor);
+          }
+        }
+
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+          const charMeta = CharMetaSchema.safeParse(popover.meta);
+          if (!charMeta.success) return;
+          const { charId } = charMeta.data;
+          event.preventDefault();
+          const nextCharId =
+            event.key === "ArrowRight"
+              ? getNextCharId(charId)
+              : getPrevCharId(charId);
+          if (!nextCharId) return;
+          const charRef = RefMap.get(nextCharId);
+          const char = CharMap.get(nextCharId);
+          if (!charRef) return;
+          if (!char) return;
+          renderPopover({
+            anchor: charRef,
+            content: <Definition char={char} />,
+            meta: {
+              charId: nextCharId,
+            },
+          });
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      popover.popoverRef.current?.blur();
+    }
+  }, [
+    popover.isOpen,
+    popover.popoverRef,
+    closePopover,
+    popover.anchor,
+    popover.meta,
+    renderPopover,
+  ]);
+
   let content = popover.content;
   if (!popover.isOpen) {
     content = null;
@@ -53,17 +118,17 @@ export function Popover() {
         left: popover.coordinates.left,
         width: popover.popoverDimensions.width,
         height: popover.popoverDimensions.height,
+        display: popover.isOpen ? "block" : "none",
       }}
       className="z-10"
+      tabIndex={-1}
       id="popover-portal-root"
     >
       <div className="relative h-full">
-        {popover.isOpen && (
-          <Arrow
-            arrow={popover.arrow}
-            popoverDimensions={popover.popoverDimensions}
-          />
-        )}
+        <Arrow
+          arrow={popover.arrow}
+          popoverDimensions={popover.popoverDimensions}
+        />
         {content}
       </div>
     </div>,
