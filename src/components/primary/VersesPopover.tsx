@@ -42,9 +42,7 @@ export function Popover() {
   useEffect(() => {
     if (popover.isOpen && popover.popoverRef.current) {
       popover.popoverRef.current.focus();
-      console.log("focusing new popover", popover.popoverRef.current);
       const handleKeyDown = (event: KeyboardEvent) => {
-        console.log("key down", event.key);
         if (event.key === "Escape") {
           if (popover.anchor) {
             closePopover(popover.anchor);
@@ -82,10 +80,8 @@ export function Popover() {
         }
       };
 
-      console.log("adding event listener");
       document.addEventListener("keydown", handleKeyDown);
       return () => {
-        console.log("removing event listener");
         document.removeEventListener("keydown", handleKeyDown);
       };
     } else {
