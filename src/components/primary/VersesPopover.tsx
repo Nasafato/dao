@@ -1,21 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { twJoin, twMerge } from "tailwind-merge";
+import { CharMetaSchema, useCharNavigation } from "../../lib/charNavigation";
 import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
-import { twMerge } from "tailwind-merge";
-import {
-  CharMap,
-  CharMetaSchema,
-  RefMap,
-  getNextCharId,
-  getPrevCharId,
-} from "../../lib/refMap";
-import { Definition } from "./VerseChar";
+import { BorderStyle } from "../../styles";
 
 export function Popover() {
   const popover = usePopoverData();
-  const { closePopover, renderPopover } = usePopoverApi();
+  const { closePopover } = usePopoverApi();
   const ref = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { renderPrevChar, renderNextChar } = useCharNavigation();
 
   useEffect(() => {
     ref.current = document.getElementById("popover-portal");
@@ -27,8 +22,10 @@ export function Popover() {
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const closest = target.closest("#popover-portal-root");
-      if (popover.isOpen && ref.current && !closest && popover.anchor) {
+      const clickedOnPopover = target.closest("#popover-portal-root");
+      const clickedOnFooter = target.closest("#footer");
+      if (clickedOnPopover || clickedOnFooter) return;
+      if (popover.isOpen && ref.current && popover.anchor) {
         closePopover(popover.anchor);
       }
     };
@@ -61,22 +58,11 @@ export function Popover() {
           if (!charMeta.success) return;
           const { charId } = charMeta.data;
           event.preventDefault();
-          const nextCharId =
-            event.key === "ArrowRight"
-              ? getNextCharId(charId)
-              : getPrevCharId(charId);
-          if (!nextCharId) return;
-          const charRef = RefMap.get(nextCharId);
-          const char = CharMap.get(nextCharId);
-          if (!charRef) return;
-          if (!char) return;
-          renderPopover({
-            anchor: charRef,
-            content: <Definition char={char} />,
-            meta: {
-              charId: nextCharId,
-            },
-          });
+          if (event.key === "ArrowRight") {
+            renderNextChar(charId);
+          } else {
+            renderPrevChar(charId);
+          }
         }
       };
 
@@ -88,12 +74,13 @@ export function Popover() {
       popover.popoverRef.current?.blur();
     }
   }, [
+    renderNextChar,
+    renderPrevChar,
     popover.isOpen,
     popover.popoverRef,
     closePopover,
     popover.anchor,
     popover.meta,
-    renderPopover,
   ]);
 
   let content = popover.content;
@@ -147,9 +134,10 @@ function Arrow({
     arrow.orientation === "facingUp" ? "rotate-45" : "-rotate-[135deg]";
   return (
     <div
-      className={twMerge(
-        "w-2 h-2 bg-white border-l border-t border-gray-950 absolute rotate",
-        rotate
+      className={twJoin(
+        "w-2 h-2 bg-white border-l border-t absolute",
+        rotate,
+        BorderStyle
       )}
       style={{
         top:

@@ -6,7 +6,7 @@ import { DaoVerse } from "../../types";
 import { Spinner } from "../shared/Spinner";
 import { Countdown } from "../shared/Countdown";
 import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
-import { SecondaryButtonStyles, SecondaryDarkModeText } from "../../styles";
+import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
 import { twMerge } from "tailwind-merge";
 
 export function AuxVerseStatus({
@@ -51,11 +51,11 @@ export function AuxVerseStatus({
           // setVerseBeingTested(verse);
           // }}
         >
-          <AcademicCapIcon className={SecondaryButtonStyles} />
+          <AcademicCapIcon className={SecondaryButtonStyle} />
           <span
             className={twMerge(
               "font-mono text-[0.6rem] text-gray-500",
-              SecondaryDarkModeText
+              SecondaryDarkModeTextStyle
             )}
           >
             Learning:
@@ -91,7 +91,7 @@ export function AuxVerseStatus({
                 <div
                   className={twMerge(
                     "font-mono text-gray-500 text-[0.6rem]",
-                    SecondaryDarkModeText
+                    SecondaryDarkModeTextStyle
                   )}
                 >
                   {display}

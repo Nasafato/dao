@@ -10,6 +10,7 @@ import {
   computePopoverDimensions,
   computePosition,
 } from "../../lib/positioning";
+import { useDaoStore } from "../../state/store";
 
 export type Popover = {
   content: React.ReactNode;
@@ -66,6 +67,19 @@ type Coordinates = {
   top: number;
 };
 
+/**
+ * This is the popover provider for individual characters. It's designed to minimize re-renders when showing
+ * the definition for each character. There are two contexts: one for the data and one for the API.
+ *
+ * The data context contains the data that's used to render the popover. The API context contains the methods
+ * to control the popover state.
+ *
+ * I think we can add a better way for each character to know whether it's highlighted or not.
+ * Right now, we imperatively update the styles of each character's element, which is not very React-y.
+ *
+ * The right way could be to add a state and state selectors by which each character can select only its own charId state,
+ * and it will only change if it's been highlighted or not highlighted. That would solve the re-render issue.
+ */
 export function PopoverProvider({ children }: { children: React.ReactNode }) {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const [content, setContent] = useState<React.ReactNode | null>(null);
@@ -78,6 +92,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     left: 0,
   });
   const [isOpen, setIsOpen] = useState(false);
+  const setFooterOpen = useDaoStore((s) => s.setFooterOpen);
   const [popoverDimensions, setPopoverDimensions] = useState<{
     width: number;
     height: number;
@@ -104,6 +119,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
         anchorElement: anchor,
         desiredDimensions: desiredDimensions,
       });
+      setFooterOpen(true);
       setAnchor(anchor);
       setContent(content);
       setCoordinates(position);
@@ -116,10 +132,11 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     const closePopover = (anchorElement: HTMLElement) => {
       anchorElement.style.color = "inherit";
       setIsOpen(false);
+      setFooterOpen(false);
     };
 
     return { renderPopover, closePopover };
-  }, []);
+  }, [setFooterOpen]);
 
   useEffect(() => {
     const handleResize = () => {

@@ -11,6 +11,8 @@ interface DaoStore {
   setAudioCached: (audioUrl: string, status: boolean) => void;
   readerMode: boolean;
   setReaderMode: (status: boolean) => void;
+  isFooterOpen: boolean;
+  setFooterOpen: (status: boolean) => void;
 }
 export const useDaoStore = create<DaoStore>((set) => ({
   verseBeingTested: null,
@@ -53,4 +55,6 @@ export const useDaoStore = create<DaoStore>((set) => ({
   },
   readerMode: false,
   setReaderMode: (status: boolean) => set({ readerMode: status }),
+  isFooterOpen: false,
+  setFooterOpen: (status: boolean) => set({ isFooterOpen: status }),
 }));

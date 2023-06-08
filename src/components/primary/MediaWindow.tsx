@@ -7,7 +7,7 @@ import {
   mediaTypeAtom,
 } from "../../state/mediaAtoms";
 import { twMerge } from "tailwind-merge";
-import { SoftBorder } from "../../styles";
+import { SoftBorderStyle } from "../../styles";
 
 export function MediaWindow() {
   const [mediaSource] = useAtom(mediaSourceAtom);
@@ -78,7 +78,7 @@ export function MediaWindow() {
     <div
       className={twMerge(
         "fixed bottom-0 px-3 py-2 border-t  w-full bg-white shadow-md left-0 flex justify-center items-center dark:bg-gray-950 z-20",
-        SoftBorder
+        SoftBorderStyle
       )}
     >
       <audio

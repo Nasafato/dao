@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "./ModeToggle";
 import { twMerge } from "tailwind-merge";
-import { SoftBorder } from "../styles";
+import { SoftBorderStyle } from "../styles";
 
 const links = [
   {
@@ -48,7 +48,7 @@ export function Header() {
     <nav
       className={twMerge(
         "h-12 px-5 lg:px-24 py-2 fixed top-0 w-full bg-white dark:bg-gray-950 z-20 border-b",
-        SoftBorder
+        SoftBorderStyle
       )}
     >
       <div className="m-auto max-w-xl font-mono text-sm h-full flex items-center">

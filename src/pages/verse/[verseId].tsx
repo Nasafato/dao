@@ -19,7 +19,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from "@heroicons/react/20/solid";
-import { SecondaryDarkModeText } from "../../styles";
+import { SecondaryDarkModeTextStyle } from "../../styles";
 import { twMerge } from "tailwind-merge";
 
 export default function VersePage({
@@ -43,11 +43,11 @@ export default function VersePage({
           href={`/#dao${verseId}`}
           className={twMerge(
             "hover:underline text-xs flex items-center",
-            SecondaryDarkModeText
+            SecondaryDarkModeTextStyle
           )}
         >
           <ArrowLeftIcon
-            className={twMerge("w-2 h-2 mr-1", SecondaryDarkModeText)}
+            className={twMerge("w-2 h-2 mr-1", SecondaryDarkModeTextStyle)}
           />
           Back
         </Link>

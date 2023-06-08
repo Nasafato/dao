@@ -31,7 +31,7 @@ import {
 } from "../../lib/localDb";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
-import { SecondaryButtonStyles, SecondaryDarkModeText } from "../../styles";
+import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
 import { twMerge } from "tailwind-merge";
 
 export function Verse({
@@ -105,22 +105,22 @@ export function Verse({
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
                   <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
-                  <XMarkIcon className={SecondaryButtonStyles} />
+                  <XMarkIcon className={SecondaryButtonStyle} />
                 ) : (
-                  <ChevronUpDownIcon className={SecondaryButtonStyles} />
+                  <ChevronUpDownIcon className={SecondaryButtonStyle} />
                 )}
               </span>
             </button>
             <Link
               href={`/verse/${verse.id}#dao${verse.id}`}
               className={twMerge(
-                SecondaryDarkModeText,
+                SecondaryDarkModeTextStyle,
                 "text-xs flex items-center hover:underline gap-x-1"
               )}
             >
               Go{" "}
               <ArrowRightIcon
-                className={twMerge("h-2 w-2", SecondaryDarkModeText)}
+                className={twMerge("h-2 w-2", SecondaryDarkModeTextStyle)}
               />
             </Link>
           </div>
