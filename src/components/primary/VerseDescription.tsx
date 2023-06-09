@@ -1,4 +1,5 @@
 import { punctuation } from "../../consts";
+import { buildCharId } from "../../lib/charNavigation";
 import { capitalize } from "../../utils";
 import { VerseChar } from "./VerseChar";
 
@@ -20,7 +21,11 @@ export function VerseDescription({
       <VerseChar
         key={index}
         char={char}
-        charId={`${verseId}-description-${index}`}
+        charId={buildCharId({
+          verseId,
+          charIndex: index,
+          context: "description",
+        })}
       />
     );
   });

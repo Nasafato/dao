@@ -1,26 +1,16 @@
+import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { GetStaticPropsContext } from "next";
-import { DAO_COMBINED_VERSES, DAO_VERSES } from "../../lib/daoText";
-import { Verse } from "../../components/primary/Verse";
-import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
-import { VerseText } from "../../components/primary/VerseText";
-import { forceQueryParamString } from "../../utils";
-import { VerseDescription } from "../../components/primary/VerseDescription";
-import { HorizontalRule } from "../../components/shared/HorizontalRule";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  VerseHeader,
-  VerseHeaderStyle,
-} from "../../components/primary/VerseHeader";
-import { CDN_URL } from "../../consts";
-import { Container } from "../../components/shared/PageLayout";
-import {
-  ArrowLeftCircleIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/20/solid";
-import { SecondaryDarkModeTextStyle } from "../../styles";
 import { twMerge } from "tailwind-merge";
+import { VerseDescription } from "../../components/primary/VerseDescription";
+import { VerseHeaderStyle } from "../../components/primary/VerseHeader";
+import { VerseText } from "../../components/primary/VerseText";
+import { Container } from "../../components/shared/PageLayout";
+import { DAO_COMBINED_VERSES, DAO_VERSES } from "../../lib/daoText";
+import { useVerseMemoryStatusQuery } from "../../lib/reactQuery";
+import { SecondaryDarkModeTextStyle } from "../../styles";
+import { forceQueryParamString } from "../../utils";
 
 export default function VersePage({
   verse,

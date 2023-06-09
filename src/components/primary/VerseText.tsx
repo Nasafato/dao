@@ -1,4 +1,5 @@
 import { punctuation } from "../../consts";
+import { buildCharId } from "../../lib/charNavigation";
 import { VerseChar } from "./VerseChar";
 
 export function VerseText({
@@ -13,7 +14,17 @@ export function VerseText({
     if (punctuation.includes(char)) {
       return char;
     }
-    return <VerseChar key={index} char={char} charId={`${verseId}-${index}`} />;
+    return (
+      <VerseChar
+        key={index}
+        char={char}
+        charId={buildCharId({
+          verseId,
+          charIndex: index,
+          context: "verse",
+        })}
+      />
+    );
   });
 
   return (
