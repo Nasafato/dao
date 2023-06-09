@@ -1,9 +1,27 @@
 import { z } from "zod";
+import { Definition } from "../components/primary/Definition";
 import {
   usePopoverApi,
   usePopoverData,
 } from "../components/primary/PopoverProvider";
-import { Definition } from "../components/primary/Definition";
+
+export function buildCharId(args: {
+  verseId: number;
+  charIndex: number;
+  context: "description" | "verse";
+}) {
+  const { verseId, charIndex, context } = args;
+  return `${verseId}-${context}-${charIndex}`;
+}
+
+export function extractCharInfoFromId(charId: string) {
+  const [verseId, context, charIndex] = charId.split("-");
+  return {
+    verseId: Number(verseId),
+    context,
+    charIndex: Number(charIndex),
+  };
+}
 
 export const RefMap = new Map<string, HTMLElement>();
 export const CharMap = new Map<string, string>();
@@ -13,18 +31,27 @@ export function addToRefMap(charId: string, ref: HTMLElement) {
   RefMap.set(charId, ref);
 }
 
-export function getNextCharId(charId: string) {
+export function getNextCharId(charId: string, forward = true) {
   const index = charIds.indexOf(charId);
   if (index === -1) return null;
-  if (index === charIds.length - 1) return null;
-  return charIds[index + 1];
+  const addend = forward ? 1 : -1;
+  const nextCharId = charIds[index + addend];
+  if (!nextCharId) return null;
+
+  const isInVerseDetails = location.pathname.includes("/verse");
+  if (isInVerseDetails) {
+    const { verseId } = extractCharInfoFromId(charId);
+    const { verseId: nextCharVerseId } = extractCharInfoFromId(nextCharId);
+    if (verseId !== nextCharVerseId) {
+      return null;
+    }
+  }
+
+  return nextCharId;
 }
 
 export function getPrevCharId(charId: string) {
-  const index = charIds.indexOf(charId);
-  if (index === -1) return null;
-  if (index === 0) return null;
-  return charIds[index - 1];
+  return getNextCharId(charId, false);
 }
 
 export const CharMetaSchema = z.object({

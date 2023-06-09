@@ -1,13 +1,12 @@
 import "@/styles/globals.css";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
-import { api } from "../utils/trpc";
 import { useEffect } from "react";
-import { initializeDb } from "../lib/localDb/db";
-import { Header } from "../components/primary/Header";
 import { Footer } from "../components/primary/Footer";
+import { Header } from "../components/primary/Header";
 import { PopoverProvider } from "../components/primary/PopoverProvider";
+import { Popover } from "../components/primary/VersesPopover";
+import { initializeDb } from "../lib/localDb/db";
+import { api } from "../utils/trpc";
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -22,6 +21,7 @@ function App({ Component, pageProps }: AppProps) {
       </main>
       <Footer />
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <Popover />
     </PopoverProvider>
   );
 }
