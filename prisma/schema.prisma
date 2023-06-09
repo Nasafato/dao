@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
@@ -11,43 +8,23 @@ datasource db {
   url      = env("POSTGRES_PRISMA_URL")
 }
 
-model Character {
-  id                    Int                    @id @default(autoincrement()) @map(name: "id")
-  character             String                 @unique @map(name: "character")
-  pronunciationVariants PronunciationVariant[] @relation(name: "character_pronunciation_variants")
-  spellingVariants      SpellingVariant[]      @relation(name: "character_spelling_variants")
-
-  @@map(name: "characters")
-}
-
-model PronunciationVariant {
-  id            Int          @id @default(autoincrement()) @map(name: "id")
-  characterId   Int          @map(name: "character_id")
-  pronunciation String       @map(name: "pronunciation")
-  simplified    Boolean      @map(name: "simplified")
-  character     Character    @relation(name: "character_pronunciation_variants", fields: [characterId], references: [id])
-  definitions   Definition[] @relation(name: "pronunciation_variant_definitions")
-
-  @@map(name: "pronunciation_variants")
-}
-
-model SpellingVariant {
-  id          Int       @id @default(autoincrement()) @map(name: "id")
-  characterId Int       @map(name: "character_id")
-  variant     String    @map(name: "variant") @db.VarChar(255)
-  simplified  Boolean   @map(name: "simplified")
-  isKey       Boolean   @map(name: "is_key")
-  character   Character @relation(name: "character_spelling_variants", fields: [characterId], references: [id])
-
-  @@map(name: "spelling_variants")
-}
-
 model Definition {
-  id                     Int                  @id @default(autoincrement()) @map(name: "id")
-  definition             String               @map(name: "definition")
-  language               String               @map(name: "language")
-  pronunciationVariantId Int                  @map(name: "pronunciation_variant_id")
-  pronunciationVariant   PronunciationVariant @relation(name: "pronunciation_variant_definitions", fields: [pronunciationVariantId], references: [id])
+  id         Int    @id @default(autoincrement()) @map("id")
+  entryId    Int    @map("entry_id")
+  definition String @map("definition")
+  entries    Entry? @relation(fields: [entryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "definitions_entry_id_entries_id_fk")
 
-  @@map(name: "definitions")
+  @@map("definitions")
+}
+
+model Entry {
+  id            Int    @id @default(autoincrement())
+  pronunciation String
+  simplified    String
+  traditional   String
+
+  definitions Definition[]
+
+  @@unique(fields: [pronunciation, simplified, traditional])
+  @@map("entries")
 }

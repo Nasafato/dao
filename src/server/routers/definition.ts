@@ -1,40 +1,26 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
 import { prisma } from "../../lib/prisma";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const definitionRouter = createTRPCRouter({
   findOne: publicProcedure
     .input(z.string())
     .query(async ({ input: searchTerm }) => {
-      const characters = await prisma.character.findMany({
+      const definitions = await prisma.entry.findMany({
         where: {
           OR: [
             {
-              character: searchTerm,
+              simplified: searchTerm,
             },
             {
-              spellingVariants: {
-                some: {
-                  variant: searchTerm,
-                },
-              },
+              traditional: searchTerm,
             },
           ],
         },
         include: {
-          spellingVariants: true,
-          pronunciationVariants: {
-            include: {
-              definitions: true,
-            },
-          },
+          definitions: true,
         },
       });
-
-      if (characters.length === 0) {
-        throw new Error("No results found");
-      }
-
-      return characters[0];
+      return definitions;
     }),
 });
