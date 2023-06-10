@@ -34,7 +34,7 @@ export function Definition({
       ) : isError ? (
         "Error"
       ) : data ? (
-        <SingleCharDefinition definition={data} className="text-xs" />
+        <SingleCharDefinition definition={data} className="text-sm" />
       ) : (
         "No definition found"
       )}

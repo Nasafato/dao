@@ -6,14 +6,15 @@
     "regenerate-dao": "",
     "dev": "next dev -p 3001",
     "build": "next build",
-    "build:show-type-errors": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "start": "next start",
     "lint": "next lint",
     "studio": "dotenv -e .env.development.local prisma studio",
     "dev:db:push": "dotenv -e .env.development.local prisma db push",
     "prod:db:push": "dotenv -e .env.prod prisma db push",
     "prod:studio": "dotenv -e .env.prod prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "local": "dotenv -e .env.development.local"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
