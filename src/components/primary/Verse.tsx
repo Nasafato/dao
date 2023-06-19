@@ -1,38 +1,34 @@
 import {
-  ArrowDownIcon,
   ArrowRightIcon,
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
-import { CDN_URL, punctuation } from "../../consts";
+import { twMerge } from "tailwind-merge";
+import { useMoreQuery } from "../../hooks";
+import {
+  INDEXED_DB_NAME,
+  INDEXED_DB_VERSION,
+  USER_ID,
+} from "../../lib/localDb";
 import {
   VerseMemoryStatus,
   VerseMemoryStatusType,
 } from "../../lib/localDb/verseMemoryStatus";
-import { DaoVerse } from "../../types";
-import { api } from "../../utils/trpc";
-import { Spinner } from "../shared/Spinner";
-import { VerseChar } from "./VerseChar";
-import { VerseDescription } from "./VerseDescription";
-import { VerseHeader, VerseHeaderStyle } from "./VerseHeader";
-import { VerseText } from "./VerseText";
-import { PlayPauseButton } from "./PlayPauseButton";
-import { buildVerseMediaSourceUrl } from "../../utils";
-import { useDaoStore } from "../../state/store";
-import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
-import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
-import { useMutation } from "@tanstack/react-query";
-import {
-  USER_ID,
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-} from "../../lib/localDb";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
 import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
-import { twMerge } from "tailwind-merge";
+import { DaoVerse } from "../../types";
+import { buildVerseMediaSourceUrl } from "../../utils";
+import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
+import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
+import { Spinner } from "../shared/Spinner";
+import { PlayPauseButton } from "./PlayPauseButton";
+import { VerseDescription } from "./VerseDescription";
+import { VerseHeaderStyle } from "./VerseHeader";
+import { VerseText } from "./VerseText";
 
 export function Verse({
   verse,
@@ -44,12 +40,8 @@ export function Verse({
   const [showDescription, setShowDescription] = useState(false);
   const verseId = verse.id;
   const verseMediaSource = buildVerseMediaSourceUrl(verseId);
-  // const readerMode = useDaoStore((state) => state.readerMode);
 
-  // const moreQuery = api.verse.findDescription.useQuery(verse.id, {
-  //   enabled: showDescription,
-  //   networkMode: "offlineFirst",
-  // });
+  const moreQuery = useMoreQuery(verseId, { enabled: showDescription });
 
   const updateStatusMutation = useMutation({
     mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
@@ -100,8 +92,8 @@ export function Verse({
                 setShowDescription(!showDescription);
               }}
             >
-              {/* Expand */}
-              {/* <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
+              Expand
+              <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
                   <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
@@ -109,10 +101,10 @@ export function Verse({
                 ) : (
                   <ChevronUpDownIcon className={SecondaryButtonStyle} />
                 )}
-              </span> */}
+              </span>
             </button>
             <Link
-              href={`/verse/${verse.id}#dao${verse.id}`}
+              href={`/verses/${verse.id}#dao${verse.id}`}
               className={twMerge(
                 SecondaryDarkModeTextStyle,
                 "text-xs flex items-center hover:underline gap-x-1"
@@ -128,12 +120,12 @@ export function Verse({
       </div>
       <VerseText text={verse.text} verseId={verse.id} />
 
-      {/* {showDescription && moreQuery.data && (
+      {showDescription && moreQuery.data && (
         <div className="pl-8">
           <div className="text-gray-400 mt-6">简介</div>
           <VerseDescription verseId={verse.id} data={moreQuery.data} />
         </div>
-      )} */}
+      )}
     </div>
   );
 }

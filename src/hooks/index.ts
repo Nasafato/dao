@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { useRef, useEffect } from "react";
-import { VerseToUserSchema } from "../types";
-import { z } from "zod";
+import { useEffect, useRef } from "react";
+import { trpcClient } from "../lib/trpcClient";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -21,6 +19,37 @@ export function useLogPropChanges(props: any) {
 
     prevProps.current = props;
   });
+}
+
+export function useDefinition(char: string) {
+  const query = useQuery({
+    queryKey: ["definition", char],
+    queryFn: async () => {
+      const result = await trpcClient.definition.findOne.query(char);
+      return result;
+    },
+    networkMode: "offlineFirst",
+    enabled: !!char,
+  });
+
+  return query;
+}
+
+export function useMoreQuery(
+  verseId: number,
+  opts: { enabled?: boolean } = { enabled: true }
+) {
+  const query = useQuery({
+    queryKey: ["description", verseId],
+    queryFn: async () => {
+      const result = await trpcClient.verse.findDescription.query(verseId);
+      return result;
+    },
+    networkMode: "offlineFirst",
+    enabled: opts.enabled ? !!verseId : false,
+  });
+
+  return query;
 }
 
 // const VerseToUserArraySchema = z.array(VerseToUserSchema);

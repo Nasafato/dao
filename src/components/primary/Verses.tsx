@@ -13,21 +13,21 @@ interface VerseProps {
 }
 
 export function Verses({ verses }: VerseProps) {
-  useQuery({
-    queryKey: ["dictionary"],
-    queryFn: async () => {
-      const result = await fetch("/api/dictionary");
-      const json = await result.json();
-      const validated = DictionarySchema.parse(json);
-      return validated;
-    },
-    networkMode: "always",
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    cacheTime: Infinity,
-  });
+  // useQuery({
+  //   queryKey: ["dictionary"],
+  //   queryFn: async () => {
+  //     const result = await fetch("/api/dictionary");
+  //     const json = await result.json();
+  //     const validated = DictionarySchema.parse(json);
+  //     return validated;
+  //   },
+  //   networkMode: "always",
+  //   staleTime: Infinity,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  //   refetchOnWindowFocus: false,
+  //   cacheTime: Infinity,
+  // });
 
   const verseMemoryStatusesQuery = useVerseMemoryStatusesQuery();
   console.log("verseMemoryStatus", verseMemoryStatusesQuery.data);
