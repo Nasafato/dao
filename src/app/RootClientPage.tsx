@@ -13,10 +13,6 @@ export function RootClientPage({ verses }: { verses: DaoVerse[] }) {
     <>
       <Container>
         <AuxVerseMemoryTestModal />
-        {/* <IndexedDbViewer
-            dbName={INDEXED_DB_NAME}
-            version={INDEXED_DB_VERSION}
-          /> */}
         <Verses verses={verses} />
       </Container>
     </>
