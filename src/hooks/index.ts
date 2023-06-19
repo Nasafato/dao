@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { trpcClient } from "../lib/trpcClient";
+import { queryClient } from "../lib/reactQuery";
+import { Definition, Entry } from "@prisma/client";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -21,11 +23,38 @@ export function useLogPropChanges(props: any) {
   });
 }
 
+type Result = (Entry & {
+  definitions: Definition[];
+})[];
+
+export type CachedResult = (Entry & {
+  definitions: string[];
+})[];
+
 export function useDefinition(char: string) {
   const query = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {
+      const verseDictionary =
+        queryClient.getQueryData<Record<string, CachedResult>>([
+          "dictionary",
+          "verse",
+        ]) ?? {};
+      const descriptionDictionary =
+        queryClient.getQueryData<Record<string, CachedResult>>([
+          "dictionary",
+          "description",
+        ]) ?? {};
+      if (verseDictionary[char]) {
+        return verseDictionary[char];
+      }
+      if (descriptionDictionary[char]) {
+        return descriptionDictionary[char];
+      }
+
       const result = await trpcClient.definition.findOne.query(char);
+      console.log("cache miss");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return result;
     },
     networkMode: "offlineFirst",
@@ -47,6 +76,27 @@ export function useMoreQuery(
     },
     networkMode: "offlineFirst",
     enabled: opts.enabled ? !!verseId : false,
+  });
+
+  return query;
+}
+
+export function useCacheDictionary(dictType: "verse" | "description") {
+  const query = useQuery({
+    queryKey: ["dictionary", dictType],
+    queryFn: async () => {
+      const result = await trpcClient.definition.fetchUniqueCharsDict.query(
+        dictType
+      );
+      return result;
+    },
+    networkMode: "offlineFirst",
+    enabled: true,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    cacheTime: Infinity,
   });
 
   return query;

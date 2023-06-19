@@ -1,12 +1,13 @@
 import { twJoin, twMerge } from "tailwind-merge";
 import { DefinitionOutput } from "../../server/routers/_app";
 import { buildPinyinWithTones, replaceNumericalPinyin } from "../../utils";
+import { CachedResult } from "../../hooks";
 
 export function SingleCharDefinition({
   definition: entries,
   className,
 }: {
-  definition: DefinitionOutput;
+  definition: DefinitionOutput | CachedResult;
   className?: string;
 }) {
   return (
@@ -24,9 +25,18 @@ export function SingleCharDefinition({
               </h3>
               <ul>
                 {e.definitions.map((def) => {
+                  let key;
+                  let definition;
+                  if (typeof def === "string") {
+                    key = def;
+                    definition = def;
+                  } else {
+                    key = def.id;
+                    definition = def.definition;
+                  }
                   return (
-                    <li key={def.id} className="list-disc ml-4">
-                      {def.definition}
+                    <li key={key} className="list-disc ml-4">
+                      {definition}
                     </li>
                   );
                 })}
