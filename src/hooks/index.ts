@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { trpcClient } from "../lib/trpcClient";
 import { queryClient } from "../lib/reactQuery";
 import { Definition, Entry } from "@prisma/client";
+import * as kv from "../lib/keyValueStore";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -84,10 +85,17 @@ export function useMoreQuery(
 export function useCacheDictionary(dictType: "verse" | "description") {
   const query = useQuery({
     queryKey: ["dictionary", dictType],
-    queryFn: async () => {
+    queryFn: async (ctx) => {
+      const existingDict = await kv.get<Record<string, CachedResult>>(
+        ctx.queryKey
+      );
+      if (existingDict) {
+        return existingDict;
+      }
       const result = await trpcClient.definition.fetchUniqueCharsDict.query(
         dictType
       );
+      await kv.set(ctx.queryKey, result);
       return result;
     },
     networkMode: "offlineFirst",
