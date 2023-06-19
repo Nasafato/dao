@@ -1,20 +1,10 @@
-import clsx from "clsx";
-import { api } from "../../utils/trpc";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import { twJoin } from "tailwind-merge";
+import { useDefinition } from "../../hooks";
+import { useCharInfo, useRenderNextOrPrevChar } from "../../lib/charNavigation";
+import { BackgroundStyle, BorderStyle, TextStyle } from "../../styles";
 import { Spinner } from "../shared/Spinner";
 import { SingleCharDefinition } from "./SingleCharDefinition";
-import { twJoin, twMerge } from "tailwind-merge";
-import {
-  BackgroundStyle,
-  BorderStyle,
-  SoftBorderStyle,
-  TextStyle,
-} from "../../styles";
-import {
-  useCharInfo,
-  useCharNavigation,
-  useRenderNextOrPrevChar,
-} from "../../lib/charNavigation";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 
 export function Definition({
   char,
@@ -23,9 +13,7 @@ export function Definition({
   char: string;
   className?: string;
 }) {
-  const { data, isLoading, isError } = api.definition.findOne.useQuery(char, {
-    networkMode: "offlineFirst",
-  });
+  const { data, isLoading, isError } = useDefinition(char);
 
   return (
     <div className={className}>

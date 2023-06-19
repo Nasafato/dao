@@ -6,5 +6,5 @@ export default function DictionaryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <Providers>{children}</Providers>;
+  return <>{children}</>;
 }
