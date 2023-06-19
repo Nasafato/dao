@@ -7,6 +7,7 @@ import { Definition } from "@prisma/client";
 import { prisma } from "../../src/lib/prisma";
 import fs from "fs/promises";
 import path from "path";
+import { CachedResult } from "../../src/hooks";
 
 async function main() {
   const uniqueChars = (
@@ -19,7 +20,7 @@ async function main() {
     await fs.readFile(path.join(__dirname, "uniqueDescriptionChars.txt"))
   ).toString();
 
-  const definitions: Record<string, any> = {};
+  const definitions: Record<string, CachedResult> = {};
   for (let i = 0; i < uniqueChars.length; i++) {
     const char = uniqueChars[i];
     const entries = await prisma.entry.findMany({
@@ -41,13 +42,15 @@ async function main() {
       return {
         id: e.id,
         pronunciation: e.pronunciation,
+        simplified: e.simplified,
+        traditional: e.traditional,
         definitions: e.definitions.map(stripExtraInfo),
       };
     });
   }
 
-  const uniqueVerseCharsDict: Record<string, any> = {};
-  const uniqueDescriptionCharsDict: Record<string, any> = {};
+  const uniqueVerseCharsDict: Record<string, CachedResult> = {};
+  const uniqueDescriptionCharsDict: Record<string, CachedResult> = {};
   for (const char of uniqueVerseChars) {
     uniqueVerseCharsDict[char] = definitions[char];
   }
