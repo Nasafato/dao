@@ -50,7 +50,6 @@ export function Verses({ verses }: VerseProps) {
             />
           );
         })}
-        <Popover />
       </div>
       <MediaWindow />
       <CommandPalette />

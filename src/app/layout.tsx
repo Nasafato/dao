@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import Script from "next/script";
 import { Header } from "./Header";
 import { Setup } from "./Setup";
-import "./globals.css";
+import "@/styles/globals.css";
+import { Footer } from "../components/primary/Footer";
+import { Providers } from "./Providers";
 export default function RootLayout({
   children,
 }: {
@@ -14,8 +16,9 @@ export default function RootLayout({
         <Header />
         <Setup />
         <main className="px-5 pb-16 lg:px-24 lg:pb-24 pt-4 lg:pt-8 mt-12">
-          {children}
+          <Providers>{children}</Providers>
         </main>
+        <Footer />
         <div id="popover-portal"></div>
         <div id="command-palette-portal"></div>
       </body>

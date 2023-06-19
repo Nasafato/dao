@@ -1,3 +1,4 @@
+"use client";
 import { Inter } from "next/font/google";
 import { AuxVerseMemoryTestModal } from "../components/auxiliary/AuxVerseMemoryTestModal";
 import { Verses } from "../components/primary/Verses";
@@ -7,7 +8,7 @@ import { DaoVerse } from "../types";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ verses }: { verses: DaoVerse[] }) {
+export function RootClientPage({ verses }: { verses: DaoVerse[] }) {
   return (
     <>
       <Container>

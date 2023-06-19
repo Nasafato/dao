@@ -73,7 +73,6 @@ export function buildEntries(lines: string[]) {
     l = l.replace("] /", "\t");
     const [spelling, pinyin, definition] = l.split("\t");
     const [traditional, simplified] = spelling.split(" ");
-    // const pronunciation = forcePronunciationIntoArray(pinyin);
     const definitionParts = definition
       .split("/")
       .filter((d) => d.trim() !== "");

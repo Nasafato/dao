@@ -1,3 +1,4 @@
+"use client";
 import { twJoin } from "tailwind-merge";
 import { BackgroundStyle, BorderStyle, LayoutPaddingStyle } from "../../styles";
 import { useDaoStore } from "../../state/store";

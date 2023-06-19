@@ -46,10 +46,10 @@ export function Verse({
   const verseMediaSource = buildVerseMediaSourceUrl(verseId);
   // const readerMode = useDaoStore((state) => state.readerMode);
 
-  const moreQuery = api.verse.findDescription.useQuery(verse.id, {
-    enabled: showDescription,
-    networkMode: "offlineFirst",
-  });
+  // const moreQuery = api.verse.findDescription.useQuery(verse.id, {
+  //   enabled: showDescription,
+  //   networkMode: "offlineFirst",
+  // });
 
   const updateStatusMutation = useMutation({
     mutationFn: async (args: { status: keyof typeof MEMORY_STATUS }) => {
@@ -101,7 +101,7 @@ export function Verse({
               }}
             >
               {/* Expand */}
-              <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
+              {/* <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
                   <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
@@ -109,7 +109,7 @@ export function Verse({
                 ) : (
                   <ChevronUpDownIcon className={SecondaryButtonStyle} />
                 )}
-              </span>
+              </span> */}
             </button>
             <Link
               href={`/verse/${verse.id}#dao${verse.id}`}
@@ -128,12 +128,12 @@ export function Verse({
       </div>
       <VerseText text={verse.text} verseId={verse.id} />
 
-      {showDescription && moreQuery.data && (
+      {/* {showDescription && moreQuery.data && (
         <div className="pl-8">
           <div className="text-gray-400 mt-6">简介</div>
           <VerseDescription verseId={verse.id} data={moreQuery.data} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

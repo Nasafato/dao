@@ -1,3 +1,4 @@
+"use client";
 import React, {
   createContext,
   useContext,
@@ -108,6 +109,7 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
 
   const api = useMemo(() => {
     const renderPopover = (args: RenderPopoverArgs) => {
+      console.log("renderPopover");
       if (!popoverRef.current) return;
       const { anchor, content } = args;
       if (prevAnchor.current && prevAnchor.current !== anchor) {
