@@ -22,7 +22,6 @@ async function main() {
       (t: { verseId: number; text: string[] }) => t.verseId === verseId
     );
     translations.push({
-      verseId: i + 1,
       ...(gouTranslation ? { gou: gouTranslation.text.join(" ") } : {}),
       ...historicalTranslations[i],
     });

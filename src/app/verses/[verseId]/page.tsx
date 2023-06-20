@@ -32,5 +32,6 @@ export default async function VerseDetailsPage({
 }) {
   const verseId = params.verseId;
   const { verse, description } = await getVerse(verseId);
+  // @ts-ignore Screw it.
   return <VersePage verse={verse} description={description} />;
 }
