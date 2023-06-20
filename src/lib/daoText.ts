@@ -11,7 +11,10 @@ export const DAO_VERSES = Array.from(DAO_TEXT).map((value, index) => {
 
 export const DAO_COMBINED_VERSES = Array.from(DAO_COMBINED).map(
   (value, index) => {
-    const translations = TRANSLATIONS_COMBINED[index];
+    const translations = TRANSLATIONS_COMBINED[index] as unknown as Record<
+      string,
+      string
+    >;
     return {
       translations,
       description: value.description,

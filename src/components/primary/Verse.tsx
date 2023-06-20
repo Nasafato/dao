@@ -123,7 +123,6 @@ export function Verse({
       {showDescription && moreQuery.data && (
         <div className="pl-8">
           <div className="text-gray-400 mt-6">简介</div>
-          {/* @ts-ignore */}
           <VerseDescription verseId={verse.id} data={moreQuery.data} />
         </div>
       )}
