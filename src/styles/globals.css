@@ -7,13 +7,3 @@ html {
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-
-/* a[id]::before {
-  position: absolute;
-  display: block;
-  content: "";
-  height: 4rem;
-  margin-top: -4rem;
-  visibility: hidden;
-  pointer-events: none;
-} */
