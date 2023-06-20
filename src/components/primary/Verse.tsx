@@ -19,11 +19,7 @@ import {
 } from "../../lib/localDb/verseMemoryStatus";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
-import {
-  SecondaryButtonPadding,
-  SecondaryButtonStyle,
-  SecondaryDarkModeTextStyle,
-} from "../../styles";
+import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
 import { DaoVerse } from "../../types";
 import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
@@ -84,7 +80,7 @@ export function Verse({
         <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
 
         <div className="grid items-center justify-self-end flex-1">
-          <div className="items-center flex gap-x-2 justify-end">
+          <div className="items-center flex gap-x-1 justify-end">
             <AuxVerseLearningMenu
               verse={verse}
               verseStatus={verseStatus}
@@ -123,10 +119,13 @@ export function Verse({
               </span>
             </button>
             <Link
-              href={`/verses/${verse.id}#dao${verse.id}`}
+              href={{
+                pathname: `/verses/${verse.id}`,
+                hash: `#dao${verse.id}`,
+              }}
               className={twJoin(
                 SecondaryDarkModeTextStyle,
-                "text-sm flex items-center hover:underline gap-x-1"
+                "text-sm flex items-center hover:underline gap-x-1 px-1"
               )}
             >
               Go{" "}

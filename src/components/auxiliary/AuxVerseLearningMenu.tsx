@@ -55,7 +55,7 @@ export function AuxVerseLearningMenu({
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex items-center">
-          <Menu.Button className="inline-flex w-full items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 py-1 underline-offset-2 hover:underline group hover:bg-gray-200 dark:hover:bg-gray-800">
+          <Menu.Button className="inline-flex w-full px-1 items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 py-1 underline-offset-2 hover:underline group hover:bg-gray-200 dark:hover:bg-gray-800">
             <EllipsisVerticalIcon className={twJoin(SecondaryButtonStyle)} />
           </Menu.Button>
         </div>

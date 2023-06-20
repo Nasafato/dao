@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { twJoin, twMerge } from "tailwind-merge";
+import { twJoin } from "tailwind-merge";
 import { CharMetaSchema, useCharNavigation } from "../../lib/charNavigation";
-import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
 import { BorderStyle } from "../../styles";
+import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
 
 export function Popover() {
   const popover = usePopoverData();

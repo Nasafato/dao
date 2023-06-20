@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-p-16">
       <body className="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100">
         <Providers>
           <Header />

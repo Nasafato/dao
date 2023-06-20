@@ -1,14 +1,14 @@
 import VersePage from "./verseIdClientPage";
 import { DAO_COMBINED_VERSES, DAO_VERSES } from "../../../lib/daoText";
 
-export async function generateStaticParams() {
-  const paths = [];
-  for (let i = 1; i < 81; i++) {
-    paths.push({
-      verseId: i.toString(),
-    });
-  }
-  return paths;
+export default async function VerseDetailsPage({
+  params,
+}: {
+  params: { verseId: string };
+}) {
+  const verseId = params.verseId;
+  const { verse, description } = await getVerse(verseId);
+  return <VersePage verse={verse} description={description} />;
 }
 
 async function getVerse(verseId: string) {
@@ -25,12 +25,12 @@ async function getVerse(verseId: string) {
   };
 }
 
-export default async function VerseDetailsPage({
-  params,
-}: {
-  params: { verseId: string };
-}) {
-  const verseId = params.verseId;
-  const { verse, description } = await getVerse(verseId);
-  return <VersePage verse={verse} description={description} />;
+export async function generateStaticParams() {
+  const paths = [];
+  for (let i = 1; i < 81; i++) {
+    paths.push({
+      verseId: i.toString(),
+    });
+  }
+  return paths;
 }
