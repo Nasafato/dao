@@ -11,6 +11,7 @@ endef
 
 all: verses descriptions dictionary translations combined
 
+# Generally, I'd just run make combined, rather than all, since it doesn't require the dictionary.
 combined: combined.json
 
 combined.json: translations/translations.json verses/dao.json descriptions/descriptions.json buildCombined.ts
@@ -36,10 +37,12 @@ descriptions/descriptions-clean.txt: descriptions/clean.sh descriptions/descript
 descriptions/descriptions.json: descriptions/build.ts descriptions/descriptions-clean.txt 
 	cat descriptions/descriptions-clean.txt | pnpm tsx ./materials/$< > './$@'
 
+# This one is expensive at the moment and relies on the Postgres DB to be running in Docker.
+# Maybe we can make it faster by using a local SQLite DB instead.
+dictionary: dictionary/uniqueVerseCharsDict.json dictionary/uniqueDescriptionCharsDict.json dictionary/uniqueAllCharsDict.json
+
 dictionary/dictionary.json: dictionary/cedict.txt dictionary/augments.json dictionary/buildDictionary.ts
 	pnpm tsx materials/dictionary/buildDictionary.ts
-
-dictionary: dictionary/uniqueVerseCharsDict.json dictionary/uniqueDescriptionCharsDict.json dictionary/uniqueAllCharsDict.json
 
 dictionary/unique%Chars.txt: verses/dao.txt dictionary/buildUniqueChars.ts
 	pnpm tsx materials/dictionary/buildUniqueChars.ts
