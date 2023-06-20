@@ -1,18 +1,13 @@
 "use client";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
-import { GetStaticPropsContext } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { twMerge } from "tailwind-merge";
+import { PopoverProvider } from "../../../components/primary/PopoverProvider";
 import { VerseDescription } from "../../../components/primary/VerseDescription";
 import { VerseHeaderStyle } from "../../../components/primary/VerseHeader";
 import { VerseText } from "../../../components/primary/VerseText";
 import { Container } from "../../../components/shared/PageLayout";
-import { DAO_COMBINED_VERSES, DAO_VERSES } from "../../../lib/daoText";
-import { useVerseMemoryStatusQuery } from "../../../lib/reactQuery";
 import { SecondaryDarkModeTextStyle } from "../../../styles";
-import { forceQueryParamString } from "../../../utils";
-import { PopoverProvider } from "../../../components/primary/PopoverProvider";
 
 export default function VersePage({
   verse,
@@ -33,7 +28,7 @@ export default function VersePage({
           <Link
             href={`/#dao${verseId}`}
             className={twMerge(
-              "hover:underline flex items-center",
+              "hover:underline flex items-center px-1",
               SecondaryDarkModeTextStyle
             )}
           >
@@ -43,42 +38,10 @@ export default function VersePage({
             Back
           </Link>
         </div>
-        {/* <VerseHeader verse={verse} verseStatus={verseStatus.data ?? null} /> */}
         <VerseText text={verse.text} verseId={verse.id} />
-        {/* <HorizontalRule /> */}
-
         <div className="text-gray-400 mt-6">简介</div>
         <VerseDescription data={description} verseId={verse.id} />
       </Container>
     </PopoverProvider>
   );
-}
-
-export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const verseId = forceQueryParamString(params?.verseId);
-  if (!verseId) {
-    throw new Error("No verseId");
-  }
-  const verseIdNumber = parseInt(verseId);
-  const verse = DAO_VERSES.find((v) => v.id.toString() === params?.verseId);
-  const description = DAO_COMBINED_VERSES[verseIdNumber - 1];
-  return {
-    props: {
-      verse,
-      description,
-    },
-  };
-}
-
-export async function getStaticPaths() {
-  const paths = [];
-  for (let i = 1; i < 81; i++) {
-    paths.push({
-      params: { verseId: i.toString() },
-    });
-  }
-  return {
-    paths,
-    fallback: false,
-  };
 }

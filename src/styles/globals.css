@@ -8,11 +8,12 @@ html {
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-a[id]::before {
+/* a[id]::before {
+  position: absolute;
   display: block;
   content: "";
-  height: 4rem; /* Fixed header height */
-  margin-top: -4rem; /* Negative fixed header height */
+  height: 4rem;
+  margin-top: -4rem;
   visibility: hidden;
   pointer-events: none;
-}
+} */
