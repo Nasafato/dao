@@ -26,7 +26,10 @@ export default function VersePage({
         <div className="flex justify-between">
           <h4 className={VerseHeaderStyle}>第{verseId}章</h4>
           <Link
-            href={`/#dao${verseId}`}
+            href={{
+              pathname: "/",
+              hash: `#dao${verseId}`,
+            }}
             className={twMerge(
               "hover:underline flex items-center px-1",
               SecondaryDarkModeTextStyle
