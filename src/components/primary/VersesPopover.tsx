@@ -114,14 +114,15 @@ export function Popover() {
         height: popover.popoverDimensions.height,
         display: popover.isOpen ? "block" : "none",
       }}
-      className="z-10"
+      className={twJoin("z-10", "focus-visible:outline-none")}
       tabIndex={-1}
       id="popover-portal-root"
     >
-      <div className="relative h-full">
+      <div className={twJoin("relative h-full", "focus-visible:outline-none")}>
         <Arrow
           arrow={popover.arrow}
           popoverDimensions={popover.popoverDimensions}
+          className="focus-visible:outline-none"
         />
         {content}
       </div>
@@ -133,9 +134,11 @@ export function Popover() {
 function Arrow({
   arrow,
   popoverDimensions,
+  className,
 }: {
   arrow: Arrow;
   popoverDimensions: { width: number; height: number };
+  className?: string;
 }) {
   const rotate =
     arrow.orientation === "facingUp" ? "rotate-45" : "-rotate-[135deg]";
@@ -144,7 +147,8 @@ function Arrow({
       className={twJoin(
         "w-2 h-2 bg-white border-l border-t absolute",
         rotate,
-        BorderStyle
+        BorderStyle,
+        className
       )}
       style={{
         top:

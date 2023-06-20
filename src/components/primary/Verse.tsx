@@ -6,7 +6,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { twMerge as twJoin } from "tailwind-merge";
 import { useMoreQuery } from "../../hooks";
 import {
   INDEXED_DB_NAME,
@@ -19,7 +19,11 @@ import {
 } from "../../lib/localDb/verseMemoryStatus";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
-import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
+import {
+  SecondaryButtonPadding,
+  SecondaryButtonStyle,
+  SecondaryDarkModeTextStyle,
+} from "../../styles";
 import { DaoVerse } from "../../types";
 import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
@@ -87,32 +91,47 @@ export function Verse({
               updateStatusMutation={updateStatusMutation}
             />
             <button
-              className="text-xs flex items-center hover:underline text-gray-600 dark:text-gray-50"
+              className="flex items-center hover:underline text-gray-600 dark:text-gray-50"
               onClick={() => {
                 setShowDescription(!showDescription);
               }}
             >
-              Expand
-              <span className="group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800">
+              <span
+                className={twJoin(
+                  "group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800",
+                  "px-1"
+                )}
+              >
                 {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-                  <Spinner className="h-3 w-3 text-gray-200 fill-gray-500" />
+                  <Spinner className="h-4 w-4 text-gray-200 fill-gray-500" />
                 ) : showDescription ? (
-                  <XMarkIcon className={SecondaryButtonStyle} />
+                  <XMarkIcon
+                    className={twJoin(
+                      SecondaryButtonStyle,
+                      // SecondaryButtonPadding,
+                      "border-1 border-blue-500"
+                    )}
+                  />
                 ) : (
-                  <ChevronUpDownIcon className={SecondaryButtonStyle} />
+                  <ChevronUpDownIcon
+                    className={twJoin(
+                      SecondaryButtonStyle
+                      // SecondaryButtonPadding,
+                    )}
+                  />
                 )}
               </span>
             </button>
             <Link
               href={`/verses/${verse.id}#dao${verse.id}`}
-              className={twMerge(
+              className={twJoin(
                 SecondaryDarkModeTextStyle,
-                "text-xs flex items-center hover:underline gap-x-1"
+                "text-sm flex items-center hover:underline gap-x-1"
               )}
             >
               Go{" "}
               <ArrowRightIcon
-                className={twMerge("h-2 w-2", SecondaryDarkModeTextStyle)}
+                className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
               />
             </Link>
           </div>

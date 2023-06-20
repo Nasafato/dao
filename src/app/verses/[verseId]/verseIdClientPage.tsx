@@ -33,12 +33,12 @@ export default function VersePage({
           <Link
             href={`/#dao${verseId}`}
             className={twMerge(
-              "hover:underline text-xs flex items-center",
+              "hover:underline flex items-center",
               SecondaryDarkModeTextStyle
             )}
           >
             <ArrowLeftIcon
-              className={twMerge("w-2 h-2 mr-1", SecondaryDarkModeTextStyle)}
+              className={twMerge("w-3 h-3 mr-1", SecondaryDarkModeTextStyle)}
             />
             Back
           </Link>
