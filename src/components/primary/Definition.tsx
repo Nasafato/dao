@@ -77,7 +77,7 @@ export const DefinitionNavigation = (Definition.Navigation =
     );
   });
 
-const CharNavButtonStyle = "text-sm";
+const CharNavButtonStyle = "p-1";
 const CharNavArrowStyle = "h-5 w-5 hover:text-gray-400";
 
-const SurroundingCharStyle = "text-xs text-gray-500 w-3";
+const SurroundingCharStyle = "text-sm text-gray-500 w-4";
