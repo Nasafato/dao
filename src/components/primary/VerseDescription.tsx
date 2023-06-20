@@ -3,6 +3,8 @@ import { buildCharId } from "../../lib/charNavigation";
 import { capitalize } from "../../utils";
 import { VerseChar } from "./VerseChar";
 
+const TRANSLATORS = ["gou", "legge", "goddard", "susuki"] as const;
+
 export function VerseDescription({
   verseId,
   data,
@@ -34,16 +36,20 @@ export function VerseDescription({
     <div>
       <div className="text-[0.95rem]/[22px] space-y-4">
         <p className="text-lg">{descriptionText}</p>
-        {Object.entries(translations).map(([translator, text]) => {
-          return (
-            <div key={translator}>
-              <h5 className={TranslationHeaderStyle}>
-                {capitalize(translator)}
-              </h5>
-              <p>{text}</p>
-            </div>
-          );
-        })}
+        {Object.entries(translations)
+          .filter((f) =>
+            TRANSLATORS.includes(f[0] as (typeof TRANSLATORS)[number])
+          )
+          .map(([translator, text]) => {
+            return (
+              <div key={translator}>
+                <h5 className={TranslationHeaderStyle}>
+                  {capitalize(translator)}
+                </h5>
+                <p>{text}</p>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
