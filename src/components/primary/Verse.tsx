@@ -119,7 +119,10 @@ export function Verse({
               </span>
             </button>
             <Link
-              href={`/verses/${verse.id}`}
+              href={{
+                pathname: `/verses/${verse.id}`,
+                hash: `#dao${verse.id}`,
+              }}
               className={twJoin(
                 SecondaryDarkModeTextStyle,
                 "text-sm flex items-center hover:underline gap-x-1 px-1"

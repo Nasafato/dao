@@ -24,7 +24,11 @@ export default function VersePage({
     <PopoverProvider>
       <Container>
         <div className="flex justify-between">
-          <h4 className={VerseHeaderStyle}>第{verseId}章</h4>
+          <h4 className={VerseHeaderStyle}>
+            <a id={`dao${verseId}`} href={`#dao${verseId}`}>
+              第{verseId}章
+            </a>
+          </h4>
           <Link
             href={{
               pathname: "/",
