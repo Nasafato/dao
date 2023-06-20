@@ -1,5 +1,5 @@
 import DAO_JSON from "../verses/dao.json";
-import DESCRIPTIONS_JSON from "../dao-descriptions.json";
+import DESCRIPTIONS_JSON from "../descriptions/descriptions.json";
 import fs from "fs";
 import { join } from "path";
 
@@ -17,7 +17,7 @@ for (const verse of DAO_JSON) {
   }
 }
 
-for (const verse of Object.values(DESCRIPTIONS_JSON)) {
+for (const verse of DESCRIPTIONS_JSON) {
   for (const c of verse) {
     if (punctuations.includes(c)) continue;
     if (c.trim() === "") continue;

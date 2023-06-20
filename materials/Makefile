@@ -1,4 +1,4 @@
-.PHONY: all verses dictionary
+.PHONY: all verses dictionary translations
 .PRECIOUS: dictionary/unique%Chars.txt
 
 define echo_begin
@@ -8,6 +8,17 @@ endef
 define echo_end
 	@echo "✅ Generated $@"
 endef
+
+all: verses descriptions dictionary translations
+	pnpm tsx buildCombined.ts verses/dao.json descriptions/descriptions.json > ./combined.json
+
+combined.json: translations/combined-translations.json verses/dao.json descriptions/descriptions.json buildCombined.ts
+	pnpm tsx materials/buildCombined.ts materials/verses/dao.json materials/descriptions/descriptions.json materials/translations/combined-translations.json > ./combined.json
+
+translations: translations/translations.json
+
+translations/translations.json: translations/historicalTranslations.json translations/customTranslations.json
+	pnpm tsx materials/translations/buildTranslations.ts > translations/translations.json
 
 verses/dao.json: verses/build.ts verses/dao.txt 
 	pnpm tsx materials/$<
