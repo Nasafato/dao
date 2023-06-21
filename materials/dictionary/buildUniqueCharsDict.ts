@@ -1,4 +1,4 @@
-import { prisma } from "../../src/lib/prisma";
+import { prisma } from "../../src/lib/db";
 import type { DenormalizedDictSchema } from "../../src/utils";
 import { processLines, withStdinStdout, benchmark } from "../cliUtils";
 

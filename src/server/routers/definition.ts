@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/db";
 import UniqueAllCharsDict from "../../../materials/dictionary/uniqueAllCharsDict.json";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 

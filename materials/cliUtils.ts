@@ -25,6 +25,8 @@ export async function withStdinStdout(
   } else {
     process.stdout.write(result);
   }
+
+  process.exit(0);
 }
 
 // First, the func should take a file descriptor as an argument, which is either stdin or a file.

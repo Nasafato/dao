@@ -50,6 +50,9 @@ dictionary: $(dictFiles)
 scoreRelevancies: 
 	cat $(DICTDIR)/uniqueAllChars.txt | pnpm local tsx materials/$(DICTDIR)/scoreRelevancies.ts
 
+prodScoreRelevancies: 
+	cat $(DICTDIR)/uniqueAllChars.txt | pnpm prod tsx materials/$(DICTDIR)/scoreRelevancies.ts
+
 $(DICTDIR)/dictionary.json: $(DICTDIR)/cedict.txt $(DICTDIR)/augments.json $(DICTDIR)/buildDictionary.ts
 	pnpm tsx $(FULLDICTDIR)/buildDictionary.ts
 
