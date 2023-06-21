@@ -7,35 +7,6 @@ import { prisma } from "../../src/lib/prisma";
 
 const EntrySchemaArray = z.array(EntrySchema);
 
-async function benchmark(
-  func: (onItemComplete?: () => void) => Promise<void>,
-  numItems: number
-) {
-  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-  let itemsProcessed = 0;
-  bar.start(numItems, itemsProcessed);
-  const startTime = performance.now();
-
-  const signalHandler = () => {
-    const elapsedTime = performance.now() - startTime;
-    console.log(`\nElapsed time: ${elapsedTime.toFixed(2)}ms`);
-    process.exit(0);
-  };
-
-  process.on("SIGINT", signalHandler);
-
-  const onItemComplete = () => {
-    itemsProcessed++;
-    bar.update(itemsProcessed);
-  };
-
-  await func(onItemComplete);
-
-  const elapsedTime = performance.now() - startTime;
-  bar.stop();
-  console.log(`Elapsed time: ${elapsedTime.toFixed(2)}ms`);
-}
-
 // async function processWithDrizzle(entry: Entry) {
 //   const [createdEntry] = await db
 //     .insert(entries)

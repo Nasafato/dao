@@ -11,8 +11,9 @@ datasource db {
 model Definition {
   id         Int    @id @default(autoincrement()) @map("id")
   entryId    Int    @map("entry_id")
-  definition String @map("definition")
+  definition String
   entries    Entry? @relation(fields: [entryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "definitions_entry_id_entries_id_fk")
+  relevancy  Float  @default(0.0)
 
   @@map("definitions")
 }
@@ -22,6 +23,7 @@ model Entry {
   pronunciation String
   simplified    String
   traditional   String
+  relevancy     Float  @default(0.0)
 
   definitions Definition[]
 

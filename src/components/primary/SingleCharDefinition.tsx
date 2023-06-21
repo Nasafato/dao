@@ -1,18 +1,18 @@
-import { twJoin, twMerge } from "tailwind-merge";
+import { twJoin } from "tailwind-merge";
 import { DefinitionOutput } from "../../server/routers/_app";
-import { buildPinyinWithTones, replaceNumericalPinyin } from "../../utils";
-import { CachedResult } from "../../hooks";
+import { replaceNumericalPinyin, sortEntriesByRelevancy } from "../../utils";
 
 export function SingleCharDefinition({
-  definition: entries,
+  entries: entries,
   className,
 }: {
-  definition: DefinitionOutput | CachedResult;
+  entries: DefinitionOutput;
   className?: string;
 }) {
+  const sortedEntries = sortEntriesByRelevancy(entries);
   return (
     <ul className={twJoin("space-y-4", className)}>
-      {entries.map((e) => {
+      {sortedEntries.map((e) => {
         return (
           <li key={e.id}>
             <div>
@@ -25,18 +25,9 @@ export function SingleCharDefinition({
               </h3>
               <ul>
                 {e.definitions.map((def) => {
-                  let key;
-                  let definition;
-                  if (typeof def === "string") {
-                    key = def;
-                    definition = def;
-                  } else {
-                    key = def.id;
-                    definition = def.definition;
-                  }
                   return (
-                    <li key={key} className="list-disc ml-4">
-                      {definition}
+                    <li key={def.id} className="list-disc ml-4">
+                      {def.definition}
                     </li>
                   );
                 })}

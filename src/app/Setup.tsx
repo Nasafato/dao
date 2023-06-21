@@ -17,7 +17,6 @@ export function Setup() {
     initializeDb();
     initializeKeyValueStore();
   }, []);
-  useCacheDictionary("verse");
-  useCacheDictionary("description");
+  useCacheDictionary();
   return null;
 }

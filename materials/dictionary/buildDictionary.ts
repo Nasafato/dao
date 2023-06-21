@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import { CONFIG, Entry } from "./config";
+import { Prisma } from "@prisma/client";
 
 // const VARIANT_OF_REGEX = /variant of (.*?)\[(.*)\]/g;
 
@@ -77,7 +78,7 @@ export function buildEntries(lines: string[]) {
       .split("/")
       .filter((d) => d.trim() !== "");
 
-    const row: Entry = {
+    const row = {
       traditional,
       simplified,
       pronunciation: pinyin,

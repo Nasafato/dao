@@ -4,6 +4,7 @@ import { trpcClient } from "../lib/trpcClient";
 import { queryClient } from "../lib/reactQuery";
 import { Definition, Entry } from "@prisma/client";
 import * as kv from "../lib/keyValueStore";
+import { NormalizedDict, findMatchingEntries, normalizeDict } from "../utils";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -24,11 +25,8 @@ export function useLogPropChanges(props: any) {
   });
 }
 
-type Result = (Entry & {
-  definitions: Definition[];
-})[];
-
 export type CachedResult = (Entry & {
+  relevancy: number;
   definitions: string[];
 })[];
 
@@ -36,27 +34,19 @@ export function useDefinition(char: string) {
   const query = useQuery({
     queryKey: ["definition", char],
     queryFn: async () => {
-      const verseDictionary =
-        queryClient.getQueryData<Record<string, CachedResult>>([
-          "dictionary",
-          "verse",
-        ]) ?? {};
-      const descriptionDictionary =
-        queryClient.getQueryData<Record<string, CachedResult>>([
-          "dictionary",
-          "description",
-        ]) ?? {};
-      if (verseDictionary[char]) {
-        return verseDictionary[char];
+      const dictionary = queryClient.getQueryData<NormalizedDict>([
+        "dictionary",
+        "all",
+      ]);
+      if (!dictionary) {
+        console.log("cache miss");
+        const result = await trpcClient.definition.findOne.query(char);
+        return result;
       }
-      if (descriptionDictionary[char]) {
-        return descriptionDictionary[char];
-      }
+      const matchingEntries = findMatchingEntries(dictionary, char);
+      console.log("cache hit", matchingEntries);
 
-      const result = await trpcClient.definition.findOne.query(char);
-      console.log("cache miss");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return result;
+      return matchingEntries;
     },
     networkMode: "offlineFirst",
     enabled: !!char,
@@ -82,7 +72,7 @@ export function useMoreQuery(
   return query;
 }
 
-export function useCacheDictionary(dictType: "verse" | "description") {
+export function useCacheDictionary(dictType: "all" = "all") {
   const query = useQuery({
     queryKey: ["dictionary", dictType],
     queryFn: async (ctx) => {
@@ -95,8 +85,10 @@ export function useCacheDictionary(dictType: "verse" | "description") {
       const result = await trpcClient.definition.fetchUniqueCharsDict.query(
         dictType
       );
-      await kv.set(ctx.queryKey, result);
-      return result;
+      const normalizedDict = normalizeDict(result);
+
+      await kv.set(ctx.queryKey, normalizedDict);
+      return normalizedDict;
     },
     networkMode: "offlineFirst",
     enabled: true,
