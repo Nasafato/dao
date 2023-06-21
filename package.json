@@ -15,7 +15,8 @@
     "prod:db:push": "dotenv -e .env.prod prisma db push",
     "prod:studio": "dotenv -e .env.prod prisma studio",
     "postinstall": "prisma generate",
-    "local": "dotenv -e .env.development.local"
+    "local": "dotenv -e .env.development.local",
+    "prod": "dotenv -e .env.prod"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
@@ -39,6 +40,7 @@
     "babel-loader": "^9.1.2",
     "cli-progress": "^3.12.0",
     "clsx": "^1.2.1",
+    "drizzle-orm": "^0.27.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "idb": "^7.1.1",
@@ -47,6 +49,7 @@
     "next-auth": "^4.22.1",
     "next-pwa": "^5.6.0",
     "postcss": "8.4.21",
+    "postgres": "^3.3.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.2",

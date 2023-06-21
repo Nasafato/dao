@@ -28,5 +28,7 @@ model Entry {
   definitions Definition[]
 
   @@unique(fields: [pronunciation, simplified, traditional])
+  @@index(fields: [simplified])
+  @@index(fields: [traditional])
   @@map("entries")
 }
