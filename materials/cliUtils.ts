@@ -1,8 +1,9 @@
 import { createInterface } from "readline";
+import CliProgress from "cli-progress";
 import fs from "fs";
 
 export async function withStdinStdout(
-  func: (args: NodeJS.ReadableStream) => Promise<string>
+  func: (args: NodeJS.ReadableStream) => Promise<string | void>
 ) {
   const inputFile = process.argv[2] || null;
   const outputFile = inputFile ? process.argv[3] || process.argv[2] : null;
@@ -15,6 +16,9 @@ export async function withStdinStdout(
   }
 
   const result = await func(inputStream);
+  if (!result) {
+    return;
+  }
 
   if (outputFile) {
     await fs.promises.writeFile(outputFile, result);
@@ -38,4 +42,33 @@ export async function processLines(input: NodeJS.ReadableStream) {
   }
 
   return lines;
+}
+
+export async function benchmark(
+  func: (onItemComplete?: () => void) => Promise<void>,
+  numItems: number
+) {
+  const bar = new CliProgress.SingleBar({}, CliProgress.Presets.shades_classic);
+  let itemsProcessed = 0;
+  bar.start(numItems, itemsProcessed);
+  const startTime = performance.now();
+
+  const signalHandler = () => {
+    const elapsedTime = performance.now() - startTime;
+    console.log(`\nElapsed time: ${elapsedTime.toFixed(2)}ms`);
+    process.exit(0);
+  };
+
+  process.on("SIGINT", signalHandler);
+
+  const onItemComplete = () => {
+    itemsProcessed++;
+    bar.update(itemsProcessed);
+  };
+
+  await func(onItemComplete);
+
+  const elapsedTime = performance.now() - startTime;
+  bar.stop();
+  console.log(`Elapsed time: ${elapsedTime.toFixed(2)}ms`);
 }

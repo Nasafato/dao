@@ -22,7 +22,7 @@ export function Definition({
       ) : isError ? (
         "Error"
       ) : data ? (
-        <SingleCharDefinition definition={data} className="text-sm" />
+        <SingleCharDefinition entries={data} className="text-sm" />
       ) : (
         "No definition found"
       )}

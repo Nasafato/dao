@@ -1,5 +1,7 @@
 import { useRef, useMemo, useState, useEffect } from "react";
 import { CDN_URL } from "./consts";
+import { z } from "zod";
+import { Definition, Entry } from "@prisma/client";
 
 export function tryParseDaoIndex(i: unknown) {
   const result = Number.parseInt(i as string, 10);
@@ -141,4 +143,77 @@ export function useQueryParam(key: string) {
   }, []);
 
   return query;
+}
+
+export function sortEntriesByRelevancy(
+  entries: Array<Entry & { definitions: Definition[] }>
+) {
+  return entries
+    .sort((a, b) => {
+      return b.relevancy - a.relevancy;
+    })
+    .map((entry) => {
+      return {
+        ...entry,
+        definitions: entry.definitions.sort((a, b) => {
+          return b.relevancy - a.relevancy;
+        }),
+      };
+    });
+}
+
+export const DenormalizedDictSchema = z.object({
+  id: z.array(z.number()),
+  pronunciation: z.array(z.string()),
+  simplified: z.array(z.string()),
+  traditional: z.array(z.string()),
+  relevancy: z.array(z.number()),
+  definitions: z.object({
+    id: z.array(z.number()),
+    entryId: z.array(z.number()),
+    definition: z.array(z.string()),
+    relevancy: z.array(z.number()),
+  }),
+});
+export type DenormalizedDictSchema = z.infer<typeof DenormalizedDictSchema>;
+export type NormalizedDict = Array<Entry & { definitions: Definition[] }>;
+
+export function findMatchingEntries(dict: NormalizedDict, char: string) {
+  const entries = [];
+  for (let i = 0; i < dict.length; i++) {
+    const entry = dict[i];
+    if (entry.simplified === char || entry.traditional === char) {
+      entries.push(entry);
+    }
+  }
+  return entries;
+}
+
+export function normalizeDict(dict: DenormalizedDictSchema) {
+  const entries: Record<string, Entry & { definitions: Definition[] }> = {};
+  for (let i = 0; i < dict.id.length; i++) {
+    const entryId = dict.id[i];
+    entries[entryId] = {
+      id: entryId,
+      relevancy: dict.relevancy[i],
+      simplified: dict.simplified[i],
+      traditional: dict.traditional[i],
+      pronunciation: dict.pronunciation[i],
+      definitions: [],
+    };
+  }
+  for (let i = 0; i < dict.definitions.entryId.length; i++) {
+    const entryId = dict.definitions.entryId[i];
+    const id = dict.definitions.id[i];
+    const definition = dict.definitions.definition[i];
+    const relevancy = dict.definitions.relevancy[i];
+    entries[entryId].definitions.push({
+      id,
+      entryId,
+      definition,
+      relevancy,
+    });
+  }
+
+  return Object.values(entries);
 }

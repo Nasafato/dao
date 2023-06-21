@@ -107,7 +107,7 @@ export function Dictionary() {
             Searching... <Spinner className="h-4 w-4" />
           </div>
         ) : searchQuery.data ? (
-          <SingleCharDefinition definition={searchQuery.data} />
+          <SingleCharDefinition entries={searchQuery.data} />
         ) : searchTerm.length > 0 ? (
           <div>Nothing found</div>
         ) : null}
