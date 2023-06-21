@@ -45,17 +45,19 @@ export async function processLines(input: NodeJS.ReadableStream) {
 }
 
 export async function benchmark(
-  func: (onItemComplete?: () => void) => Promise<void>,
-  numItems: number
+  func: (onItemComplete: () => void) => Promise<void>,
+  numItems: number,
+  opts: { stream?: NodeJS.WritableStream } = { stream: process.stderr }
 ) {
   const bar = new CliProgress.SingleBar({}, CliProgress.Presets.shades_classic);
   let itemsProcessed = 0;
   bar.start(numItems, itemsProcessed);
   const startTime = performance.now();
+  const stream = opts.stream || process.stderr;
 
   const signalHandler = () => {
     const elapsedTime = performance.now() - startTime;
-    console.log(`\nElapsed time: ${elapsedTime.toFixed(2)}ms`);
+    stream.write(`\nElapsed time: ${elapsedTime.toFixed(2)}ms\n`);
     process.exit(0);
   };
 
@@ -70,5 +72,6 @@ export async function benchmark(
 
   const elapsedTime = performance.now() - startTime;
   bar.stop();
-  console.log(`Elapsed time: ${elapsedTime.toFixed(2)}ms`);
+
+  stream.write(`Elapsed time: ${elapsedTime.toFixed(2)}ms\n`);
 }

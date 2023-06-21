@@ -1,6 +1,9 @@
 .PHONY: all verses dictionary translations combined scoreRelevancies
 .PRECIOUS: dictionary/unique%Chars.txt
 
+MATDIR := materials
+DICTDIR := dictionary
+FULLDICTDIR := $(MATDIR)/$(DICTDIR)
 
 define echo_begin
 	@echo "🔁 Generating $@"
@@ -38,20 +41,20 @@ descriptions/descriptions-clean.txt: descriptions/clean.sh descriptions/descript
 descriptions/descriptions.json: descriptions/build.ts descriptions/descriptions-clean.txt 
 	cat descriptions/descriptions-clean.txt | pnpm tsx ./materials/$< > './$@'
 
-dictFiles := dictionary/uniqueVerseCharsDict.json dictionary/uniqueDescriptionCharsDict.json dictionary/uniqueAllCharsDict.json
+dictFiles := $(DICTDIR)/uniqueAllCharsDict.json
 
 # This one is expensive at the moment and relies on the Postgres DB to be running in Docker.
 # Maybe we can make it faster by using a local SQLite DB instead.
 dictionary: $(dictFiles)
 
 scoreRelevancies: 
-	cat dictionary/uniqueAllChars.txt | pnpm local tsx materials/dictionary/scoreRelevancies.ts
+	cat $(DICTDIR)/uniqueAllChars.txt | pnpm local tsx materials/$(DICTDIR)/scoreRelevancies.ts
 
-dictionary/dictionary.json: dictionary/cedict.txt dictionary/augments.json dictionary/buildDictionary.ts
-	pnpm tsx materials/dictionary/buildDictionary.ts
+$(DICTDIR)/dictionary.json: $(DICTDIR)/cedict.txt $(DICTDIR)/augments.json $(DICTDIR)/buildDictionary.ts
+	pnpm tsx $(FULLDICTDIR)/buildDictionary.ts
 
 dictionary/unique%Chars.txt: verses/dao.txt dictionary/buildUniqueChars.ts
 	pnpm tsx materials/dictionary/buildUniqueChars.ts
 
-dictionary/unique%CharsDict.json: dictionary/unique%Chars.txt dictionary/dictionary.json dictionary/buildUniqueCharsDict.ts
-	pnpm local tsx materials/dictionary/buildUniqueCharsDict.ts
+$(DICTDIR)/unique%CharsDict.json: $(DICTDIR)/unique%Chars.txt $(DICTDIR)/dictionary.json $(DICTDIR)/buildUniqueCharsDict.ts
+	cat $(DICTDIR)/unique$*Chars.txt | pnpm --silent local tsx $(FULLDICTDIR)/buildUniqueCharsDict.ts > $(DICTDIR)/unique$*CharsDict.json
