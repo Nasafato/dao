@@ -18,10 +18,8 @@ export function ProgressBar() {
     };
 
     const handleMouseUp = (e: MouseEvent) => {
-      console.log("mouseup");
       if (!containerRef.current) return;
       const progress = computeProgress(e.x, containerRef.current);
-      console.log("progress", progress);
       setProgress(progress);
       setIsDragging(false);
     };
@@ -43,22 +41,19 @@ export function ProgressBar() {
       onMouseDown={() => {
         setIsDragging(true);
       }}
-      //   onMouseUp={() => {
-      //     setIsDragging(false);
-      //   }}
       onClick={(e) => {
         if (containerRef.current) {
           const progress = computeProgress(e.clientX, containerRef.current);
           setProgress(progress);
         }
       }}
-      className="group w-40 rounded-full h-2 border bg-gray-100"
+      className="group w-full rounded-full h-[5px] bg-gray-200/70 dark:bg-gray-500 dark:border-none"
     >
       <div
         ref={innerRef}
         className={twMerge(
-          "bg-white h-full group-hover:bg-green-500 relative rounded-full",
-          isDragging && "bg-green-500"
+          "h-full bg-green-400 group-hover:bg-green-400 relative rounded-full",
+          isDragging && "bg-green-400"
         )}
         style={{
           width: `${visualProgress * 100}%`,
@@ -66,7 +61,7 @@ export function ProgressBar() {
       >
         <div
           className={twMerge(
-            " hidden group-hover:block w-3 h-3 bg-black rounded-full absolute -right-[6px] top-1/2 -translate-y-1/2",
+            " hidden group-hover:block w-3 h-3 bg-green-400 dark:bg-white rounded-full absolute -right-[6px] top-1/2 -translate-y-1/2",
             isDragging && "block"
           )}
         ></div>

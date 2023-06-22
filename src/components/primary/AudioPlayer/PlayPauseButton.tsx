@@ -1,18 +1,20 @@
 import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useDaoStore } from "../../../state/store";
+import { buildVerseMediaSourceUrl } from "../../../utils";
 
 export function PlayPauseButton({
-  verseMediaSource,
+  verseId,
   className,
 }: {
-  verseMediaSource: string;
+  verseId: number;
   className?: string;
 }) {
   const audioUrl = useDaoStore((state) => state.audioUrl);
   const status = useDaoStore((state) => state.audioStatus);
   const setAudioStatus = useDaoStore((state) => state.setAudioStatus);
   const playAudioUrl = useDaoStore((state) => state.playAudioUrl);
+  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
 
   return (
     <button
@@ -28,7 +30,7 @@ export function PlayPauseButton({
             setAudioStatus("playing");
           }
         } else {
-          playAudioUrl(verseMediaSource);
+          playAudioUrl(verseMediaSource, verseId);
         }
       }}
     >

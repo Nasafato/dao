@@ -3,7 +3,6 @@ import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 import { useVerseMemoryStatusesQuery } from "../../lib/reactQuery";
 import { DaoVerse, DictionarySchema } from "../../types";
 import { CommandPalette } from "./CommandPalette";
-import { MediaWindow } from "./MediaWindow";
 import { Verse } from "./Verse";
 import { PopoverProvider } from "./PopoverProvider";
 import { Popover } from "./VersesPopover";
@@ -51,7 +50,6 @@ export function Verses({ verses }: VerseProps) {
           );
         })}
       </div>
-      <MediaWindow />
       <CommandPalette />
     </>
   );

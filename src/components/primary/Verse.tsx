@@ -39,7 +39,6 @@ export function Verse({
 }) {
   const [showDescription, setShowDescription] = useState(false);
   const verseId = verse.id;
-  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
 
   const moreQuery = useMoreQuery(verseId, { enabled: showDescription });
 
@@ -76,7 +75,7 @@ export function Verse({
             第{verseId}章
           </a>
         </div>
-        <PlayPauseButton verseMediaSource={verseMediaSource} className="ml-2" />
+        <PlayPauseButton className="ml-2" verseId={verse.id} />
         <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
 
         <div className="grid items-center justify-self-end flex-1">

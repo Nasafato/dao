@@ -12,11 +12,12 @@ interface DaoStore {
   setFooterOpen: (status: boolean) => void;
 
   /* Audio. */
+  audioVerseId: number | null;
   audioUrl: string | null;
   audioStatus: "playing" | "paused";
   setAudioStatus: (status: "playing" | "paused") => void;
   setAudioUrl: (url: string) => void;
-  playAudioUrl: (url: string) => void;
+  playAudioUrl: (url: string, verseId: number) => void;
   audioProgress: number;
   audioDuration: number;
   visualProgress: number;
@@ -33,6 +34,7 @@ export const useDaoStore = create<DaoStore>((set) => ({
   isPopoverOpen: false,
   setIsPopoverOpen: (status: boolean) => set({ isPopoverOpen: status }),
 
+  audioVerseId: null,
   audioDuration: 0.0,
   audioProgress: 0.0,
   visualProgress: 0.0,
@@ -47,8 +49,13 @@ export const useDaoStore = create<DaoStore>((set) => ({
   setAudioStatus: (status: "playing" | "paused") =>
     set({ audioStatus: status }),
   setAudioUrl: (url: string) => set({ audioUrl: url }),
-  playAudioUrl: (url: string) =>
-    set({ audioUrl: url, audioStatus: "playing", audioProgress: 0.0 }),
+  playAudioUrl: (url: string, verseId: number) =>
+    set({
+      audioUrl: url,
+      audioStatus: "playing",
+      audioProgress: 0.0,
+      audioVerseId: verseId,
+    }),
   verseBeingTested: null,
   setVerseBeingTested: (verse: DaoVerse | null) => {
     // if (verse) {
