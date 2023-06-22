@@ -8,3 +8,4 @@ workers_dev = true
 [[r2_buckets]]
 binding = "DAO_BUCKET"
 bucket_name = 'daodejing'
+preview_bucket_name = 'daodejing-preview'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function AudioPlayer({ src }: { src: string }) {
+export function AudioPlayer({ src }: { src: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);

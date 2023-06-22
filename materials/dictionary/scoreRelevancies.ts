@@ -5,7 +5,6 @@ import {
   db,
   definitions,
   entries,
-  prisma,
 } from "../../src/lib/db";
 import { benchmark, processLines, withStdinStdout } from "../cliUtils";
 

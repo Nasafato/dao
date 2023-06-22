@@ -25,7 +25,7 @@ import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
 import { Spinner } from "../shared/Spinner";
-import { PlayPauseButton } from "./PlayPauseButton";
+import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
