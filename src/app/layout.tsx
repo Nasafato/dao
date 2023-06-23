@@ -7,7 +7,6 @@ import { MainLayoutHorizontalPaddingStyle } from "../styles";
 import { Header } from "./Header";
 import { Providers } from "./Providers";
 import { Setup } from "./Setup";
-// import { modeToggleEffegcct } from "./modeToggleEffect";
 import { themeEffect } from "./theme-effect";
 
 export default function RootLayout({

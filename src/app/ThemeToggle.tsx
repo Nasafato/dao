@@ -45,28 +45,7 @@ export function ThemeToggle() {
   });
 
   return (
-    <div>
-      {isHovering && (
-        <span
-          className={`
-            text-[9px]
-            text-gray-400
-            mr-[-5px]
-
-            /* mobile */
-            hidden
-
-            md:inline
-          `}
-        >
-          {preference === null
-            ? "System"
-            : preference === "dark"
-            ? "Dark"
-            : "Light"}
-        </span>
-      )}
-
+    <div className="flex items-center gap-x-1">
       {/*
         the `theme-auto:` plugin is registered in `tailwind.config.js` and
         works similarly to the `dark:` prefix, which depends on the `theme-effect.ts` behavior
@@ -77,9 +56,7 @@ export function ThemeToggle() {
           isHovering && !isHoveringOverride
             ? "bg-gray-200 dark:bg-[#313131]"
             : ""
-        } active:bg-gray-300 transition-[background-color] dark:active:bg-[#242424] rounded-sm p-2 
-          bg-gray-200
-          dark:bg-[#313131]
+        }  transition-[background-color] dark:active:bg-[#242424] rounded-sm p-2 
           theme-system:!bg-inherit
           [&_.sun-icon]:hidden
           dark:[&_.moon-icon]:hidden
@@ -125,6 +102,25 @@ export function ThemeToggle() {
           <MoonIcon />
         </span>
       </button>
+      {isHovering && (
+        <span
+          className={`
+            text-[9px]
+            text-gray-400
+
+            /* mobile */
+            hidden
+
+            md:inline
+          `}
+        >
+          {preference === null
+            ? "System"
+            : preference === "dark"
+            ? "Dark"
+            : "Light"}
+        </span>
+      )}
     </div>
   );
 }
