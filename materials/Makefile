@@ -29,6 +29,9 @@ translations/translations.json: translations/historicalTranslations.json transla
 verses/dao.json: verses/build.ts verses/dao.txt 
 	pnpm tsx materials/$<
 
+verses/all/%.json: verses/build.ts verses/dao.txt
+	pnpm tsx materials/$<
+
 descriptions: descriptions/descriptions.json
 
 descriptions-clean:
