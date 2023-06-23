@@ -13,3 +13,6 @@ export const BackgroundStyle = "bg-white dark:bg-gray-950";
 
 export const LayoutPaddingStyle = "px-5 lg:px-24 py-2";
 export const MainLayoutHorizontalPaddingStyle = "px-5 lg:px-24";
+
+export const IconButtonColor =
+  "text-gray-500 dark:text-gray-300 hover:bg-gray-200 hover:dark:bg-gray-700";

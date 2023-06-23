@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { twJoin } from "tailwind-merge";
 import { CharMetaSchema, useCharNavigation } from "../../lib/charNavigation";
-import { BorderStyle } from "../../styles";
+import { BorderStyle, IconButtonColor } from "../../styles";
 import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export function Popover() {
   const popover = usePopoverData();
@@ -125,6 +126,18 @@ export function Popover() {
           className="focus-visible:outline-none"
         />
         {content}
+        <div className="absolute top-0 right-0 p-1">
+          <button
+            className={twJoin(IconButtonColor, "rounded-sm")}
+            onClick={() => {
+              if (popover.anchor) {
+                closePopover(popover.anchor);
+              }
+            }}
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </div>,
     ref.current
