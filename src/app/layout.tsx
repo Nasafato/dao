@@ -6,6 +6,8 @@ import "@/styles/globals.css";
 import { Footer } from "../components/primary/Footer";
 import { Providers } from "./Providers";
 import { Popover } from "../components/primary/VersesPopover";
+import { twJoin } from "tailwind-merge";
+import { MainLayoutHorizontalPaddingStyle } from "../styles";
 export default function RootLayout({
   children,
 }: {
@@ -17,7 +19,12 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Setup />
-          <main className="px-5 pb-16 lg:px-24 lg:pb-24 pt-4 lg:pt-8 mt-12">
+          <main
+            className={twJoin(
+              MainLayoutHorizontalPaddingStyle,
+              "pb-16 lg:pb-24 pt-4 lg:pt-8 mt-12"
+            )}
+          >
             {children}
           </main>
           <Footer />
@@ -36,7 +43,7 @@ export default function RootLayout({
   );
 }
 
-export const meatdata: Metadata = {
+export const metadata: Metadata = {
   title: "Home",
   description: "Welcome to the Daoedejing",
 };

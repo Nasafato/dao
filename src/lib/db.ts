@@ -44,7 +44,7 @@ export const definitions = pgTable("definitions", {
 });
 
 console.log(process.env.POSTGRES_PRISMA_URL);
-const queryClient = postgres(process.env.POSTGRES_URL ?? "");
+const queryClient = postgres(process.env.POSTGRES_PRISMA_URL ?? "");
 export const db = drizzle(queryClient);
 
 export type DbEntry = InferModel<typeof entries>;

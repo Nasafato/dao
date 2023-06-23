@@ -32,6 +32,13 @@ const worker = {
         object.writeHttpMetadata(headers);
         headers.set("etag", object.httpEtag);
 
+        if (key.endsWith(".mp3")) {
+          headers.set("Accept-Ranges", "bytes");
+          headers.set("Content-Type", "audio/mpeg");
+          headers.set("Content-Length", object.size.toString());
+          headers.set("Content-Range", `bytes 0-${object.size - 1}/*`);
+        }
+
         const origin = request.headers.get("origin");
         if (origin && isAllowedOrigin(origin)) {
           headers.set("Access-Control-Allow-Origin", origin);
@@ -39,6 +46,8 @@ const worker = {
           headers.set("Access-Control-Allow-Headers", "Content-Type");
           headers.set("Access-Control-Allow-Credentials", "true");
         }
+
+        console.log("url", url);
         return new Response(object.body, { headers });
       default:
         return new Response("Method Not Allowed", {

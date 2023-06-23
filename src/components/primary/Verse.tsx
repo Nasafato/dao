@@ -25,7 +25,7 @@ import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
 import { Spinner } from "../shared/Spinner";
-import { PlayPauseButton } from "./PlayPauseButton";
+import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
@@ -39,7 +39,6 @@ export function Verse({
 }) {
   const [showDescription, setShowDescription] = useState(false);
   const verseId = verse.id;
-  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
 
   const moreQuery = useMoreQuery(verseId, { enabled: showDescription });
 
@@ -76,7 +75,7 @@ export function Verse({
             第{verseId}章
           </a>
         </div>
-        <PlayPauseButton verseMediaSource={verseMediaSource} className="ml-2" />
+        <PlayPauseButton className="ml-2" verseId={verse.id} />
         <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
 
         <div className="grid items-center justify-self-end flex-1">
