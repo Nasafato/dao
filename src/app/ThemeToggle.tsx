@@ -1,5 +1,6 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
+import { ComputerDesktopIcon } from "@heroicons/react/20/solid";
 import { themeEffect } from "./theme-effect";
 
 export function ThemeToggle() {
@@ -8,8 +9,6 @@ export function ThemeToggle() {
     undefined
   );
   const [currentTheme, setCurrentTheme] = useState<null | string>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isHoveringOverride, setIsHoveringOverride] = useState(false);
 
   const onMediaChange = useCallback(() => {
     const current = themeEffect();
@@ -45,19 +44,16 @@ export function ThemeToggle() {
   });
 
   return (
-    <div className="flex items-center gap-x-1">
+    <div className="group flex items-center gap-x-1">
       {/*
         the `theme-auto:` plugin is registered in `tailwind.config.js` and
         works similarly to the `dark:` prefix, which depends on the `theme-effect.ts` behavior
       */}
       <button
         aria-label="Toggle theme"
-        className={`inline-flex ${
-          isHovering && !isHoveringOverride
-            ? "bg-gray-200 dark:bg-[#313131]"
-            : ""
-        }  transition-[background-color] dark:active:bg-[#242424] rounded-sm p-2 
-          theme-system:!bg-inherit
+        className={`inline-flex
+          transition-[background-color] dark:active:bg-[#242424] rounded-sm p-2 
+        group-hover:bg-gray-200 dark:group-hover:bg-[#313131]
           [&_.sun-icon]:hidden
           dark:[&_.moon-icon]:hidden
           dark:[&_.sun-icon]:inline
@@ -65,7 +61,7 @@ export function ThemeToggle() {
         onClick={(ev) => {
           ev.preventDefault();
           // prevent the hover state from rendering
-          setIsHoveringOverride(true);
+          //   setIsHoveringOverride(true);
 
           let newPreference: string | null =
             currentTheme === "dark" ? "light" : "dark";
@@ -89,38 +85,39 @@ export function ThemeToggle() {
 
           setPreference(newPreference);
         }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => {
-          setIsHovering(false);
-          setIsHoveringOverride(false);
-        }}
+        // onMouseEnter={() => setIsHovering(true)}
+        // onMouseLeave={() => {
+        //   setIsHovering(false);
+        //   setIsHoveringOverride(false);
+        // }}
       >
-        <span className="sun-icon">
-          <SunIcon />
-        </span>
-        <span className="moon-icon">
+        {preference === null ? (
+          <SystemIcon />
+        ) : preference === "dark" ? (
           <MoonIcon />
-        </span>
+        ) : (
+          <SunIcon />
+        )}
       </button>
-      {isHovering && (
-        <span
-          className={`
+      {/* {isHovering && ( */}
+      <span
+        className={`
             text-[9px]
             text-gray-400
 
             /* mobile */
             hidden
 
-            md:inline
+            md:group-hover:inline
           `}
-        >
-          {preference === null
-            ? "System"
-            : preference === "dark"
-            ? "Dark"
-            : "Light"}
-        </span>
-      )}
+      >
+        {preference === null
+          ? "System"
+          : preference === "dark"
+          ? "Dark"
+          : "Light"}
+      </span>
+      {/* )} */}
     </div>
   );
 }
@@ -159,6 +156,28 @@ function SunIcon(props: any) {
         stroke="none"
         fill="currentColor"
       />
+    </svg>
+  );
+}
+
+function SystemIcon(props: any) {
+  return (
+    <svg
+      data-testid="geist-icon"
+      fill="none"
+      height={16}
+      shape-rendering="geometricPrecision"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      width={16}
+      {...props}
+    >
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+      <path d="M8 21h8"></path>
+      <path d="M12 17v4"></path>
     </svg>
   );
 }
