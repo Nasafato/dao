@@ -3,7 +3,6 @@ export const revalidate = 60;
 
 import { padVerseId } from "@/serverUtils";
 import { ImageResponse } from "next/server";
-// import { getPosts } from "@/app/get-posts";
 
 export default async function Image({
   params,
@@ -12,23 +11,23 @@ export default async function Image({
 }) {
   const verseText = await fetch(
     new URL(
-      `../../materials/verses/all/${padVerseId(params.verseId)}.json`,
+      `../../../../materials/verses/all/${padVerseId(params.verseId)}.json`,
       import.meta.url
     )
   );
   return new ImageResponse(
     (
-      <div tw="flex p-10 h-full w-full bg-white flex-col">
-        <header tw="flex text-[36px] w-full">
-          <div tw="font-bold">
+      <div className="flex p-10 h-full w-full bg-white flex-col">
+        <header className="flex text-[36px] w-full">
+          <div className="font-bold">
             The Daodejing (道德经): Verse {params.verseId}
           </div>
-          <div tw="grow" />
-          <div tw="text-[28px]">daodejing.app/verses</div>
+          <div className="grow" />
+          <div className="text-[28px]">daodejing.app/verses</div>
         </header>
 
-        <main tw="flex mt-10 flex-col w-full">
-          <div tw="flex w-full text-[26px] text-gray-400 mb-3">
+        <main className="flex mt-10 flex-col w-full">
+          <div className="flex w-full text-[26px] text-gray-400 mb-3">
             {await verseText.text()}
           </div>
         </main>

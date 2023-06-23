@@ -19,6 +19,9 @@
     "prod": "dotenv -e .env.prod"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.0.3",
+    "@fontsource/noto-sans-sc": "^5.0.3",
+    "@fontsource/roboto-mono": "^5.0.3",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
     "@hookform/resolvers": "^3.1.0",
@@ -45,7 +48,7 @@
     "eslint-config-next": "13.3.0",
     "idb": "^7.1.1",
     "jotai": "^2.0.4",
-    "next": "13.4.6",
+    "next": "13.4.7",
     "next-auth": "^4.22.1",
     "next-pwa": "^5.6.0",
     "postcss": "8.4.21",
