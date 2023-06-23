@@ -1,6 +1,6 @@
 export default function AboutPage() {
   return (
-    <div className="max-w-xl mx-auto h-full">
+    <div className="max-w-xl mx-auto">
       <h1 className="font-bold">About</h1>
       <div className="space-y-2">
         <p>
@@ -24,18 +24,18 @@ export default function AboutPage() {
         <p>
           Memories change you. What is your mind if not your brain plus the sum
           of your past experiences? Those experiences leave grooves, and those
-          grooves turn into your thoughts and your actions as you come into
-          contact with the world.
+          grooves turn into your thoughts and your actions as you contend with
+          the world.
         </p>
         <p>
-          To memorize a text is to let it change you, more fully than just
-          reading it once or twice. Most knowledge in the world is useless
+          To memorize a text is to let it become part of you more fully than
+          just reading it once or twice. Most knowledge in the world is useless
           within a week after learning it. You read enough books, blog posts,
           Twitter threads, watch enough movies, and see that many things are
           beautiful, much knowledge is intriguing, but how much of it lasts?
         </p>
         <p>
-          So, I will memorize the Dao. It is only 81 verses, totaling 5260
+          So, I am memorizing the Dao. It is only 81 verses, totaling 5260
           Chinese characters. A few months of work for a lifetime.
         </p>
       </div>
