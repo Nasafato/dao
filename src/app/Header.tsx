@@ -1,9 +1,6 @@
-"use client";
-import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 
-import { usePathname, useRouter } from "next/navigation";
-import { ModeToggle } from "./ModeToggle";
 import { twMerge } from "tailwind-merge";
 import { SoftBorderStyle } from "../styles";
 
@@ -23,9 +20,9 @@ const links = [
 ];
 
 export function Header() {
-  const urlPath = usePathname();
-  const isActive: (pathname: string) => boolean = (pathname) =>
-    urlPath === pathname;
+  // const urlPath = usePathname();
+  // const isActive: (pathname: string) => boolean = (pathname) =>
+  //   urlPath === pathname;
 
   let right = null;
   right = (
@@ -34,8 +31,8 @@ export function Header() {
         <li
           key={link.href}
           className={twMerge(
-            "border-r border-gray-300 pr-2 pl-2 hover:underline last-of-type:border-r-0",
-            isActive(link.href) && "underline"
+            "border-r border-gray-300 pr-2 pl-2 hover:underline last-of-type:border-r-0"
+            // isActive(link.href) && "underline"
           )}
         >
           <Link href={link.href}>{link.name}</Link>
@@ -53,7 +50,7 @@ export function Header() {
     >
       <div className="m-auto max-w-xl font-mono text-sm h-full flex items-center">
         <div className="flex justify-between items-center flex-1">
-          <ModeToggle />
+          <ThemeToggle />
           {right}
         </div>
       </div>

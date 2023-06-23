@@ -1,14 +1,14 @@
-import { Metadata } from "next";
-import Script from "next/script";
-import { Header } from "./Header";
-import { Setup } from "./Setup";
 import "@/styles/globals.css";
-import { Footer } from "../components/primary/Footer";
-import { Providers } from "./Providers";
-import { Popover } from "../components/primary/VersesPopover";
+import { Metadata } from "next";
 import { twJoin } from "tailwind-merge";
+import { Footer } from "../components/primary/Footer";
+import { Popover } from "../components/primary/VersesPopover";
 import { MainLayoutHorizontalPaddingStyle } from "../styles";
-import { modeToggleEffect } from "./modeToggleEffect";
+import { Header } from "./Header";
+import { Providers } from "./Providers";
+import { Setup } from "./Setup";
+import { themeEffect } from "./theme-effect";
+
 export default function RootLayout({
   children,
 }: {
@@ -19,10 +19,11 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(${modeToggleEffect.toString()})()`,
+            __html: `(${themeEffect.toString()})()`,
           }}
         />
       </head>
+
       <body className="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100">
         <Providers>
           <Header />
