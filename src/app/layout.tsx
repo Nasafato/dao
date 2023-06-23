@@ -43,7 +43,7 @@ export default function RootLayout({
   );
 }
 
-export const meatdata: Metadata = {
+export const metadata: Metadata = {
   title: "Home",
   description: "Welcome to the Daoedejing",
 };
