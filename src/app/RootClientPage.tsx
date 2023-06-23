@@ -5,6 +5,7 @@ import { Verses } from "../components/primary/Verses";
 import { Container } from "../components/shared/PageLayout";
 import { DAO_VERSES } from "../lib/daoText";
 import { DaoVerse } from "../types";
+import { Floater } from "../components/Floater";
 
 const inter = Inter({ subsets: ["latin"] });
 
