@@ -1,14 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { InferModel } from "drizzle-orm";
-import {
-  pgTable,
-  serial,
-  text,
-  varchar,
-  real,
-  integer,
-} from "drizzle-orm/pg-core";
-import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { integer, pgTable, real, serial, text } from "drizzle-orm/pg-core";
+import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 const globalForPrisma = globalThis as unknown as {
@@ -43,7 +36,6 @@ export const definitions = pgTable("definitions", {
   relevancy: real("relevancy").notNull(),
 });
 
-console.log(process.env.POSTGRES_PRISMA_URL);
 const queryClient = postgres(process.env.POSTGRES_PRISMA_URL ?? "");
 export const db = drizzle(queryClient);
 

@@ -55,9 +55,9 @@ const ShuffleIcon = ({ className }: { className?: string }) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={twJoin("feather feather-shuffle", className)}
   >
     <polyline points="16 3 21 3 21 8"></polyline>
