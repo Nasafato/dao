@@ -24,7 +24,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100">
+      <body>
         <Providers>
           <Header />
           <Setup />
