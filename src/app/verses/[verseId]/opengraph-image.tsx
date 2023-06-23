@@ -1,20 +1,20 @@
 export const runtime = "edge";
 export const revalidate = 60;
 
-import path from "path";
 import { padVerseId } from "@/serverUtils";
 import { ImageResponse } from "next/server";
 // import { getPosts } from "@/app/get-posts";
-
-const versePath = path.join(__dirname, "materials/verses/all");
 
 export default async function Image({
   params,
 }: {
   params: { verseId: string };
 }) {
-  const verseText = await import(
-    path.join(versePath, padVerseId(params.verseId) + ".json")
+  const verseText = await fetch(
+    new URL(
+      `../../materials/verses/all/${padVerseId(params.verseId)}.json`,
+      import.meta.url
+    )
   );
   return new ImageResponse(
     (
@@ -28,7 +28,9 @@ export default async function Image({
         </header>
 
         <main tw="flex mt-10 flex-col w-full">
-          <div tw="flex w-full text-[26px] text-gray-400 mb-3">{verseText}</div>
+          <div tw="flex w-full text-[26px] text-gray-400 mb-3">
+            {await verseText.text()}
+          </div>
         </main>
       </div>
     ),
