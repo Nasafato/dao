@@ -54,14 +54,17 @@ export function ThemeToggle() {
         className={`inline-flex
           transition-[background-color] dark:active:bg-[#242424] rounded-sm p-2 
         group-hover:bg-gray-200 dark:group-hover:bg-[#313131]
-          [&_.sun-icon]:hidden
-          dark:[&_.moon-icon]:hidden
-          dark:[&_.sun-icon]:inline
+          [&_.moon-icon]:hidden
+          [&_.system-icon]:hidden
+          theme-system:[&_.system-icon]:inline
+          theme-system:[&_.sun-icon]:hidden
+          theme-system:[&._moon-icon]:hidden
+          dark:[&_.system-icon]:hidden
+          dark:[&_.moon-icon]:inline
+          dark:[&_.sun-icon]:hidden
         }`}
         onClick={(ev) => {
           ev.preventDefault();
-          // prevent the hover state from rendering
-          //   setIsHoveringOverride(true);
 
           let newPreference: string | null =
             currentTheme === "dark" ? "light" : "dark";
@@ -70,8 +73,6 @@ export function ThemeToggle() {
             ? "dark"
             : "light";
 
-          // if the user has their current OS theme as a preference (instead of auto)
-          // and they click the toggle, we want to switch to reset the preference
           if (preference !== null && systemTheme === currentTheme) {
             newPreference = null;
             localStorage.removeItem("theme");
@@ -85,21 +86,21 @@ export function ThemeToggle() {
 
           setPreference(newPreference);
         }}
-        // onMouseEnter={() => setIsHovering(true)}
-        // onMouseLeave={() => {
-        //   setIsHovering(false);
-        //   setIsHoveringOverride(false);
-        // }}
       >
-        {preference === null ? (
+        {/* {preference === null ? ( */}
+        {/* ) : preference === "dark" ? ( */}
+        <span className="system-icon">
           <SystemIcon />
-        ) : preference === "dark" ? (
+        </span>
+        <span className="moon-icon">
           <MoonIcon />
-        ) : (
+        </span>
+        {/* ) : ( */}
+        <span className="sun-icon">
           <SunIcon />
-        )}
+        </span>
+        {/* )} */}
       </button>
-      {/* {isHovering && ( */}
       <span
         className={`
             text-[9px]
@@ -117,7 +118,6 @@ export function ThemeToggle() {
           ? "Dark"
           : "Light"}
       </span>
-      {/* )} */}
     </div>
   );
 }
