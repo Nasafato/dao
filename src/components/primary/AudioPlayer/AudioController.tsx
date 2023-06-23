@@ -15,6 +15,7 @@ export function AudioController({ className }: { className?: string }) {
   const status = useDaoStore((state) => state.audioStatus);
   const verseId = useDaoStore((state) => state.audioVerseId);
   const setAudioStatus = useDaoStore((state) => state.setAudioStatus);
+  const audioUrl = useDaoStore((state) => state.audioUrl);
   const playAudioUrl = useDaoStore((state) => state.playAudioUrl);
   const playNextVerse = () => {
     if (verseId && verseId < 81) {
@@ -40,6 +41,10 @@ export function AudioController({ className }: { className?: string }) {
           "dark:text-gray-400 dark:hover:text-gray-300"
         )}
         onClick={() => {
+          if (!audioUrl) {
+            playAudioUrl(buildVerseMediaSourceUrl(1), 1);
+            return;
+          }
           if (status === "playing") {
             setAudioStatus("paused");
           } else {

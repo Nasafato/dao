@@ -5,6 +5,7 @@ import {
   BackgroundStyle,
   BorderStyle,
   LayoutPaddingStyle,
+  MainLayoutHorizontalPaddingStyle,
   SoftBorderStyle,
 } from "../../styles";
 import { DefinitionNavigation } from "../DefinitionNavigation";
@@ -14,6 +15,7 @@ import { Audio } from "./AudioPlayer/Audio";
 import { AudioController } from "./AudioPlayer/AudioController";
 import { AudioTimeController } from "./AudioPlayer/AudioTimeController";
 import { AudioTitle } from "./AudioPlayer/AudioTitle";
+import { Container } from "../shared/PageLayout";
 
 export function Footer() {
   // const isFooterOpen = useDaoStore(
@@ -50,17 +52,19 @@ export function Footer() {
 
         <div
           className={twJoin(
-            "border-t flex",
+            "border-t",
+            MainLayoutHorizontalPaddingStyle,
             BackgroundStyle,
-            BorderStyle,
-            LayoutPaddingStyle
+            BorderStyle
           )}
         >
-          <AudioTitle className="flex-initial" />
-          <div className="flex-1">
-            <AudioController />
-            <AudioTimeController />
-          </div>
+          <Container className="flex py-2">
+            <AudioTitle className="flex-initial" />
+            <div className="flex-1">
+              <AudioController />
+              <AudioTimeController />
+            </div>
+          </Container>
         </div>
       </footer>
     </>
