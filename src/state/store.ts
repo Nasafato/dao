@@ -27,10 +27,18 @@ interface DaoStore {
   isDragging: boolean;
   setIsDragging: (status: boolean) => void;
 
+  /* Playlist. */
+  isPlaylistOpen: boolean;
+  setIsPlaylistOpen: (status: boolean) => void;
+
+  /* Popover. */
   isPopoverOpen: boolean;
   setIsPopoverOpen: (status: boolean) => void;
 }
 export const useDaoStore = create<DaoStore>((set) => ({
+  isPlaylistOpen: false,
+  setIsPlaylistOpen: (status: boolean) => set({ isPlaylistOpen: status }),
+
   isPopoverOpen: false,
   setIsPopoverOpen: (status: boolean) => set({ isPopoverOpen: status }),
 

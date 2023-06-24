@@ -9,6 +9,7 @@ import { Header } from "./Header";
 import { Providers } from "./Providers";
 import { Setup } from "./Setup";
 import { themeEffect } from "./theme-effect";
+import { Playlist } from "../components/Playlist";
 
 export default function RootLayout({
   children,
@@ -39,6 +40,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Popover></Popover>
+          <Playlist />
         </Providers>
         <div id="popover-portal"></div>
         <div id="command-palette-portal"></div>
