@@ -46,20 +46,47 @@ export default function RootLayout({
   );
 }
 
+const APP_NAME = "Daodejing";
+const APP_DEFAULT_TITLE = "Daodejing";
+const APP_TITLE_TEMPLATE = "%s - Daodejing";
+const APP_DESCRIPTION = "Study the Daodejing, with a dictionary and more.";
+
 export const metadata: Metadata = {
-  title: "Daodejing",
-  description: "Study the Daodejing, with a dictionary and more.",
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
+  themeColor: "#FFFFFF",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE,
+    // startUpImage: [],
+  },
+  metadataBase: new URL("https://daodejing.app"),
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
-    title: "Daodejing",
-    description: "Study the Daodejing, with a dictionary and more.",
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
     url: "https://daodejing.app",
-    siteName: "Daodejing",
+    description: APP_DESCRIPTION,
   },
   twitter: {
-    card: "summary_large_image",
-    site: "@daodejingapp",
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
     creator: "@9981apollo",
+    description: APP_DESCRIPTION,
   },
-  themeColor: "transparent",
-  metadataBase: new URL("https://daodejing.app"),
 };
