@@ -2,7 +2,7 @@ export const runtime = "edge";
 export const revalidate = 60;
 
 import { ImageResponse } from "next/server";
-import VERSE_1 from "../../materials/verses/all/01.json";
+import { DAO_VERSES } from "../lib/daoText";
 import TRANSLATIONS from "../../materials/translations/translations.json";
 import { twJoin } from "tailwind-merge";
 import { fetchFont } from "../serverUtils";
@@ -30,6 +30,7 @@ export default async function MainOG() {
     )
   ).then((res) => res.arrayBuffer());
 
+  const VERSE_1 = DAO_VERSES[0].text;
   const chars = VERSE_1 + "道德经";
   const map: Record<string, boolean> = {};
   for (const char of chars) {
