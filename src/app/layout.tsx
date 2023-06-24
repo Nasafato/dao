@@ -47,6 +47,19 @@ export default function RootLayout({
 }
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "Welcome to the Daoedejing",
+  title: "Daodejing",
+  description: "Study the Daodejing, with a dictionary and more.",
+  openGraph: {
+    title: "Daodejing",
+    description: "Study the Daodejing, with a dictionary and more.",
+    url: "https://daodejing.app",
+    siteName: "Daodejing",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@daodejingapp",
+    creator: "@9981apollo",
+  },
+  themeColor: "transparent",
+  metadataBase: new URL("https://daodejing.app"),
 };
