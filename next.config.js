@@ -4,7 +4,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 /** @type {import('next').NextConfig} */
-const withPWA = require("next-pwa")({
+const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   runtimeCaching: cacheStrategies,
 });

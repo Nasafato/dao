@@ -19,6 +19,7 @@
     "prod": "dotenv -e .env.prod"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^9.0.1",
     "@fontsource/inter": "^5.0.3",
     "@fontsource/noto-sans-sc": "^5.0.3",
     "@fontsource/roboto-mono": "^5.0.3",
@@ -50,7 +51,6 @@
     "jotai": "^2.0.4",
     "next": "13.4.7",
     "next-auth": "^4.22.1",
-    "next-pwa": "^5.6.0",
     "postcss": "8.4.21",
     "postgres": "^3.3.5",
     "react": "18.2.0",
