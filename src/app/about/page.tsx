@@ -42,3 +42,28 @@ export default function AboutPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Daodejing",
+  description: "Study the Daodejing, with a dictionary and more.",
+  openGraph: {
+    title: "Daodejing",
+    description: "Study the Daodejing, with a dictionary and more.",
+    url: "https://daodejing.app",
+    siteName: "Daodejing",
+  },
+  twitter: {
+    title: "Daodejing",
+    images: [
+      {
+        url: "https://daodejing.app/opengraph-image",
+      },
+    ],
+    description: "Study the Daodejing, with a dictionary and more.",
+    card: "summary_large_image",
+    site: "@daodejingapp",
+    creator: "@9981apollo",
+  },
+  themeColor: "transparent",
+  metadataBase: new URL("https://daodejing.app"),
+};

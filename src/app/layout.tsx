@@ -56,13 +56,6 @@ export const metadata: Metadata = {
     siteName: "Daodejing",
   },
   twitter: {
-    title: "Daodejing",
-    images: [
-      {
-        url: "https://daodejing.app/opengraph-image",
-      },
-    ],
-    description: "Study the Daodejing, with a dictionary and more.",
     card: "summary_large_image",
     site: "@daodejingapp",
     creator: "@9981apollo",

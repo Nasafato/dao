@@ -1,11 +1,7 @@
-import {
-  OgLayout,
-  TranslationStyle,
-  VerseStyle,
-} from "../../components/OgLayout";
 import { ImageResponse } from "next/server";
-import { computeUniqueChars, fetchFont } from "../../serverUtils";
 import { twJoin } from "tailwind-merge";
+import { OgLayout, VerseStyle } from "../../components/OgLayout";
+import { computeUniqueChars, fetchFont } from "../../serverUtils";
 
 export default async function DictionaryOg() {
   const uniqueChars = computeUniqueChars("道德经");
@@ -15,8 +11,8 @@ export default async function DictionaryOg() {
   return new ImageResponse(
     (
       <OgLayout>
-        <div tw={twJoin("flex flex-col max-w-sm", VerseStyle)}>
-          <p>Search for characters in CEDict.</p>
+        <div tw={twJoin("flex flex-col", VerseStyle)}>
+          <p>Search for characters in CEDict. Study the Dao.</p>
         </div>
       </OgLayout>
     ),
