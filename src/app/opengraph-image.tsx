@@ -5,6 +5,7 @@ import { ImageResponse } from "next/server";
 import VERSE_1 from "../../materials/verses/all/01.json";
 import VERSE_2 from "../../materials/verses/all/02.json";
 import TRANSLATIONS from "../../materials/translations/translations.json";
+import { twJoin } from "tailwind-merge";
 
 async function fetchFont(
   text: string,
@@ -28,7 +29,6 @@ async function fetchFont(
     /src: url\((.+)\) format\('(opentype|truetype)'\)/
   );
 
-  console.log("css", css);
   if (!resource) return null;
 
   const res = await fetch(resource[1]);
@@ -70,30 +70,26 @@ export default async function MainOG() {
   return new ImageResponse(
     (
       <div
-        tw="flex p-10 h-full w-full bg-white flex-col"
+        tw="flex p-20 h-full w-full bg-white flex-col"
         style={font("Inter 300")}
       >
-        <header tw="flex text-[36px] w-full">
+        <header tw="flex text-[36px] w-full items-center">
           <div tw="font-bold flex items-center" style={font("Inter 600")}>
-            <span tw="mr-2">Daodejing </span>
-            <span style={font("Noto Sans SC 400")}>道德经</span>
+            <span tw="mr-2">DAODEJING </span>
+            <span tw="text-[60px]" style={font("Noto Sans SC 400")}>
+              道德经
+            </span>
           </div>
           <div tw="grow" />
           <div tw="text-[28px]">daodejing.app</div>
         </header>
 
         <main tw="flex mt-10 flex-col w-full" style={font("Noto Sans SC 400")}>
-          <div tw="w-full text-[24px] text-gray-800 mb-3 flex">
-            <div tw="text-[26px]">{VERSE_1}</div>
+          <div tw="w-full text-[24px] text-gray-800 mb-8 flex">
+            <div tw={VerseStyle}>{VERSE_1}</div>
           </div>
-          <div tw="w-full text-[24px] text-gray-800 mb-10">
+          <div tw={twJoin("w-full mb-10", TranslationStyle)}>
             {TRANSLATIONS[0].gou}
-          </div>
-          <div tw="w-full text-[26px] text-gray-800 mb-3 flex">
-            <div tw="text-[26px]">{VERSE_2}</div>
-          </div>
-          <div tw="w-full text-[24px] text-gray-800 mb-3">
-            {TRANSLATIONS[1].gou}
           </div>
         </main>
       </div>
@@ -110,6 +106,9 @@ export default async function MainOG() {
     }
   );
 }
+
+const VerseStyle = "text-[48px] text-gray-900";
+const TranslationStyle = "text-[28px] text-gray-900";
 
 // lil helper for mroe succinct styles
 function font(fontFamily: string) {
