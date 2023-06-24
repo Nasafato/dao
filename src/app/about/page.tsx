@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 export default function AboutPage() {
   return (
     <div className="max-w-xl mx-auto h-full">
@@ -53,13 +55,6 @@ export const metadata: Metadata = {
     siteName: "Daodejing",
   },
   twitter: {
-    title: "Daodejing",
-    images: [
-      {
-        url: "https://daodejing.app/opengraph-image",
-      },
-    ],
-    description: "Study the Daodejing, with a dictionary and more.",
     card: "summary_large_image",
     site: "@daodejingapp",
     creator: "@9981apollo",
