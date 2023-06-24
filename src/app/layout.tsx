@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { twJoin } from "tailwind-merge";
 import { Footer } from "../components/primary/Footer";
@@ -41,6 +42,7 @@ export default function RootLayout({
         </Providers>
         <div id="popover-portal"></div>
         <div id="command-palette-portal"></div>
+        <Analytics />
       </body>
     </html>
   );
