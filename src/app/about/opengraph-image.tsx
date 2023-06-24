@@ -1,11 +1,7 @@
-import {
-  OgLayout,
-  TranslationStyle,
-  VerseStyle,
-} from "../../components/OgLayout";
 import { ImageResponse } from "next/server";
-import { computeUniqueChars, fetchFont } from "../../serverUtils";
 import { twJoin } from "tailwind-merge";
+import { OgLayout } from "../../components/OgLayout";
+import { computeUniqueChars, fetchFont } from "../../serverUtils";
 
 export default async function AboutOg() {
   const uniqueChars = computeUniqueChars("道德经");
@@ -28,12 +24,7 @@ export default async function AboutOg() {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        // { name: "Inter 300", data: await inter300 },
-        // { name: "Inter 600", data: await inter600 },
-        // { name: "Roboto Mono 400", data: await robotoMono400 },
-        { name: "Noto Sans SC 400", data: notoSansScFont },
-      ],
+      fonts: [{ name: "Noto Sans SC 400", data: notoSansScFont }],
     }
   );
 }

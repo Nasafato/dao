@@ -23,12 +23,7 @@ export default async function DictionaryOg() {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        // { name: "Inter 300", data: await inter300 },
-        // { name: "Inter 600", data: await inter600 },
-        // { name: "Roboto Mono 400", data: await robotoMono400 },
-        { name: "Noto Sans SC 400", data: notoSansScFont },
-      ],
+      fonts: [{ name: "Noto Sans SC 400", data: notoSansScFont }],
     }
   );
 }
