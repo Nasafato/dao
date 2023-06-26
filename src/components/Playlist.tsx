@@ -5,7 +5,17 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useDaoStore } from "../state/store";
 import { twJoin } from "tailwind-merge";
 import { Bars3Icon } from "@heroicons/react/20/solid";
-import { button } from "../styles";
+import { border, button } from "../styles";
+import { convertNumberToChinese } from "../serverUtils";
+import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
+
+const verses: Array<{ id: number; title: string }> = [];
+for (let i = 0; i < 81; i++) {
+  verses.push({
+    id: i + 1,
+    title: `第${i + 1}章`,
+  });
+}
 
 export function Playlist() {
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
@@ -16,8 +26,9 @@ export function Playlist() {
       <Dialog
         as="div"
         className={twJoin(
-          "relative z-10"
-          // "border border-red-500"
+          "relative z-10",
+          // "border border-red-500",
+          ""
         )}
         onClose={setIsPlaylistOpen}
       >
@@ -37,8 +48,9 @@ export function Playlist() {
         >
           <div
             className={twJoin(
-              "absolute inset-0 overflow-hidden"
-              // "border-orange-600 border-2"
+              "absolute inset-0 overflow-hidden",
+              // "border-orange-600 border-2",
+              ""
             )}
           >
             <div
@@ -58,11 +70,16 @@ export function Playlist() {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-[16rem]">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div
+                    className={twJoin(
+                      "flex h-full flex-col overflow-y-scroll bg-white py-4 shadow-xl border-l",
+                      border()
+                    )}
+                  >
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                          Panel title
+                          Playlist
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -81,7 +98,19 @@ export function Playlist() {
                       </div>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Your content */}
+                      <ul>
+                        {verses.map((v) => (
+                          <li
+                            key={v.id}
+                            className="py-1 flex items-center gap-x-2"
+                          >
+                            <div>
+                              <PlayPauseButton verseId={v.id} />
+                            </div>
+                            <h5>{v.title}</h5>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </Dialog.Panel>

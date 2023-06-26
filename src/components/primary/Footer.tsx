@@ -8,6 +8,7 @@ import {
   LayoutPaddingStyle,
   MainLayoutHorizontalPaddingStyle,
   SoftBorderStyle,
+  border,
 } from "../../styles";
 import { DefinitionNavigation } from "../DefinitionNavigation";
 
@@ -58,7 +59,7 @@ export function Footer() {
             FooterHeight,
             MainLayoutHorizontalPaddingStyle,
             BackgroundStyle,
-            BorderStyle
+            border()
           )}
         >
           <Container className="flex py-2">
