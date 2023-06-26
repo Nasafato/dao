@@ -57,15 +57,15 @@ export function Playlist() {
               {verses.map((v) => (
                 <li
                   key={v.id}
-                  className={background({
-                    color: audioVerseId === v.id ? "invert" : "default",
-                  })}
+                  className={twJoin(audioVerseId === v.id && "inverse")}
                 >
-                  <div className="py-2 px-3 flex items-center gap-x-2">
-                    <PlayPauseButton
-                      verseId={v.id}
-                      className={(audioVerseId === v.id && "invert") || ""}
-                    />
+                  <div
+                    className={twJoin(
+                      "py-2 px-3 flex items-center gap-x-2",
+                      background()
+                    )}
+                  >
+                    <PlayPauseButton verseId={v.id} />
                     <h5>{v.title}</h5>
                   </div>
                 </li>

@@ -37,10 +37,9 @@ export const background = tv({
   `,
   variants: {
     color: {
-      default: "bg-white dark:bg-gray-950",
-      invert: `
-        bg-gray-950 dark:bg-white
-        dark:text-gray-900 text-gray-100
+      default: `
+        bg-white inverse:dark:bg-white text-gray-900 inverse:dark:text-gray-900
+        dark:bg-gray-950 inverse:bg-gray-950 dark:text-gray-100 inverse:text-gray-100
       `,
     },
   },
@@ -59,8 +58,8 @@ export const button = tv({
       primary:
         "text-gray-900 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
       secondary: `
-        text-gray-400 hover:text-gray-500 iv:dark:text-gray-400 iv:dark:hover:text-gray-500
-        dark:hover:text-gray-200 iv:text-gray-200 iv:hover:text-gray-500
+        text-gray-400 hover:text-gray-500 inverse:dark:text-gray-400 inverse:dark:hover:text-gray-500
+        dark:hover:text-gray-400 inverse:text-gray-400 inverse:hover:text-gray-200
       `,
       icon: `
         text-gray-900 hover:text-gray-900
@@ -71,8 +70,8 @@ export const button = tv({
     ring: {
       true: `
         ring-1
-        ring-gray-200 dark:ring-gray-200 
-        hover:ring-gray-500 hover:dark-ring-gray-500
+        ring-gray-400 hover:ring-gray-500 inverse:dark:ring-gray-400 inverse:dark:hover:ring-gray-500
+        dark:hover:ring-gray-400 inverse:ring-gray-400 inverse:hover:ring-gray-200
       `,
     },
     rounded: {

@@ -24,7 +24,7 @@ module.exports = {
   plugins: [
     plugin(function ({ addVariant }) {
       addVariant("theme-system", ".theme-system &");
-      addVariant("iv", ".invert &");
+      addVariant("inverse", ".inverse &");
     }),
   ],
 };
