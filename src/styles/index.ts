@@ -20,6 +20,16 @@ export const IconButtonColor =
   "text-gray-500 dark:text-gray-300 hover:bg-gray-200 hover:dark:bg-gray-700";
 export const HeaderHeight = "h-12";
 export const FooterHeight = "h-14";
+export const BottomSpacing = "bottom-14";
+export const verticalSpacing = tv({
+  base: `bottom-14`,
+  variants: {
+    orientation: {
+      bottom: "bottom-14 top-auto",
+      top: "top-14 bottom-auto",
+    },
+  },
+});
 
 export const button = tv({
   base: `

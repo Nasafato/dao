@@ -40,7 +40,6 @@ export default function RootLayout({
           </main>
           <Footer />
           <Popover></Popover>
-          <Playlist />
         </Providers>
         <div id="popover-portal"></div>
         <div id="command-palette-portal"></div>

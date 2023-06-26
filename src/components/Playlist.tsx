@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useDaoStore } from "../state/store";
 import { twJoin } from "tailwind-merge";
 import { Bars3Icon } from "@heroicons/react/20/solid";
-import { border, button } from "../styles";
+import { border, button, verticalSpacing } from "../styles";
 import { convertNumberToChinese } from "../serverUtils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 
@@ -18,6 +18,59 @@ for (let i = 0; i < 81; i++) {
 }
 
 export function Playlist() {
+  const isOpen = useDaoStore((state) => state.isPlaylistOpen);
+  const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
+
+  return (
+    <Transition.Root show={isOpen} as={Fragment}>
+      <div
+        className={twJoin(
+          "absolute bottom-[3.5rem] right-0 w-[300px] h-[400px] bg-white shadow-xl flex flex-col",
+          "border",
+          border()
+        )}
+      >
+        <div
+          className={
+            "flex-1 flex items-start justify-between border-b py-2 px-1 " +
+            border()
+          }
+        >
+          <h3 className="text-base font-semibold leading-6 text-gray-900">
+            Playlist
+          </h3>
+          <button
+            type="button"
+            className={button({
+              color: "icon",
+              size: "md",
+            })}
+            onClick={() => setIsPlaylistOpen(false)}
+          >
+            <span className="sr-only">Close panel</span>
+            <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+        <div className={twJoin("flex-0 h-full overflow-scroll")}>
+          <div className="px-4 py-2">
+            <ul>
+              {verses.map((v) => (
+                <li key={v.id} className="py-1 flex items-center gap-x-2">
+                  <div>
+                    <PlayPauseButton verseId={v.id} />
+                  </div>
+                  <h5>{v.title}</h5>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Transition.Root>
+  );
+}
+
+export function AdfasdfPlaylist() {
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
 

@@ -18,7 +18,7 @@ import { AudioController } from "./AudioPlayer/AudioController";
 import { AudioTimeController } from "./AudioPlayer/AudioTimeController";
 import { AudioTitle } from "./AudioPlayer/AudioTitle";
 import { Container } from "../shared/PageLayout";
-import { PlaylistButton } from "../Playlist";
+import { Playlist, PlaylistButton } from "../Playlist";
 
 export function Footer() {
   // const isFooterOpen = useDaoStore(
@@ -68,7 +68,10 @@ export function Footer() {
               <AudioController />
               <AudioTimeController />
             </div>
-            <PlaylistButton />
+            <div className="relative">
+              <PlaylistButton />
+              <Playlist />
+            </div>
           </Container>
         </div>
       </footer>
