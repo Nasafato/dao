@@ -4,6 +4,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useDaoStore } from "../state/store";
 import { twJoin } from "tailwind-merge";
+import { Bars3Icon } from "@heroicons/react/20/solid";
+import { button } from "../styles";
 
 export function Playlist() {
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
@@ -13,25 +15,36 @@ export function Playlist() {
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10 border border-red-500"
+        className={twJoin(
+          "relative z-10"
+          // "border border-red-500"
+        )}
         onClose={setIsPlaylistOpen}
       >
         <div
           className={twJoin(
-            "fixed inset-0 top-10 border-purple-500 border-2",
+            "fixed inset-0 top-10",
+            // "border-purple-500 border-2",
             "bottom-14 top-12"
           )}
         />
         <div
           className={twJoin(
-            "fixed inset-0 overflow-hidden border-blue-500 border-2",
+            "fixed inset-0 overflow-hidden",
+            // "border-blue-500 border-2",
             "bottom-14 top-12"
           )}
         >
-          <div className="absolute inset-0 overflow-hidden border-orange-600 border-2">
+          <div
+            className={twJoin(
+              "absolute inset-0 overflow-hidden"
+              // "border-orange-600 border-2"
+            )}
+          >
             <div
               className={twJoin(
-                "pointer-events-none fixed right-0 flex max-w-full pl-10 border-green-600 border-2",
+                "pointer-events-none fixed right-0 flex max-w-full pl-10",
+                // "border-green-600 border-2",
                 "bottom-14 top-12"
               )}
             >
@@ -54,11 +67,15 @@ export function Playlist() {
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className={button({
+                              color: "icon",
+                              size: "md",
+                            })}
+                            // className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             onClick={() => setIsPlaylistOpen(false)}
                           >
                             <span className="sr-only">Close panel</span>
-                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                            <XMarkIcon className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
                       </div>
@@ -82,8 +99,25 @@ export const PlaylistButton = (Playlist.Button = function PlaylistButton() {
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
 
   return (
-    <button onClick={() => setIsPlaylistOpen(!isOpen)}>
-      {isOpen ? "Close" : "Open"}
+    <button
+      onClick={() => setIsPlaylistOpen(!isOpen)}
+      className={button({
+        size: "md",
+        class: "ml-3",
+        color: "icon",
+      })}
+    >
+      {isOpen ? (
+        <>
+          <span className="sr-only">Open playlist</span>
+          <XMarkIcon className="w-4 h-4" />
+        </>
+      ) : (
+        <>
+          <span className="sr-only">Open playlist</span>
+          <Bars3Icon className="w-4 h-4" />
+        </>
+      )}
     </button>
   );
 });

@@ -25,14 +25,22 @@ export const button = tv({
   base: `
     text-gray-900 hover:text-gray-700
     dark:text-gray-500 dark:hover:text-gray-400
+    justify-center flex items-center
+    rounded-sm
   `,
   variants: {
     color: {
       primary: "",
       secondary: "",
+      icon: `
+        text-gray-900 hover:text-gray-900
+        dark:text-gray-500 dark:hover:text-gray-500
+        hover:bg-gray-200 hover:dark:bg-gray-700
+      `,
     },
     size: {
       sm: "h-4 w-4",
+      md: "h-6 w-6",
     },
   },
 });
