@@ -4,6 +4,7 @@ import { useDaoStore } from "../../state/store";
 import {
   BackgroundStyle,
   BorderStyle,
+  FooterHeight,
   LayoutPaddingStyle,
   MainLayoutHorizontalPaddingStyle,
   SoftBorderStyle,
@@ -16,6 +17,7 @@ import { AudioController } from "./AudioPlayer/AudioController";
 import { AudioTimeController } from "./AudioPlayer/AudioTimeController";
 import { AudioTitle } from "./AudioPlayer/AudioTitle";
 import { Container } from "../shared/PageLayout";
+import { PlaylistButton } from "../Playlist";
 
 export function Footer() {
   // const isFooterOpen = useDaoStore(
@@ -53,6 +55,7 @@ export function Footer() {
         <div
           className={twJoin(
             "border-t",
+            FooterHeight,
             MainLayoutHorizontalPaddingStyle,
             BackgroundStyle,
             BorderStyle
@@ -64,6 +67,7 @@ export function Footer() {
               <AudioController />
               <AudioTimeController />
             </div>
+            <PlaylistButton />
           </Container>
         </div>
       </footer>
