@@ -43,9 +43,9 @@ export function Footer() {
           <div className="relative">
             <div
               className={twJoin(
-                "-top-9 right-2 absolute rounded-full w-60 border",
+                "-top-9 right-2 absolute rounded-full w-60 border shadow-md",
                 BackgroundStyle,
-                SoftBorderStyle
+                border()
               )}
             >
               <DefinitionNavigation />
