@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useDaoStore } from "../state/store";
 import { twJoin } from "tailwind-merge";
 import { Bars3Icon } from "@heroicons/react/20/solid";
-import { border, button, verticalSpacing } from "../styles";
+import { background, border, button, verticalSpacing } from "../styles";
 import { convertNumberToChinese } from "../serverUtils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 
@@ -18,6 +18,7 @@ for (let i = 0; i < 81; i++) {
 }
 
 export function Playlist() {
+  const audioVerseId = useDaoStore((state) => state.audioVerseId);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
 
@@ -25,20 +26,19 @@ export function Playlist() {
     <Transition.Root show={isOpen} as={Fragment}>
       <div
         className={twJoin(
-          "absolute bottom-[3.5rem] right-0 w-[300px] h-[400px] bg-white shadow-xl flex flex-col",
+          "absolute bottom-[3.5rem] right-0 w-[300px] h-[400px] shadow-xl flex flex-col",
           "border",
-          border()
+          border(),
+          background()
         )}
       >
         <div
           className={
-            "flex-1 flex items-start justify-between border-b py-2 px-1 " +
+            "flex-1 flex items-start justify-between border-b py-2 px-3 " +
             border()
           }
         >
-          <h3 className="text-base font-semibold leading-6 text-gray-900">
-            Playlist
-          </h3>
+          <h3 className="text-base font-semibold leading-6">Playlist</h3>
           <button
             type="button"
             className={button({
@@ -52,14 +52,22 @@ export function Playlist() {
           </button>
         </div>
         <div className={twJoin("flex-0 h-full overflow-scroll")}>
-          <div className="px-4 py-2">
+          <div className="">
             <ul>
               {verses.map((v) => (
-                <li key={v.id} className="py-1 flex items-center gap-x-2">
-                  <div>
-                    <PlayPauseButton verseId={v.id} />
+                <li
+                  key={v.id}
+                  className={background({
+                    color: audioVerseId === v.id ? "invert" : "default",
+                  })}
+                >
+                  <div className="py-2 px-3 flex items-center gap-x-2">
+                    <PlayPauseButton
+                      verseId={v.id}
+                      className={(audioVerseId === v.id && "invert") || ""}
+                    />
+                    <h5>{v.title}</h5>
                   </div>
-                  <h5>{v.title}</h5>
                 </li>
               ))}
             </ul>

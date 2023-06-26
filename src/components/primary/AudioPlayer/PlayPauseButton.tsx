@@ -2,6 +2,7 @@ import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useDaoStore } from "../../../state/store";
 import { buildVerseMediaSourceUrl } from "../../../utils";
+import { button } from "../../../styles";
 
 export function PlayPauseButton({
   verseId,
@@ -18,10 +19,17 @@ export function PlayPauseButton({
 
   return (
     <button
-      className={clsx(
-        "h-4 w-4 ring-1 ring-gray-200 rounded-full flex justify-center items-center text-gray-400 hover:bg-gray-200",
-        className
-      )}
+      className={button({
+        color: "secondary",
+        size: "sm",
+        ring: true,
+        rounded: "full",
+        class: className,
+      })}
+      // className={clsx(
+      //   "h-4 w-4 ring-1 ring-gray-200 rounded-full flex justify-center items-center text-gray-400 hover:bg-gray-200",
+      //   className
+      // )}
       onClick={() => {
         if (audioUrl === verseMediaSource) {
           if (status === "playing") {

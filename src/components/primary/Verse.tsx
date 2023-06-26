@@ -65,7 +65,7 @@ export function Verse({
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-x-1">
         <div>
           <a
             id={`dao${verseId}`}

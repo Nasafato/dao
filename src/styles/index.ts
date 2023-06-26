@@ -31,30 +31,70 @@ export const verticalSpacing = tv({
   },
 });
 
+export const background = tv({
+  base: `
+    bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100
+  `,
+  variants: {
+    color: {
+      default: "bg-white dark:bg-gray-950",
+      invert: `
+        bg-gray-950 dark:bg-white
+        dark:text-gray-900 text-gray-100
+      `,
+    },
+  },
+  defaultVariants: {
+    color: "default",
+  },
+});
+
 export const button = tv({
   base: `
-    text-gray-900 hover:text-gray-700
-    dark:text-gray-500 dark:hover:text-gray-400
     justify-center flex items-center
     rounded-sm
   `,
   variants: {
     color: {
-      primary: "",
-      secondary: "",
+      primary:
+        "text-gray-900 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
+      secondary: `
+        text-gray-400 hover:text-gray-500 iv:dark:text-gray-400 iv:dark:hover:text-gray-500
+        dark:hover:text-gray-200 iv:text-gray-200 iv:hover:text-gray-500
+      `,
       icon: `
         text-gray-900 hover:text-gray-900
         dark:text-gray-500 dark:hover:text-gray-500
         hover:bg-gray-200 hover:dark:bg-gray-700
       `,
     },
+    ring: {
+      true: `
+        ring-1
+        ring-gray-200 dark:ring-gray-200 
+        hover:ring-gray-500 hover:dark-ring-gray-500
+      `,
+    },
+    rounded: {
+      none: "rounded-none",
+      sm: "rounded-sm",
+      md: "rounded-md",
+      lg: "rounded-lg",
+      full: "rounded-full",
+    },
     size: {
       sm: "h-4 w-4",
-      md: "h-6 w-6",
+      md: "h-5 w-5",
+      lg: "h-6 w-6",
     },
+  },
+  defaultVariants: {
+    color: "primary",
+    size: "md",
+    rounded: "none",
   },
 });
 
 export const border = tv({
-  base: `border-gray-950 dark:border-gray-200/10`,
+  base: `border-gray-950 dark:border-gray-200/50`,
 });
