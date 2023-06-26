@@ -44,3 +44,7 @@ export const button = tv({
     },
   },
 });
+
+export const border = tv({
+  base: `border-gray-950 dark:border-gray-200/10`,
+});

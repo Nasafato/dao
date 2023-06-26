@@ -2,7 +2,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
 import { twMerge } from "tailwind-merge";
-import { HeaderHeight, SoftBorderStyle } from "../styles";
+import { HeaderHeight, SoftBorderStyle, border } from "../styles";
 
 const links = [
   {
@@ -46,7 +46,8 @@ export function Header() {
       className={twMerge(
         HeaderHeight,
         "px-5 lg:px-24 py-2 fixed top-0 w-full bg-white dark:bg-gray-950 z-20 border-b",
-        SoftBorderStyle
+        border()
+        // SoftBorderStyle
       )}
     >
       <div className="m-auto max-w-xl font-mono text-sm h-full flex items-center">
