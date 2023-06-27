@@ -100,3 +100,43 @@ async function checkAudioCached(audioUrl: string) {
 
   return Boolean(cachedResponse);
 }
+
+let audioCacheCheckInterval: number;
+export const audioBeingCached = new Map<
+  string,
+  {
+    checking: boolean;
+    timesChecked: number;
+  }
+>();
+
+export function checkForAudio(audioUrl: string) {
+  audioBeingCached.set(audioUrl, {
+    checking: true,
+    timesChecked: 0,
+  });
+
+  audioCacheCheckInterval = window.setInterval(async () => {
+    if (audioBeingCached.size === 0) {
+      clearInterval(audioCacheCheckInterval);
+      return;
+    }
+    for (const [audioUrl, cacheInfo] of audioBeingCached.entries()) {
+      if (cacheInfo.timesChecked > 10) {
+        audioBeingCached.delete(audioUrl);
+        continue;
+      }
+      const isCached = await checkAudioCached(audioUrl);
+      if (isCached) {
+        audioBeingCached.delete(audioUrl);
+        useDaoStore.setState((state) => ({
+          cachedAudio: {
+            ...state.cachedAudio,
+            [audioUrl]: true,
+          },
+        }));
+      }
+    }
+    await checkAudioCached(audioUrl);
+  }, 500);
+}
