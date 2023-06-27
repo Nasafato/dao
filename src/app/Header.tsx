@@ -1,4 +1,6 @@
 "use client";
+// import { Listbox } from "@headlessui/react";
+import { Menu } from "@headlessui/react";
 import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
@@ -101,7 +103,6 @@ function LinkWithChildren({
   link: Link;
   className?: string;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const name =
     typeof link.name === "function" ? link.name(pathname) : link.name;
@@ -115,56 +116,48 @@ function LinkWithChildren({
     );
   } else {
     content = (
-      <>
-        <Link href={link.href}>{name}</Link>
-        <button
-          className={`relative ${button({
-            color: "secondary",
-            size: "md",
-          })}`}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <ChevronDownIcon className="h-4 w-4" />
-          {isOpen && (
-            <Menu className="absolute top-6 right-0">
-              {link.children.map((child) => (
-                <LinkWithChildren
-                  link={child}
-                  key={child.href}
-                  className="pr-3 py-2"
-                />
-              ))}
-            </Menu>
+      <Menu as="div" className="relative">
+        <Menu.Button className="hover:underline">
+          <div className="flex items-center text">
+            <Link href="/verses/chinese">{name}</Link>
+            <ChevronDownIcon className="h-4 w-4" />
+          </div>
+        </Menu.Button>
+        <Menu.Items
+          className={twJoin(
+            "absolute top-5 right-0 border",
+            border(),
+            background()
           )}
-        </button>
-      </>
+        >
+          <ul>
+            {link.children.map((c) => (
+              <Menu.Item
+                key={c.href}
+                href={c.href}
+                as={Link}
+                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-800"
+              >
+                <LinkName name={c.name} />
+              </Menu.Item>
+            ))}
+          </ul>
+        </Menu.Items>
+      </Menu>
     );
   }
   return (
     <li
       key={link.href}
-      className={twMerge(
-        "pr-2 pl-2 hover:underline flex items-center"
-        // isActive(link.href) && "underline"
-      )}
+      className={twMerge("pr-2 pl-2 hover:underline flex items-center")}
     >
       {content}
     </li>
   );
 }
 
-function Menu({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={twJoin("px-1 py-1 border", border(), background(), className)}
-    >
-      {children}
-    </div>
-  );
+function LinkName({ name }: { name: string | ((path: string) => string) }) {
+  const pathname = usePathname();
+  const linkName = typeof name === "function" ? name(pathname ?? "") : name;
+  return <>{linkName}</>;
 }

@@ -50,7 +50,7 @@ export const background = tv({
 
 export const VerseStyle = tv({
   base: `
-    font-normal text-gray-800 dark:text-gray-100">
+    font-normal">
   `,
   variants: {
     size: {
@@ -65,6 +65,18 @@ export const VerseStyle = tv({
   },
 });
 
+export const HeadingStyle = tv({
+  base: "text-sm",
+  variants: {
+    color: {
+      default: "text-gray-500 dark:text-gray-300",
+    },
+  },
+  defaultVariants: {
+    color: "default",
+  },
+});
+
 export const button = tv({
   base: `
     justify-center flex items-center
@@ -73,7 +85,7 @@ export const button = tv({
   variants: {
     color: {
       primary:
-        "text-gray-900 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400 hover:underline",
+        "text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-400 hover:underline",
       secondary: `
         text-gray-400 hover:text-gray-500 inverse:dark:text-gray-400 inverse:dark:hover:text-gray-500
         dark:hover:text-gray-400 inverse:text-gray-400 inverse:hover:text-gray-200

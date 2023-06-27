@@ -46,7 +46,12 @@ export default function VersePage({
           </Link>
         </div>
         <VerseText text={verse.text} verseId={verse.id} />
-        <div className="text-gray-400 mt-6">简介</div>
+        <div className="text-gray-400 mt-6 flex items-center gap-x-1 group">
+          简介
+          <span className="text-xs tracking-wide group-hover:block hidden group-active:block">
+            Description
+          </span>
+        </div>
         <VerseDescription data={description} verseId={verse.id} />
       </Container>
     </PopoverProvider>
