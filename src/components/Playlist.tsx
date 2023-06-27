@@ -8,6 +8,7 @@ import { Bars3Icon } from "@heroicons/react/20/solid";
 import { background, border, button, verticalSpacing } from "../styles";
 import { convertNumberToChinese } from "../serverUtils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
+import { DownloadAudioButton } from "./primary/DownloadAudioButton";
 
 const verses: Array<{ id: number; title: string }> = [];
 for (let i = 0; i < 81; i++) {
@@ -65,6 +66,7 @@ export function Playlist() {
                       background()
                     )}
                   >
+                    <DownloadAudioButton verseId={v.id} />
                     <PlayPauseButton verseId={v.id} />
                     <h5>{v.title}</h5>
                   </div>
@@ -169,6 +171,9 @@ export function AdfasdfPlaylist() {
                               <PlayPauseButton verseId={v.id} />
                             </div>
                             <h5>{v.title}</h5>
+                            <div>
+                              <DownloadAudioButton verseId={v.id} />
+                            </div>
                           </li>
                         ))}
                       </ul>

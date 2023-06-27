@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { useDaoStore } from "../../../state/store";
 import { buildVerseMediaSourceUrl } from "../../../utils";
 import { button } from "../../../styles";
+import { checkForAudio } from "../DownloadAudioButton";
 
 export function PlayPauseButton({
   verseId,
@@ -39,6 +40,7 @@ export function PlayPauseButton({
           }
         } else {
           playAudioUrl(verseMediaSource, verseId);
+          checkForAudio(verseMediaSource);
         }
       }}
     >
