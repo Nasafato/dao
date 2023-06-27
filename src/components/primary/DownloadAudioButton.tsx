@@ -9,10 +9,14 @@ import { Spinner } from "../shared/Spinner";
 import clsx from "clsx";
 import { useDaoStore } from "../../state/store";
 import { useMutation } from "@tanstack/react-query";
+import { buildVerseMediaSourceUrl } from "../../utils";
+import { button } from "../../styles";
 
-export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
+export function DownloadAudioButton({ verseId }: { verseId: number }) {
+  const audioUrl = buildVerseMediaSourceUrl(verseId);
   const cachedAudio = useDaoStore((state) => state.cachedAudio);
   const setAudioCached = useDaoStore((state) => state.setAudioCached);
+  const isAudioCached = useDaoStore((state) => state.cachedAudio[audioUrl]);
   const isCached = !!cachedAudio[audioUrl];
 
   const checkCache = useCallback(async () => {
@@ -22,7 +26,7 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
 
   useEffect(() => {
     checkCache();
-  }, [checkCache]);
+  }, [checkCache, isAudioCached]);
 
   const fetchAudioMutation = useMutation(
     async () => {
@@ -31,7 +35,9 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
         setAudioCached(audioUrl, true);
         return;
       }
-      await fetch(audioUrl);
+      await fetch(audioUrl, {
+        mode: "no-cors",
+      });
     },
     {
       onSuccess: () => {
@@ -76,7 +82,10 @@ export function DownloadAudioButton({ audioUrl }: { audioUrl: string }) {
 
   return (
     <button onClick={onClick} type="button">
-      <ArrowDownTrayIcon className="w-5 h-5 text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200" />
+      <ArrowDownTrayIcon
+        className={button({ color: "secondary", size: "md" })}
+        // className="w-5 h-5 text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200" />
+      />
     </button>
   );
 }

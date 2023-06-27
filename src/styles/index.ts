@@ -90,7 +90,7 @@ export const button = tv({
   defaultVariants: {
     color: "primary",
     size: "md",
-    rounded: "none",
+    rounded: "sm",
   },
 });
 

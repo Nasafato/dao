@@ -47,21 +47,27 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
+// const DAO_CDN_MP3_PATTERN =
+//   /^https:\/\/dao-worker\.daodejing\.workers\.dev\/.*\.mp3$/;
 const DAO_CDN_MP3_PATTERN =
   /^https:\/\/dao-worker\.daodejing\.workers\.dev\/.*\.mp3$/;
+const BUNNY_CDN_MP3_PATTERN = /^https:\/\/daodejing\.b-cdn\.net\/.*\.mp3$/;
 
 self.addEventListener("fetch", (event) => {
   if (!event) return;
 
   const { request } = event;
   // console.log("request", request);
-  if (request.url.match(DAO_CDN_MP3_PATTERN)) {
+  if (
+    request.url.match(DAO_CDN_MP3_PATTERN) ||
+    request.url.match(BUNNY_CDN_MP3_PATTERN)
+  ) {
     // console.log("matched mp3 pattern", request.mode);
     event.respondWith(
       (async function () {
         // Check if the request is in the cache
         const cache = await caches.open(DAO_CDN_MP3_CACHE);
-        const corsRequest = new Request(request, { mode: "cors" });
+        const corsRequest = new Request(request, { mode: "no-cors" });
         const cachedResponse = await cache.match(corsRequest);
         if (cachedResponse) {
           // console.log("Serving from cache:", corsRequest);
