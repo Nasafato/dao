@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { DaoVerse } from "@/types";
 
 interface DaoStore {
+  /* Language. */
+  language: "English" | "Chinese";
+  setLanguage: (language: "English" | "Chinese") => void;
+
   verseBeingTested: null | DaoVerse;
   setVerseBeingTested: (verse: DaoVerse | null) => void;
   cachedAudio: Record<string, boolean>;
@@ -36,6 +40,9 @@ interface DaoStore {
   setIsPopoverOpen: (status: boolean) => void;
 }
 export const useDaoStore = create<DaoStore>((set) => ({
+  language: "Chinese",
+  setLanguage: (language: "English" | "Chinese") => set({ language }),
+
   isPlaylistOpen: false,
   setIsPlaylistOpen: (status: boolean) => set({ isPlaylistOpen: status }),
 

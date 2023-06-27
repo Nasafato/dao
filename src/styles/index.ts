@@ -48,6 +48,23 @@ export const background = tv({
   },
 });
 
+export const VerseStyle = tv({
+  base: `
+    font-normal text-gray-800 dark:text-gray-100">
+  `,
+  variants: {
+    size: {
+      small: "text-sm",
+      medium: "text-md",
+      large: "text-lg",
+      xl: "text-xl",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
+});
+
 export const button = tv({
   base: `
     justify-center flex items-center
@@ -56,7 +73,7 @@ export const button = tv({
   variants: {
     color: {
       primary:
-        "text-gray-900 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
+        "text-gray-900 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400 hover:underline",
       secondary: `
         text-gray-400 hover:text-gray-500 inverse:dark:text-gray-400 inverse:dark:hover:text-gray-500
         dark:hover:text-gray-400 inverse:text-gray-400 inverse:hover:text-gray-200
@@ -88,6 +105,7 @@ export const button = tv({
       full: "rounded-full",
     },
     size: {
+      none: "",
       sm: "h-4 w-4",
       md: "h-5 w-5",
       lg: "h-6 w-6",
@@ -95,7 +113,7 @@ export const button = tv({
   },
   defaultVariants: {
     color: "primary",
-    size: "md",
+    size: "none",
     rounded: "sm",
   },
 });

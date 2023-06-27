@@ -6,7 +6,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { DAO_CDN_MP3_CACHE } from "../../consts";
 import { Spinner } from "../shared/Spinner";
-import clsx from "clsx";
 import { useDaoStore } from "../../state/store";
 import { useMutation } from "@tanstack/react-query";
 import { buildVerseMediaSourceUrl } from "../../utils";
