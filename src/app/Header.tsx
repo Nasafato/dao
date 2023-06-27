@@ -1,13 +1,57 @@
+"use client";
+// import { Listbox } from "@headlessui/react";
+import { Menu } from "@headlessui/react";
 import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
-import { twMerge } from "tailwind-merge";
-import { HeaderHeight, SoftBorderStyle, border } from "../styles";
+import { twJoin, twMerge } from "tailwind-merge";
+import {
+  BorderStyle,
+  HeaderHeight,
+  SoftBorderStyle,
+  background,
+  border,
+  button,
+} from "../styles";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
 
-const links = [
+type Link = {
+  name: string | ((path: string | null) => string);
+  href: string;
+  children?: Link[];
+};
+
+const links: Link[] = [
   {
-    name: "Home",
+    name: (path: string | null) => {
+      if (!path) {
+        return "Verses";
+      }
+
+      if (path === "/") {
+        return "Chinese";
+      }
+      if (path.includes("/chinese")) {
+        return "Chinese";
+      }
+      if (path.includes("/english")) {
+        return "English";
+      }
+      return "Verses";
+    },
     href: "/",
+    children: [
+      {
+        name: "Chinese",
+        href: "/verses/chinese",
+      },
+      {
+        name: "English",
+        href: "/verses/english",
+      },
+    ],
   },
   {
     name: "About",
@@ -20,7 +64,7 @@ const links = [
 ];
 
 export function Header() {
-  // const urlPath = usePathname();
+  const urlPath = usePathname();
   // const isActive: (pathname: string) => boolean = (pathname) =>
   //   urlPath === pathname;
 
@@ -28,15 +72,7 @@ export function Header() {
   right = (
     <ul className="flex text-sm items-center font-sans">
       {links.map((link) => (
-        <li
-          key={link.href}
-          className={twMerge(
-            "border-r border-gray-300 pr-2 pl-2 hover:underline last-of-type:border-r-0"
-            // isActive(link.href) && "underline"
-          )}
-        >
-          <Link href={link.href}>{link.name}</Link>
-        </li>
+        <LinkWithChildren link={link} key={link.href} />
       ))}
     </ul>
   );
@@ -58,4 +94,70 @@ export function Header() {
       </div>
     </nav>
   );
+}
+
+function LinkWithChildren({
+  link,
+  className,
+}: {
+  link: Link;
+  className?: string;
+}) {
+  const pathname = usePathname();
+  const name =
+    typeof link.name === "function" ? link.name(pathname) : link.name;
+
+  let content;
+  if (!link.children) {
+    content = (
+      <Link href={link.href} className={className}>
+        {name}
+      </Link>
+    );
+  } else {
+    content = (
+      <Menu as="div" className="relative">
+        <Menu.Button className="hover:underline">
+          <div className="flex items-center text">
+            <Link href="/verses/chinese">{name}</Link>
+            <ChevronDownIcon className="h-4 w-4" />
+          </div>
+        </Menu.Button>
+        <Menu.Items
+          className={twJoin(
+            "absolute top-5 right-0 border",
+            border(),
+            background()
+          )}
+        >
+          <ul>
+            {link.children.map((c) => (
+              <Menu.Item
+                key={c.href}
+                href={c.href}
+                as={Link}
+                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-800"
+              >
+                <LinkName name={c.name} />
+              </Menu.Item>
+            ))}
+          </ul>
+        </Menu.Items>
+      </Menu>
+    );
+  }
+  return (
+    <li
+      key={link.href}
+      className={twMerge("pr-2 pl-2 hover:underline flex items-center")}
+    >
+      {content}
+    </li>
+  );
+}
+
+function LinkName({ name }: { name: string | ((path: string) => string) }) {
+  const pathname = usePathname();
+  const linkName = typeof name === "function" ? name(pathname ?? "") : name;
+  return <>{linkName}</>;
 }

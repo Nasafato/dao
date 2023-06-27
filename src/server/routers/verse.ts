@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DAO_VERSES, DAO_COMBINED_VERSES } from "../../lib/daoText";
+import { DAO_VERSES, DAO_COMBINED } from "../../lib/daoText";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const verseRouter = createTRPCRouter({
@@ -20,6 +20,6 @@ export const verseRouter = createTRPCRouter({
         throw new Error("Verse ID must be between 1 and 81");
       }
 
-      return DAO_COMBINED_VERSES[verseId - 1];
+      return DAO_COMBINED[verseId - 1];
     }),
 });
