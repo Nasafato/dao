@@ -64,7 +64,13 @@ export const button = tv({
       icon: `
         text-gray-900 hover:text-gray-900
         dark:text-gray-500 dark:hover:text-gray-500
-        hover:bg-gray-200 hover:dark:bg-gray-700
+        hover:bg-gray-200 hover:dark:bg-gray-700,
+      `,
+      green: `
+        text-green-500 hover:text-green-600
+      `,
+      red: `
+        text-red-500 hover:text-red-600
       `,
     },
     ring: {

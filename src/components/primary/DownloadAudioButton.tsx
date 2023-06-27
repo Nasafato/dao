@@ -62,8 +62,20 @@ export function DownloadAudioButton({ verseId }: { verseId: number }) {
   if (isCached) {
     return (
       <button onClick={onClearDownloadClick} className="group">
-        <CheckIcon className="text-green-500 w-4 h-4 group-hover:hidden" />
-        <XMarkIcon className="text-red-500 w-4 h-4 hidden group-hover:block" />
+        <CheckIcon
+          className={button({
+            size: "md",
+            color: "green",
+            class: "group-hover:hidden",
+          })}
+        />
+        <XMarkIcon
+          className={button({
+            size: "md",
+            color: "red",
+            class: "hidden group-hover:block",
+          })}
+        />
       </button>
     );
   }
@@ -72,9 +84,11 @@ export function DownloadAudioButton({ verseId }: { verseId: number }) {
     return (
       <button className="group">
         <Spinner
-          className={clsx(
-            "w-5 h-5 mr-2 text-gray-200 dark:text-gray-400 fill-gray-800 dark:fill-gray-600"
-          )}
+          className={button({
+            size: "md",
+            color: "secondary",
+            class: "fill-gray-800",
+          })}
         />
       </button>
     );
