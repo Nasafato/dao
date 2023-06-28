@@ -35,6 +35,16 @@ export default async function VersesEnglish(props: {
             );
           })}
         </section>
+        <section className="mt-5 pb-5">
+          <h2 className={HeadingStyle()}>The rest</h2>
+          <p
+            className={VerseStyle({
+              size: "large",
+            })}
+          >
+            I haven&apos;t translated these yet. Stay tuned.
+          </p>
+        </section>
       </div>
     );
   }
