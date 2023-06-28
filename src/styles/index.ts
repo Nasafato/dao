@@ -88,8 +88,10 @@ export const button = tv({
   `,
   variants: {
     color: {
-      primary:
-        "text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-400 hover:underline",
+      primary: `
+        text-gray-900 hover:text-gray-700 
+        dark:text-gray-200 dark:hover:text-gray-100 hover:underline
+      `,
       secondary: `
         text-gray-400 hover:text-gray-500 inverse:dark:text-gray-400 inverse:dark:hover:text-gray-500
         dark:hover:text-gray-400 inverse:text-gray-400 inverse:hover:text-gray-200

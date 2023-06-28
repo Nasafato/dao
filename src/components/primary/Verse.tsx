@@ -168,7 +168,6 @@ export function Verse({
         </div>
       </div>
       <VerseText text={verse.text} verseId={verse.id} />
-
       {showDescription && moreQuery.data && (
         <div className="pl-8">
           <VerseDescription verseId={verse.id} data={moreQuery.data} />

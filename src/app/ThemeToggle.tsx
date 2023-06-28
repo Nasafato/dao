@@ -66,7 +66,7 @@ export function ThemeToggle() {
           theme-system:dark:[&_.moon-icon]:hidden
           theme-system:[&_.sun-icon]:hidden
           theme-system:[&._moon-icon]:hidden
-        }`}
+        `}
         onClick={(ev) => {
           ev.preventDefault();
 

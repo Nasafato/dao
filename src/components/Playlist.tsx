@@ -1,13 +1,11 @@
 "use client";
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import Link from "next/link";
+import { Transition } from "@headlessui/react";
+import { Bars3Icon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useDaoStore } from "../state/store";
+import { Fragment } from "react";
 import { twJoin } from "tailwind-merge";
-import { Bars3Icon, ChevronDoubleDownIcon } from "@heroicons/react/20/solid";
-import { background, border, button, verticalSpacing } from "../styles";
-import { convertNumberToChinese } from "../serverUtils";
+import { useDaoStore } from "../state/store";
+import { background, border, button } from "../styles";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
 
@@ -23,8 +21,6 @@ export function Playlist() {
   const audioVerseId = useDaoStore((state) => state.audioVerseId);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
-  const language = useDaoStore((state) => state.language);
-  const setLanguage = useDaoStore((state) => state.setLanguage);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -80,7 +76,7 @@ export function Playlist() {
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div
             className={
               "flex-1 flex items-center justify-between border-t py-2 px-3 " +
@@ -97,7 +93,7 @@ export function Playlist() {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Transition.Root>
   );
