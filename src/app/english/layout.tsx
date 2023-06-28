@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { Container } from "../../components/shared/PageLayout";
-import { button } from "../../styles";
+import { HeadingStyle, button } from "../../styles";
 import { usePathname } from "next/navigation";
 import { Translators } from "../../../types/materials";
 import { capitalize } from "../../utils";
+import { twJoin } from "tailwind-merge";
 
 export default function VersesEnglishLayout({
   children,
@@ -14,16 +15,25 @@ export default function VersesEnglishLayout({
   const pathname = usePathname();
   return (
     <Container>
-      <div>
-        <label>Translation</label>
+      <nav className="mb-8">
+        <h3 className={twJoin(HeadingStyle(), "mb-1")}>Translation</h3>
         <div className="flex items-center gap-x-2">
-          {Translators.map((t) => (
-            <Link key={t} href={`/english/${t}`} className={`${button()}`}>
-              <span>{capitalize(t)}</span>
-            </Link>
-          ))}
+          {Translators.map((t) => {
+            const isActive = pathname?.includes(t) ?? false;
+            return (
+              <Link
+                key={t}
+                href={`/english/${t}`}
+                className={` ${button()} py-1 px-2 hover:bg-gray-200 dark:hover:bg-gray-800 ${
+                  isActive ? "bg-gray-200 dark:bg-gray-800" : ""
+                } `}
+              >
+                <span>{capitalize(t)}</span>
+              </Link>
+            );
+          })}
         </div>
-      </div>
+      </nav>
       {children}
     </Container>
   );

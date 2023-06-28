@@ -7,8 +7,10 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SingleCharDefinition } from "../../components/primary/SingleCharDefinition";
 import { Spinner } from "../../components/shared/Spinner";
 import { trpcClient } from "../../lib/trpcClient";
+import { button } from "../../styles";
 
-const LiStyle = "ring-1 ring-gray-300 rounded-md hover:bg-gray-100";
+const LiStyle =
+  "ring-1 ring-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export function Dictionary() {
@@ -71,7 +73,9 @@ export function Dictionary() {
           {commonSearchTerms.map((term) => (
             <li className={LiStyle} key={term}>
               <button
-                className="px-2 py-1"
+                className={`
+                  px-2 py-1
+                `}
                 onClick={() => {
                   updateSearchTerm(term);
                   if (inputRef.current) {
@@ -95,7 +99,14 @@ export function Dictionary() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue-300 sm:text-sm"
+            className={`
+              block w-full pl-10 pr-3 py-2 border sm:text-sm rounded-md leading-5 
+            bg-white dark:bg-inherit
+              border-gray-300 
+               placeholder-gray-500 
+              focus:outline-none focus:placeholder-gray-400 
+              focus:border-blue-300 focus:ring-blue-300 
+            `}
             placeholder=""
             ref={inputRef}
           />

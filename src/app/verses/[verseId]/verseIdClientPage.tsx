@@ -23,7 +23,7 @@ export default function VersePage({ verse }: { verse: VerseCombined }) {
           </h4>
           <Link
             href={{
-              pathname: "/",
+              pathname: "/chinese",
               hash: `#dao${verseId}`,
             }}
             className={twMerge(
@@ -38,12 +38,6 @@ export default function VersePage({ verse }: { verse: VerseCombined }) {
           </Link>
         </div>
         <VerseText text={verse.verse} verseId={verse.verseId} />
-        <div className="text-gray-400 mt-6 flex items-center gap-x-1 group">
-          简介
-          <span className="text-xs tracking-wide group-hover:block hidden group-active:block">
-            Description
-          </span>
-        </div>
         <VerseDescription data={verse} verseId={verse.verseId} />
       </Container>
     </PopoverProvider>

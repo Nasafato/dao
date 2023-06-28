@@ -118,7 +118,7 @@ function LinkWithChildren({
     content = (
       <Menu as="div" className="relative">
         <Menu.Button className="hover:underline">
-          <div className="flex items-center text">
+          <div className="flex items-center text gap-x-1">
             <Link
               href={pathname?.includes("english") ? "/chinese" : "/english/gou"}
             >
@@ -129,22 +129,28 @@ function LinkWithChildren({
         </Menu.Button>
         <Menu.Items
           className={twJoin(
-            "absolute top-5 right-0 border",
+            "absolute top-6 right-0 border w-32",
             border(),
             background()
           )}
         >
           <ul>
-            {link.children.map((c) => (
-              <Menu.Item
-                key={c.href}
-                href={c.href}
-                as={Link}
-                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-800"
-              >
-                <LinkName name={c.name} />
-              </Menu.Item>
-            ))}
+            {link.children.map((c) => {
+              const isActive = pathname?.includes(c.href);
+              return (
+                <Menu.Item
+                  key={c.href}
+                  href={c.href}
+                  as={Link}
+                  className={twJoin(
+                    "block px-3 py-2 hover:underline",
+                    isActive && "bg-gray-200 dark:bg-gray-800"
+                  )}
+                >
+                  <LinkName name={c.name} />
+                </Menu.Item>
+              );
+            })}
           </ul>
         </Menu.Items>
       </Menu>

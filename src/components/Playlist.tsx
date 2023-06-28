@@ -80,7 +80,7 @@ export function Playlist() {
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div
             className={
               "flex-1 flex items-center justify-between border-t py-2 px-3 " +
@@ -97,7 +97,7 @@ export function Playlist() {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Transition.Root>
   );
