@@ -3,6 +3,7 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
@@ -19,7 +20,12 @@ import {
 } from "../../lib/localDb/verseMemoryStatus";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "../../lib/reactQuery";
-import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
+import {
+  SecondaryButtonStyle,
+  SecondaryDarkModeTextStyle,
+  TooltipStyle,
+  background,
+} from "../../styles";
 import { DaoVerse } from "../../types";
 import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
@@ -85,53 +91,81 @@ export function Verse({
               verseStatus={verseStatus}
               updateStatusMutation={updateStatusMutation}
             />
-            <button
-              className="flex items-center hover:underline text-gray-600 dark:text-gray-50"
-              onClick={() => {
-                setShowDescription(!showDescription);
-              }}
-            >
-              <span
-                className={twJoin(
-                  "group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800",
-                  "px-1"
-                )}
-              >
-                {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-                  <Spinner className="h-4 w-4 text-gray-200 fill-gray-500" />
-                ) : showDescription ? (
-                  <XMarkIcon
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <button
+                  className="flex items-center hover:underline text-gray-600 dark:text-gray-50"
+                  onClick={() => {
+                    setShowDescription(!showDescription);
+                  }}
+                >
+                  <span
                     className={twJoin(
-                      SecondaryButtonStyle,
-                      // SecondaryButtonPadding,
-                      "border-1 border-blue-500"
+                      "group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800",
+                      "px-1"
                     )}
-                  />
-                ) : (
-                  <ChevronUpDownIcon
-                    className={twJoin(
-                      SecondaryButtonStyle
-                      // SecondaryButtonPadding,
+                  >
+                    {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
+                      <Spinner className="h-4 w-4 text-gray-200 fill-gray-500" />
+                    ) : showDescription ? (
+                      <XMarkIcon
+                        className={twJoin(
+                          SecondaryButtonStyle,
+                          // SecondaryButtonPadding,
+                          "border-1 border-blue-500"
+                        )}
+                      />
+                    ) : (
+                      <ChevronUpDownIcon
+                        className={twJoin(
+                          SecondaryButtonStyle
+                          // SecondaryButtonPadding,
+                        )}
+                      />
                     )}
+                  </span>
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  sideOffset={3}
+                  side={verseId === 1 ? "bottom" : "top"}
+                  className={twJoin(TooltipStyle().content())}
+                >
+                  Show more
+                  <Tooltip.Arrow className={TooltipStyle().arrow()} />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Link
+                  href={{
+                    pathname: `/verses/${verse.id}`,
+                    hash: `#dao${verse.id}`,
+                  }}
+                  className={twJoin(
+                    SecondaryDarkModeTextStyle,
+                    "text-sm flex items-center hover:underline gap-x-1 px-1"
+                  )}
+                >
+                  Go{" "}
+                  <ArrowRightIcon
+                    className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
                   />
-                )}
-              </span>
-            </button>
-            <Link
-              href={{
-                pathname: `/verses/${verse.id}`,
-                hash: `#dao${verse.id}`,
-              }}
-              className={twJoin(
-                SecondaryDarkModeTextStyle,
-                "text-sm flex items-center hover:underline gap-x-1 px-1"
-              )}
-            >
-              Go{" "}
-              <ArrowRightIcon
-                className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
-              />
-            </Link>
+                </Link>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  sideOffset={3}
+                  side={verseId === 1 ? "bottom" : "top"}
+                  className={twJoin(TooltipStyle().content())}
+                >
+                  Go to verse page
+                  <Tooltip.Arrow className={TooltipStyle().arrow()} />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
           </div>
         </div>
       </div>

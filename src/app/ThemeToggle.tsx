@@ -56,12 +56,16 @@ export function ThemeToggle() {
         group-hover:bg-gray-200 dark:group-hover:bg-[#313131]
           [&_.moon-icon]:hidden
           [&_.system-icon]:hidden
-          theme-system:[&_.system-icon]:inline
-          theme-system:[&_.sun-icon]:hidden
-          theme-system:[&._moon-icon]:hidden
+          
           dark:[&_.system-icon]:hidden
           dark:[&_.moon-icon]:inline
           dark:[&_.sun-icon]:hidden
+
+          theme-system:[&_.system-icon]:inline
+          theme-system:dark:[&_.system-icon]:inline
+          theme-system:dark:[&_.moon-icon]:hidden
+          theme-system:[&_.sun-icon]:hidden
+          theme-system:[&._moon-icon]:hidden
         }`}
         onClick={(ev) => {
           ev.preventDefault();

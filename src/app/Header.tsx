@@ -119,7 +119,15 @@ function LinkWithChildren({
       <Menu as="div" className="relative">
         <Menu.Button className="hover:underline">
           <div className="flex items-center text">
-            <Link href="/verses/chinese">{name}</Link>
+            <Link
+              href={
+                pathname?.includes("english")
+                  ? "/verses/chinese"
+                  : "/verses/english"
+              }
+            >
+              {name}
+            </Link>
             <ChevronDownIcon className="h-4 w-4" />
           </div>
         </Menu.Button>
