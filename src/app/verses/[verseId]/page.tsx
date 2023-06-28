@@ -7,22 +7,13 @@ export default async function VerseDetailsPage({
   params: { verseId: string };
 }) {
   const verseId = params.verseId;
-  const { verse, description } = await getVerse(verseId);
-  return <VersePage verse={verse} description={description} />;
-}
-
-async function getVerse(verseId: string) {
   const verseIdNumber = Number(verseId);
   if (isNaN(verseIdNumber)) throw new Error("Invalid verseId");
   if (verseIdNumber < 1 || verseIdNumber > 81)
     throw new Error("Invalid verseId");
-  const verse = DAO_VERSES.find((v) => v.id.toString() === verseId);
+  const verse = DAO_COMBINED.find((v) => v.verseId.toString() === verseId);
   if (!verse) throw new Error("No verse");
-  const description = DAO_COMBINED[verseIdNumber - 1];
-  return {
-    verse,
-    description,
-  };
+  return <VersePage verse={verse} />;
 }
 
 export async function generateStaticParams() {

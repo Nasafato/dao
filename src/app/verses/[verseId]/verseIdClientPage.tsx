@@ -8,18 +8,10 @@ import { VerseHeaderStyle } from "../../../components/primary/VerseHeader";
 import { VerseText } from "../../../components/primary/VerseText";
 import { Container } from "../../../components/shared/PageLayout";
 import { SecondaryDarkModeTextStyle } from "../../../styles";
+import { VerseCombined } from "../../../../types/materials";
 
-export default function VersePage({
-  verse,
-  description,
-}: {
-  verse: { id: number; text: string };
-  description: {
-    translations: { [key: string]: string };
-    description: string;
-  };
-}) {
-  const verseId = verse.id;
+export default function VersePage({ verse }: { verse: VerseCombined }) {
+  const verseId = verse.verseId;
   return (
     <PopoverProvider>
       <Container>
@@ -45,14 +37,14 @@ export default function VersePage({
             Back
           </Link>
         </div>
-        <VerseText text={verse.text} verseId={verse.id} />
+        <VerseText text={verse.verse} verseId={verse.verseId} />
         <div className="text-gray-400 mt-6 flex items-center gap-x-1 group">
           简介
           <span className="text-xs tracking-wide group-hover:block hidden group-active:block">
             Description
           </span>
         </div>
-        <VerseDescription data={description} verseId={verse.id} />
+        <VerseDescription data={verse} verseId={verse.verseId} />
       </Container>
     </PopoverProvider>
   );

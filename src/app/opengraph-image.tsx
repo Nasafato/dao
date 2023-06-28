@@ -3,7 +3,7 @@ export const revalidate = 60;
 
 import { ImageResponse } from "next/server";
 import { DAO_VERSES } from "../lib/daoText";
-import TRANSLATIONS from "../../materials/translations/translations.json";
+import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../lib/daoText";
 import { twJoin } from "tailwind-merge";
 import { fetchFont } from "../serverUtils";
 import { OgLayout } from "../components/OgLayout";

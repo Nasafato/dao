@@ -29,3 +29,8 @@ Memorization works by a `nextReview` date for each verse. The formula is pretty 
 This should work offline, but I should also be able to go online, sync progress to my desktop from my phone, or vice-versa, and handle conflicts.
 
 
+
+# English sources
+- https://en.wikibooks.org/wiki/Dao_De_Jing
+- http://www.acmuller.net/con-dao/daodejing.html#div-2
+- https://www.gutenberg.org/files/49965/49965-h/49965-h.htm
