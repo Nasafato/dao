@@ -18,8 +18,16 @@ all: verses descriptions dictionary translations combined
 # Generally, I'd just run make combined, rather than all, since it doesn't require the dictionary.
 combined: combined.json
 
-combined.json: translations/translations.json verses/dao.json descriptions/descriptions.json buildCombined.ts
-	pnpm tsx materials/buildCombined.ts materials/verses/dao.json materials/descriptions/descriptions.json materials/translations/translations.json > ./combined.json
+COMBINED_INPUT_FILES := translations/translations.json verses/dao.json descriptions/descriptions.json explanations/explanations.json
+
+combined.json: $(COMBINED_INPUT_FILES) buildCombined.ts
+	pnpm tsx \
+		materials/buildCombined.ts \
+		materials/verses/dao.json \
+		materials/descriptions/descriptions.json \
+		materials/translations/translations.json \
+		materials/explanations/explanations.json \
+		> ./combined.json
 
 translations: translations/translations.json
 
@@ -28,6 +36,13 @@ translations/translations.json: translations/historicalTranslations.json transla
 
 verses/dao.json: verses/build.ts verses/dao.txt 
 	pnpm tsx materials/$<
+
+explanations: explanations/explanations.json
+
+EXPLANATION_FILES := $(wildcard explanations/explanations/*)
+
+explanations/explanations.json: explanations/buildExplanations.ts $(FILES)
+	pnpm tsx materials/$< > ./explanations/explanations.json
 
 descriptions: descriptions/descriptions.json
 

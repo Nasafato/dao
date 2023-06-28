@@ -1,18 +1,7 @@
 // MediaWindow.js
+import { atom } from "jotai";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { atom, useAtom } from "jotai";
-import React, {
-  useContext,
-  createContext,
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  useCallback,
-  Ref,
-  MutableRefObject,
-} from "react";
-import { useLogPropChanges } from "../../hooks";
 import { tryParseDaoIndex } from "../../utils";
 // import MediaControls from "./MediaControls";
 // import { AudioPlayer } from "./HeadlessAudioPlayer";

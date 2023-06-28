@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { prisma } from "../../lib/db";
-import UniqueAllCharsDict from "../../../materials/dictionary/uniqueAllCharsDict.json";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { DenormalizedDictSchema } from "../../utils";
+const UniqueAllCharsDict: DenormalizedDictSchema = require("../../../materials/dictionary/uniqueAllCharsDict.json");
 
 export const definitionRouter = createTRPCRouter({
   findOne: publicProcedure

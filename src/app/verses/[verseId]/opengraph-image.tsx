@@ -4,7 +4,7 @@ export const revalidate = 60;
 import { computeUniqueChars, fetchFont } from "@/serverUtils";
 import { ImageResponse } from "next/server";
 import { twJoin } from "tailwind-merge";
-import TRANSLATIONS from "../../../../materials/translations/translations.json";
+import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../../../lib/daoText";
 import {
   OgLayout,
   TranslationStyle,
