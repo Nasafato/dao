@@ -29,6 +29,16 @@ Memorization works by a `nextReview` date for each verse. The formula is pretty 
 This should work offline, but I should also be able to go online, sync progress to my desktop from my phone, or vice-versa, and handle conflicts.
 
 
+# Picking translations
+Configuration is interesting. Should we just have one translation for each verse that gets saved? A preferred translation for a verse?
+
+Or just let it be set page-wide? I think configuration is necessary. Though, it's kind of impossible to do so on mobile.
+
+There are a lot of choices here. So let's forget configuration for now, and just let the user switch between translations as necessary.
+
+The thing is, there's an English page plus a regular description page with translations.
+
+
 
 # English sources
 - https://en.wikibooks.org/wiki/Dao_De_Jing
