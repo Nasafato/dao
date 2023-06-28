@@ -41,6 +41,10 @@ export const background = tv({
         bg-white inverse:dark:bg-white text-gray-900 inverse:dark:text-gray-900
         dark:bg-gray-950 inverse:bg-gray-950 dark:text-gray-100 inverse:text-gray-100
       `,
+      dark: `
+        bg-black text-white
+        dark:bg-white dark:text-black
+      `,
     },
   },
   defaultVariants: {
@@ -132,4 +136,11 @@ export const button = tv({
 
 export const border = tv({
   base: `border-gray-950 dark:border-gray-200/50`,
+});
+
+export const TooltipStyle = tv({
+  slots: {
+    content: `${background({ color: "dark" })} px-2 py-1 text-xs rounded-md`,
+    arrow: "fill-back dark:fill-white",
+  },
 });

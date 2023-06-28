@@ -5,6 +5,7 @@ import {
   PlusCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { UseMutationResult } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
@@ -12,7 +13,7 @@ import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
 import { useDaoStore } from "../../state/store";
 import { DaoVerse } from "../../types";
 import { Spinner } from "../shared/Spinner";
-import { SecondaryButtonStyle } from "../../styles";
+import { SecondaryButtonStyle, TooltipStyle } from "../../styles";
 import { twJoin } from "tailwind-merge";
 
 export function AuxVerseLearningMenu({
@@ -55,9 +56,25 @@ export function AuxVerseLearningMenu({
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex items-center">
-          <Menu.Button className="inline-flex w-full px-1 items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 py-1 underline-offset-2 hover:underline group hover:bg-gray-200 dark:hover:bg-gray-800">
-            <EllipsisVerticalIcon className={twJoin(SecondaryButtonStyle)} />
-          </Menu.Button>
+          <Tooltip.Root>
+            <Tooltip.Trigger asChild>
+              <Menu.Button className="inline-flex w-full px-1 items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-gray-600 hover:text-gray-500 py-1 underline-offset-2 hover:underline group hover:bg-gray-200 dark:hover:bg-gray-800">
+                <EllipsisVerticalIcon
+                  className={twJoin(SecondaryButtonStyle)}
+                />
+              </Menu.Button>
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Content
+                sideOffset={3}
+                side={verse.id === 1 ? "bottom" : "top"}
+                className={twJoin(TooltipStyle().content())}
+              >
+                Menu
+                <Tooltip.Arrow className={TooltipStyle().arrow()} />
+              </Tooltip.Content>
+            </Tooltip.Portal>
+          </Tooltip.Root>
         </div>
         <Transition
           as={Fragment}
