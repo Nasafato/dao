@@ -45,11 +45,11 @@ const links: Link[] = [
     children: [
       {
         name: "Chinese",
-        href: "/verses/chinese",
+        href: "/chinese",
       },
       {
         name: "English",
-        href: "/verses/english",
+        href: "/english/gou",
       },
     ],
   },

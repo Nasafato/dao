@@ -1,9 +1,10 @@
 import { z } from "zod";
 
+export const Translators = ["gou", "goddard", "legge", "susuki"] as const;
 export const VerseTranslationSchema = z.object({
   gou: z.string().optional(),
   goddard: z.string(),
-  sususki: z.string(),
+  susuki: z.string(),
   legge: z.string(),
 });
 export type VerseTranslation = z.infer<typeof VerseTranslationSchema>;
