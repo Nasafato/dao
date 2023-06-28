@@ -1,12 +1,13 @@
 import { Suspense } from "react";
-import { Dictionary } from "./Dictionary";
+import { Dictionary, Fallback } from "./Dictionary";
+import { Container } from "../../components/shared/PageLayout";
 
 export default function DictionaryPage() {
   return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
+    <Container>
+      <Suspense fallback={<Fallback />}>
         <Dictionary />
       </Suspense>
-    </div>
+    </Container>
   );
 }

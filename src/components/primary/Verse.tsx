@@ -141,6 +141,9 @@ export function Verse({
                   href={{
                     pathname: `/verses/${verse.id}`,
                     hash: `#dao${verse.id}`,
+                    query: {
+                      prev: `/chinese`,
+                    },
                   }}
                   className={twJoin(
                     SecondaryDarkModeTextStyle,

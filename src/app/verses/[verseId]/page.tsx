@@ -1,5 +1,5 @@
-import VersePage from "./verseIdClientPage";
-import { DAO_COMBINED, DAO_VERSES } from "../../../lib/daoText";
+import { DAO_COMBINED } from "../../../lib/daoText";
+import { VerseDetails } from "./VerseDetails";
 
 export default async function VerseDetailsPage({
   params,
@@ -13,7 +13,7 @@ export default async function VerseDetailsPage({
     throw new Error("Invalid verseId");
   const verse = DAO_COMBINED.find((v) => v.verseId.toString() === verseId);
   if (!verse) throw new Error("No verse");
-  return <VersePage verse={verse} />;
+  return <VerseDetails verse={verse} />;
 }
 
 export async function generateStaticParams() {
