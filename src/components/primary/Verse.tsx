@@ -24,10 +24,8 @@ import {
   SecondaryButtonStyle,
   SecondaryDarkModeTextStyle,
   TooltipStyle,
-  background,
 } from "../../styles";
 import { DaoVerse } from "../../types";
-import { buildVerseMediaSourceUrl } from "../../utils";
 import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
 import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
 import { Spinner } from "../shared/Spinner";
