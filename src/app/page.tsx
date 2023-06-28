@@ -1,6 +1,5 @@
-import { RootClientPage } from "./RootClientPage";
-import { DAO_VERSES } from "../lib/daoText";
+import { redirect } from "next/navigation";
 
 export default function RootPage() {
-  return <RootClientPage verses={DAO_VERSES} />;
+  redirect("/chinese");
 }

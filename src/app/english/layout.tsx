@@ -24,7 +24,6 @@ export default function VersesEnglishLayout({
           ))}
         </div>
       </div>
-      <div>ASDFAdfadfadsf</div>
       {children}
     </Container>
   );
