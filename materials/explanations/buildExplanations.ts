@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const explanationsPath = path.join(__dirname, "./explanations");
+const explanationsPath = path.join(__dirname, "./files");
 
 async function main() {
   const files = await fs.promises.readdir(explanationsPath);
