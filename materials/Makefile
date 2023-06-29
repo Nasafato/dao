@@ -31,7 +31,9 @@ combined.json: $(COMBINED_INPUT_FILES) buildCombined.ts
 
 translations: translations/translations.json
 
-translations/translations.json: translations/historicalTranslations.json translations/customTranslations.json translations/buildTranslations.ts
+TRANSLATION_FILES := $(wildcard translations/files/*)
+
+translations/translations.json: $(TRANSLATION_FILES) translations/buildTranslations.ts
 	pnpm tsx materials/translations/buildTranslations.ts > translations/translations.json
 
 verses/dao.json: verses/build.ts verses/dao.txt 

@@ -1,10 +1,10 @@
-import { useRef, useMemo, useState, useEffect } from "react";
-import { CDN_URL } from "./consts";
-import { z } from "zod";
 import { Definition, Entry } from "@prisma/client";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { DenormalizedDictSchema, NormalizedDict } from "../types/materials";
+import { CDN_URL } from "./consts";
 
 export function tryParseDaoIndex(i: unknown) {
-  const result = Number.parseInt(i as string, 10);
+  const result = Number(i);
   if (Number.isNaN(result)) {
     return null;
   }
@@ -161,22 +161,6 @@ export function sortEntriesByRelevancy(
       };
     });
 }
-
-export const DenormalizedDictSchema = z.object({
-  id: z.array(z.number()),
-  pronunciation: z.array(z.string()),
-  simplified: z.array(z.string()),
-  traditional: z.array(z.string()),
-  relevancy: z.array(z.number()),
-  definitions: z.object({
-    id: z.array(z.number()),
-    entryId: z.array(z.number()),
-    definition: z.array(z.string()),
-    relevancy: z.array(z.number()),
-  }),
-});
-export type DenormalizedDictSchema = z.infer<typeof DenormalizedDictSchema>;
-export type NormalizedDict = Array<Entry & { definitions: Definition[] }>;
 
 export function findMatchingEntries(dict: NormalizedDict, char: string) {
   const entries = [];
