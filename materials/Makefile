@@ -43,18 +43,32 @@ verses/dao.json: verses/build.ts verses/dao.txt
 # Audio Recordings: Generate for only translations for now.
 ##################
 
-# AUDIO_FILES := audio/translations/01gou.txt
-AUDIO_FILES := audio/translations/01gou.mp3 audio/translations/02gou.mp3 audio/translations/03gou.mp3
+FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
+FILTER_IN = $(foreach v,$(2),$(if $(findstring $(1),$(v)),$(v),))
 
-audio/translations/%.mp3: translations/files/%.txt audio/buildAudio.ts
+TRANSLATIONS := $(wildcard translations/files/*)
+TRANSLATIONS_GOU := $(call FILTER_IN,gou,$(TRANSLATIONS))
+
+# print_list: $(TRANSLATIONS)
+# 	@echo $^
+# print_translations:
+# 	@echo '$(TRANSLATIONS)'
+
+# print_list: $(TRANSLATIONS_GOU)
+# 	@echo $^
+
+# AUDIO_FILES:= $(shell printf 'audio/files/english_gou-generated-%02d.mp3 ' {1..3})
+AUDIO_FILES:= $(shell printf 'audio/files/english_gou-generated-%02d.mp3 ' {1..3})
+
+audio/files/%.mp3: $(TRANSLATIONS_GOU) audio/buildAudio.ts
 	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
-UPLOAD_FILES := $(addprefix upload/audio/translations/, $(notdir $(AUDIO_FILES)))
+UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(AUDIO_FILES)))
 
 # audio/translations/%.txt: translations/files/%.txt audio/buildAudio.ts
 # 	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
-upload/audio/translations/%.mp3: audio/translations/%.mp3
+upload/audio/files/%.mp3: audio/files/%.mp3
 	pnpm local tsx materials/audio/uploadAudio.ts $< $@
 
 upload-audio: $(UPLOAD_FILES)

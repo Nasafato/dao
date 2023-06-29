@@ -7,14 +7,14 @@ import stream from "stream";
 type Ctx = {
   inputFile: string | null;
   inputFilePath: string | null;
-  inputStream: NodeJS.ReadableStream;
+  inputStream: stream.Readable;
   outputFile: string | null;
   outputFilePath: string | null;
 };
 export async function withStdinStdout(
   func: (
     ctx: Ctx,
-    args: NodeJS.ReadableStream
+    args: stream.Readable
   ) => Promise<string | AsyncIterable<any> | stream.Readable | null | void>
 ) {
   const inputFile = process.argv[2] || null;
@@ -22,7 +22,7 @@ export async function withStdinStdout(
 
   const inputFilePath = inputFile ? path.join(__dirname, inputFile) : null;
   const outputFilePath = outputFile ? path.join(__dirname, outputFile) : null;
-  let inputStream: NodeJS.ReadableStream;
+  let inputStream: stream.Readable;
   if (inputFilePath) {
     inputStream = fs.createReadStream(inputFilePath);
   } else {
