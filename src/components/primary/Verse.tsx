@@ -33,6 +33,8 @@ import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
+import { Languages } from "../../../types/materials";
+import { buildAudioFile, buildVerseMediaSourceUrl } from "../../utils";
 
 export function Verse({
   verse,
@@ -79,7 +81,14 @@ export function Verse({
             第{verseId}章
           </a>
         </div>
-        <PlayPauseButton className="ml-2" verseId={verse.id} />
+        <PlayPauseButton
+          className="ml-2"
+          audioFile={buildAudioFile({
+            verseId: verse.id,
+            speaker: "human",
+            language: "chinese",
+          })}
+        />
         <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
 
         <div className="grid items-center justify-self-end flex-1">

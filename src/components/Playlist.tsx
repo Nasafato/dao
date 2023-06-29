@@ -2,10 +2,11 @@
 import { Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { twJoin } from "tailwind-merge";
 import { useDaoStore } from "../state/store";
 import { background, border, button } from "../styles";
+import { buildAudioFile } from "../utils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
 
@@ -18,10 +19,11 @@ for (let i = 0; i < 81; i++) {
 }
 
 export function Playlist() {
-  const audioVerseId = useDaoStore((state) => state.audioVerseId);
+  const audioVerseId = useDaoStore((state) => state.audioFile?.verseId);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
-  const [language, setLanguage] = useState<"Chinese" | "English">("Chinese");
+  const language = useDaoStore((state) => state.playlistLanguage);
+  const setPlaylistLanguage = useDaoStore((state) => state.setPlaylistLanguage);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -59,28 +61,21 @@ export function Playlist() {
               border()
             }
           >
-            {(
-              [
-                {
-                  language: "Chinese",
-                },
-                {
-                  language: "English",
-                },
-              ] as const
-            ).map((choice) => (
-              <button
-                className={`${button()} px-1 ${
-                  choice.language === language && "bg-gray-200"
-                }`}
-                onClick={() => {
-                  setLanguage(choice.language);
-                }}
-                key={choice.language}
-              >
-                {choice.language}
-              </button>
-            ))}
+            {([{ language: "Chinese" }, { language: "English" }] as const).map(
+              (choice) => (
+                <button
+                  className={`${button()} px-1 ${
+                    choice.language === language && "bg-gray-200"
+                  }`}
+                  onClick={() => {
+                    setPlaylistLanguage(choice.language);
+                  }}
+                  key={choice.language}
+                >
+                  {choice.language}
+                </button>
+              )
+            )}
           </section>
           <section className={twJoin("flex-0 h-full overflow-scroll")}>
             <div className="">
@@ -97,7 +92,14 @@ export function Playlist() {
                       )}
                     >
                       <DownloadAudioButton verseId={v.id} />
-                      <PlayPauseButton verseId={v.id} />
+                      <PlayPauseButton
+                        audioFile={buildAudioFile({
+                          verseId: v.id,
+                          translator: "gou",
+                          speaker: "human",
+                          language: "chinese",
+                        })}
+                      />
                       <h5>{v.title}</h5>
                     </div>
                   </li>

@@ -2,7 +2,8 @@ import { ForwardIcon, PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useDaoStore } from "@/state/store";
 import { twJoin } from "tailwind-merge";
-import { buildVerseMediaSourceUrl } from "../../../utils";
+import { buildAudioFile, buildVerseMediaSourceUrl } from "../../../utils";
+import { Languages } from "../../../../types/materials";
 
 const LightColorStyle = "text-gray-400 hover:text-gray-500";
 const SkipButtonStyle = twJoin(
@@ -13,18 +14,33 @@ const SkipButtonStyle = twJoin(
 
 export function AudioController({ className }: { className?: string }) {
   const status = useDaoStore((state) => state.audioStatus);
-  const verseId = useDaoStore((state) => state.audioVerseId);
+  const currAudioMetadata = useDaoStore((state) => state.audioFile);
+  const verseId = useDaoStore((state) => state.audioFile?.verseId);
   const setAudioStatus = useDaoStore((state) => state.setAudioStatus);
-  const audioUrl = useDaoStore((state) => state.audioUrl);
-  const playAudioUrl = useDaoStore((state) => state.playAudioUrl);
+  const audioUrl = useDaoStore((state) => state.audioFile?.url);
+  const playAudio = useDaoStore((state) => state.playAudio);
   const playNextVerse = () => {
+    if (!currAudioMetadata) return;
     if (verseId && verseId < 81) {
-      playAudioUrl(buildVerseMediaSourceUrl(verseId + 1), verseId + 1);
+      playAudio(
+        buildAudioFile({
+          speaker: currAudioMetadata.speaker,
+          language: currAudioMetadata.language,
+          verseId: verseId + 1,
+          translator: currAudioMetadata.translator,
+        })
+      );
     }
   };
   const playPrevVerse = () => {
+    if (!currAudioMetadata) return;
     if (verseId && verseId > 1) {
-      playAudioUrl(buildVerseMediaSourceUrl(verseId - 1), verseId - 1);
+      buildAudioFile({
+        speaker: currAudioMetadata.speaker,
+        language: currAudioMetadata.language,
+        verseId: verseId - 1,
+        translator: currAudioMetadata.translator,
+      });
     }
   };
 
@@ -42,7 +58,13 @@ export function AudioController({ className }: { className?: string }) {
         )}
         onClick={() => {
           if (!audioUrl) {
-            playAudioUrl(buildVerseMediaSourceUrl(1), 1);
+            playAudio(
+              buildAudioFile({
+                speaker: "human",
+                language: "chinese",
+                verseId: 1,
+              })
+            );
             return;
           }
           if (status === "playing") {

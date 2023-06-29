@@ -1,6 +1,13 @@
 import { Definition, Entry } from "@prisma/client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DenormalizedDictSchema, NormalizedDict } from "../types/materials";
+import {
+  AudioFile,
+  AudioFileInput,
+  DenormalizedDictSchema,
+  Languages,
+  NormalizedDict,
+  Translators,
+} from "../types/materials";
 import { CDN_URL } from "./consts";
 
 export function tryParseDaoIndex(i: unknown) {
@@ -28,12 +35,54 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+export function buildAudioFile(input: AudioFileInput): AudioFile {
+  const { verseId, speaker, translator, language } = input;
+  const verseIdStr = verseId < 10 ? "0" + verseId : verseId;
+  let url;
+  let title;
+  if (input.language === "english") {
+    if (!translator) {
+      throw new Error("English requires a translator.");
+    }
+    url = `${CDN_URL}/${speaker}-${verseIdStr}-${language}-${translator}`;
+    title = `Verse ${verseId} [English - ${capitalize(translator)}]`;
+  } else {
+    url = `${CDN_URL}/${speaker}-${verseIdStr}-${language}.mp3`;
+    title = `第${verseId}章`;
+  }
+
+  return {
+    ...input,
+    url,
+    title,
+  };
+}
+
 export function buildVerseMediaSourceUrl(
   verseId: number,
-  options: { type: "human" | "generated" } = { type: "human" }
+  options: {
+    type: "human" | "generated";
+    language: (typeof Languages)[number];
+    translator?: (typeof Translators)[number];
+  } = {
+    type: "human",
+    translator: "gou",
+    language: "chinese",
+  }
 ) {
   const type = options.type === "human" ? "human" : "generated";
-  return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
+  if (options.language === "chinese") {
+    return `${CDN_URL}/${type}${verseId < 10 ? "0" + verseId : verseId}.mp3`;
+  }
+
+  let translator = options.translator ?? "gou";
+  if (translator === "gou" && verseId > 3) {
+    translator = "goddard";
+  }
+
+  return `${CDN_URL}/${type}-${verseId < 10 ? "0" + verseId : verseId}-${
+    options.translator
+  }-${options.language}`;
 }
 
 export function dedupe<T, K>(array: T[], predicate: (item: T) => K): T[] {

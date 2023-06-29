@@ -1,11 +1,9 @@
-import { twJoin } from "tailwind-merge";
-import { BorderStyle, SoftBorderStyle } from "@/styles";
-import { buildVerseMediaSourceUrl } from "@/utils";
 import { useDaoStore } from "@/state/store";
+import { BorderStyle, SoftBorderStyle } from "@/styles";
+import { twJoin } from "tailwind-merge";
 
 export function AudioTitle({ className }: { className?: string }) {
-  const verseId = useDaoStore((state) => state.audioVerseId);
-  const playAudioUrl = useDaoStore((state) => state.playAudioUrl);
+  const verseId = useDaoStore((state) => state.audioFile?.verseId);
   return (
     <div
       className={twJoin(
@@ -30,19 +28,7 @@ export function AudioTitle({ className }: { className?: string }) {
             </h5>
           </a>
         </div>
-      ) : (
-        <button
-          className="flex items-center gap-x-2 justify-center px-2 py-2 font-semibold hover:underline"
-          onClick={() => {
-            const randomVerseId = Math.floor(Math.random() * 80) + 1;
-            const mediaSource = buildVerseMediaSourceUrl(randomVerseId);
-            playAudioUrl(mediaSource, randomVerseId);
-          }}
-        >
-          random
-          <ShuffleIcon className="w-3 h-3" />
-        </button>
-      )}
+      ) : null}
     </div>
   );
 }
