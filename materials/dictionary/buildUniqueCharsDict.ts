@@ -3,7 +3,7 @@ import type { DenormalizedDictSchema } from "../../types/materials";
 import { processLines, withStdinStdout, benchmark } from "../cliUtils";
 
 async function main() {
-  await withStdinStdout(async (input) => {
+  await withStdinStdout(async (ctx, input) => {
     const uniqueChars = (await processLines(input))
       .map((s) => s.trim())
       .filter(Boolean);

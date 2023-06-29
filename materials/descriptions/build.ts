@@ -1,7 +1,7 @@
 import { processLines, withStdinStdout } from "../cliUtils";
 
 async function main() {
-  await withStdinStdout(async (input) => {
+  await withStdinStdout(async (ctx, input) => {
     const lines = await processLines(input);
     const index = build(lines);
     return JSON.stringify(index);

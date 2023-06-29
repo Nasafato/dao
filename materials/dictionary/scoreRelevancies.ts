@@ -115,7 +115,7 @@ function createDefinitionsUpdateSql(values: SQL) {
 }
 
 async function main() {
-  await withStdinStdout(async (input) => {
+  await withStdinStdout(async (ctx, input) => {
     const chars = (await processLines(input)).map((s) => s.trim());
     const dbEntries = await db
       .select()

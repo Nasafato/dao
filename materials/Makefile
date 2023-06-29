@@ -5,15 +5,11 @@ MATDIR := materials
 DICTDIR := dictionary
 FULLDICTDIR := $(MATDIR)/$(DICTDIR)
 
-define echo_begin
-	@echo "🔁 Generating $@"
-endef
-
-define echo_end
-	@echo "✅ Generated $@"
-endef
-
 all: verses descriptions dictionary translations combined
+
+##################
+# Combined: the final output we consume.
+##################
 
 # Generally, I'd just run make combined, rather than all, since it doesn't require the dictionary.
 combined: combined.json
@@ -29,6 +25,10 @@ combined.json: $(COMBINED_INPUT_FILES) buildCombined.ts
 		materials/explanations/explanations.json \
 		> ./combined.json
 
+##################
+# Translations
+##################
+
 translations: translations/translations.json
 
 TRANSLATION_FILES := $(wildcard translations/files/*)
@@ -39,6 +39,25 @@ translations/translations.json: $(TRANSLATION_FILES) translations/buildTranslati
 verses/dao.json: verses/build.ts verses/dao.txt 
 	pnpm tsx materials/$<
 
+##################
+# Audio Recordings: Generate for only translations for now.
+##################
+
+# AUDIO_FILES := audio/translations/01gou.txt
+AUDIO_FILES := audio/translations/01gou.mp3 audio/translations/02gou.mp3 audio/translations/03gou.mp3
+
+audio/translations/%.mp3: translations/files/%.txt audio/buildAudio.ts
+	pnpm local tsx materials/audio/buildAudio.ts $< $@
+
+# audio/translations/%.txt: translations/files/%.txt audio/buildAudio.ts
+# 	pnpm local tsx materials/audio/buildAudio.ts $< $@
+
+audio: $(AUDIO_FILES)
+
+##################
+# Explanations
+##################
+
 explanations: explanations/explanations.json
 
 EXPLANATION_FILES := $(wildcard explanations/files/*)
@@ -46,6 +65,9 @@ EXPLANATION_FILES := $(wildcard explanations/files/*)
 explanations/explanations.json: explanations/buildExplanations.ts $(EXPLANATION_FILES)
 	pnpm tsx materials/$< > ./explanations/explanations.json
 
+##################
+# Descriptions
+##################
 descriptions: descriptions/descriptions.json
 
 descriptions-clean:
@@ -58,6 +80,9 @@ descriptions/descriptions-clean.txt: descriptions/clean.sh descriptions/descript
 descriptions/descriptions.json: descriptions/build.ts descriptions/descriptions-clean.txt 
 	cat descriptions/descriptions-clean.txt | pnpm tsx ./materials/$< > './$@'
 
+##################
+# Dictionary
+##################
 dictFiles := $(DICTDIR)/uniqueAllCharsDict.json
 
 # This one is expensive at the moment and relies on the Postgres DB to be running in Docker.
