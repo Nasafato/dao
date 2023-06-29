@@ -1,5 +1,5 @@
 import { prisma } from "../../src/lib/db";
-import type { DenormalizedDictSchema } from "../../src/utils";
+import type { DenormalizedDictSchema } from "../../types/materials";
 import { processLines, withStdinStdout, benchmark } from "../cliUtils";
 
 async function main() {
