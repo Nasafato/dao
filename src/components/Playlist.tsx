@@ -2,7 +2,7 @@
 import { Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { twJoin } from "tailwind-merge";
 import { useDaoStore } from "../state/store";
 import { background, border, button } from "../styles";
@@ -21,6 +21,7 @@ export function Playlist() {
   const audioVerseId = useDaoStore((state) => state.audioVerseId);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
+  const [language, setLanguage] = useState<"Chinese" | "English">("Chinese");
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -33,13 +34,13 @@ export function Playlist() {
         )}
       >
         <div className={twJoin("h-[400px] flex flex-col")}>
-          <div
+          <section
             className={
-              "flex-1 flex items-start justify-between border-b py-2 px-3 " +
+              "flex-1 flex items-center justify-between border-b py-1 px-2 " +
               border()
             }
           >
-            <h3 className="text-base font-semibold leading-6">Playlist</h3>
+            <h3 className="text-sm font-semibold leading-6">Playlist</h3>
             <button
               type="button"
               className={button({
@@ -51,8 +52,37 @@ export function Playlist() {
               <span className="sr-only">Close panel</span>
               <XMarkIcon className="h-4 w-4" aria-hidden="true" />
             </button>
-          </div>
-          <div className={twJoin("flex-0 h-full overflow-scroll")}>
+          </section>
+          <section
+            className={
+              "flex-1 flex items-center justify-start border-b py-1 px-2 gap-x-2 " +
+              border()
+            }
+          >
+            {(
+              [
+                {
+                  language: "Chinese",
+                },
+                {
+                  language: "English",
+                },
+              ] as const
+            ).map((choice) => (
+              <button
+                className={`${button()} px-1 ${
+                  choice.language === language && "bg-gray-200"
+                }`}
+                onClick={() => {
+                  setLanguage(choice.language);
+                }}
+                key={choice.language}
+              >
+                {choice.language}
+              </button>
+            ))}
+          </section>
+          <section className={twJoin("flex-0 h-full overflow-scroll")}>
             <div className="">
               <ul>
                 {verses.map((v) => (
@@ -74,7 +104,7 @@ export function Playlist() {
                 ))}
               </ul>
             </div>
-          </div>
+          </section>
         </div>
         {/* <div>
           <div
