@@ -69,6 +69,24 @@ export const ElevenLabsGetVoicesResponseSchema = z.object({
   voices: z.array(ElevenLabsVoiceSchema),
 });
 
+export const TranslationBase = z
+  .object({
+    verseId: z.number().min(1).max(81),
+    language: z.enum(Languages),
+    translator: z.enum(Translators).optional(),
+  })
+  .superRefine((val, ctx) => {
+    if (val.language === "english") {
+      if (!val.translator) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "English requires a translator.",
+        });
+      }
+    }
+  });
+export type TranslationBase = z.infer<typeof TranslationBase>;
+
 export const AudioFileBase = z.object({
   verseId: z.number().min(1).max(81),
   speaker: z.enum(["human", "generated"]),
@@ -95,16 +113,30 @@ export const AudioFile = AudioFileBase.extend({
 });
 export type AudioFile = z.infer<typeof AudioFile>;
 
-export function constructAudioFileName({
+export function buildTranslationName({
+  verseId,
+  translator,
+  language,
+}: TranslationBase) {
+  const verseIdStr = verseId.toString().padStart(2, "0");
+  const segments = [
+    `${language}${translator ? `_${translator}` : ""}`,
+    verseIdStr,
+  ];
+  return segments.join("-");
+}
+
+export function buildAudioFileName({
   verseId,
   speaker,
   language,
   translator,
 }: AudioFileInput) {
+  const verseIdStr = verseId.toString().padStart(2, "0");
   const segments = [
     `${language}${translator ? `_${translator}` : ""}`,
     speaker,
-    verseId,
+    verseIdStr,
   ];
   return segments.join("-");
 }
