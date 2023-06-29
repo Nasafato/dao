@@ -1,31 +1,40 @@
 import fs from "fs";
 import path from "path";
+import {
+  VerseTranslation,
+  Translators,
+  VerseTranslationSchema,
+} from "../../types/materials";
 
 async function main() {
-  const customTranslations = JSON.parse(
-    await fs.promises.readFile(
-      path.join(__dirname, "customTranslations.json"),
-      "utf8"
-    )
-  );
-  const historicalTranslations = JSON.parse(
-    await fs.promises.readFile(
-      path.join(__dirname, "historicalTranslations.json"),
-      "utf8"
-    )
+  const translationFiles = await fs.promises.readdir(
+    path.join(__dirname, "files")
   );
 
-  const translations = [];
-  for (let i = 0; i < 81; i++) {
-    const verseId = i + 1;
-    const gouTranslation = customTranslations.find(
-      (t: { verseId: number; text: string[] }) => t.verseId === verseId
+  const translationsMap: Record<string, Partial<VerseTranslation>> = {};
+  for (const file of translationFiles) {
+    const verseId = file.slice(0, 2);
+    const translator = file.slice(2, -4) as (typeof Translators)[number];
+    const translation = await fs.promises.readFile(
+      path.join(__dirname, "files", file),
+      "utf8"
     );
-    translations.push({
-      ...(gouTranslation ? { gou: gouTranslation.text.join(" ") } : {}),
-      ...historicalTranslations[i],
-    });
+    if (translationsMap[verseId]) {
+      translationsMap[verseId][translator] = translation;
+    } else {
+      translationsMap[verseId] = { [translator]: translation };
+    }
   }
+
+  const entries = Object.entries(translationsMap);
+  entries.sort((a, b) => {
+    return Number(a[0]) - Number(b[0]);
+  });
+  const translations = VerseTranslationSchema.array().parse(
+    entries.map((e) => {
+      return e[1];
+    })
+  );
 
   process.stdout.write(JSON.stringify(translations));
 }
