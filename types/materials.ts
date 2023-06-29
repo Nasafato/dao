@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Definition, Entry } from "@prisma/client";
+import type { Entry, Definition } from "@prisma/client";
 
 export const Translators = ["gou", "goddard", "legge", "susuki"] as const;
 export const VerseTranslationSchema = z.object({
