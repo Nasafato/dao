@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Definition, Entry } from "@prisma/client";
+import type { Entry, Definition } from "@prisma/client";
 
 export const Translators = ["gou", "goddard", "legge", "susuki"] as const;
 export const VerseTranslationSchema = z.object({
@@ -34,3 +34,36 @@ export const DenormalizedDictSchema = z.object({
 });
 export type DenormalizedDictSchema = z.infer<typeof DenormalizedDictSchema>;
 export type NormalizedDict = Array<Entry & { definitions: Definition[] }>;
+
+/*
+ * Eleven Labs API
+ */
+export const ElevenLabsVoiceSchema = z.object({
+  voice_id: z.string(),
+  name: z.string(),
+  samples: z.nullable(z.unknown()),
+  category: z.string(),
+  fine_tuning: z.object({
+    model_id: z.nullable(z.unknown()),
+    language: z.nullable(z.unknown()),
+    is_allowed_to_fine_tune: z.boolean(),
+    fine_tuning_requested: z.boolean(),
+    finetuning_state: z.string(),
+    verification_attempts: z.nullable(z.unknown()),
+    verification_failures: z.array(z.unknown()),
+    verification_attempts_count: z.number(),
+    slice_ids: z.nullable(z.unknown()),
+    manual_verification: z.nullable(z.unknown()),
+    manual_verification_requested: z.boolean(),
+  }),
+  labels: z.record(z.unknown()),
+  description: z.nullable(z.string()),
+  preview_url: z.string(),
+  available_for_tiers: z.array(z.unknown()),
+  settings: z.nullable(z.unknown()),
+  sharing: z.nullable(z.unknown()),
+});
+
+export const ElevenLabsGetVoicesResponseSchema = z.object({
+  voices: z.array(ElevenLabsVoiceSchema),
+});

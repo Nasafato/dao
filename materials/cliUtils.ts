@@ -1,32 +1,59 @@
 import { createInterface } from "readline";
 import CliProgress from "cli-progress";
 import fs from "fs";
+import path from "path";
+import stream from "stream";
 
+type Ctx = {
+  inputFile: string | null;
+  inputFilePath: string | null;
+  inputStream: NodeJS.ReadableStream;
+  outputFile: string | null;
+  outputFilePath: string | null;
+};
 export async function withStdinStdout(
-  func: (args: NodeJS.ReadableStream) => Promise<string | void>
+  func: (
+    ctx: Ctx,
+    args: NodeJS.ReadableStream
+  ) => Promise<string | AsyncIterable<any> | stream.Readable | null | void>
 ) {
   const inputFile = process.argv[2] || null;
   const outputFile = inputFile ? process.argv[3] || process.argv[2] : null;
 
+  const inputFilePath = inputFile ? path.join(__dirname, inputFile) : null;
+  const outputFilePath = outputFile ? path.join(__dirname, outputFile) : null;
   let inputStream: NodeJS.ReadableStream;
-  if (inputFile) {
-    inputStream = fs.createReadStream(inputFile);
+  if (inputFilePath) {
+    inputStream = fs.createReadStream(inputFilePath);
   } else {
     inputStream = process.stdin;
   }
 
-  const result = await func(inputStream);
+  const ctx = {
+    inputFile,
+    inputFilePath,
+    inputStream,
+    outputFile,
+    outputFilePath,
+  };
+  let result = await func(ctx, inputStream);
   if (!result) {
     return;
   }
 
-  if (outputFile) {
-    await fs.promises.writeFile(outputFile, result);
+  const outputStream: stream.Writable = outputFilePath
+    ? fs.createWriteStream(outputFilePath)
+    : process.stdout;
+  if (typeof result === "string") {
+    outputStream.write(result);
   } else {
-    process.stdout.write(result);
+    for await (const item of result) {
+      outputStream.write(item);
+    }
   }
-
-  process.exit(0);
+  if (outputStream !== process.stdout) {
+    outputStream.end();
+  }
 }
 
 // First, the func should take a file descriptor as an argument, which is either stdin or a file.
@@ -77,3 +104,25 @@ export async function benchmark(
 
   stream.write(`Elapsed time: ${elapsedTime.toFixed(2)}ms\n`);
 }
+
+export async function* stringToIterable(s: string) {
+  const chunkSize = 50;
+  for (let i = 0; i < s.length; i += chunkSize) {
+    yield s.slice(i, i + chunkSize);
+  }
+}
+
+// export async function* chunkReadableStream(
+//   stream: NodeJS.ReadableStream,
+//   chunkSize: number
+// ) {
+//   let chunk = Buffer.alloc(0);
+//   for await (const data of stream) {
+//     chunk += data;
+//     if (chunk.length >= chunkSize) {
+//       yield chunk;
+//       chunk = "";
+//     }
+//   }
+//   yield chunk;
+// }
