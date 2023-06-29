@@ -3,17 +3,18 @@ import { BorderStyle, SoftBorderStyle } from "@/styles";
 import { twJoin } from "tailwind-merge";
 
 export function AudioTitle({ className }: { className?: string }) {
+  const audioFile = useDaoStore((state) => state.audioFile);
   const verseId = useDaoStore((state) => state.audioFile?.verseId);
   return (
     <div
       className={twJoin(
-        "text-xs flex items-center mr-4 w-20 justify-center",
+        "text-xs flex items-center mr-4 w-20 justify-start",
         BorderStyle,
         className
       )}
     >
       {verseId ? (
-        <div className={twJoin("pr-4 w-10 text-center")}>
+        <div className={twJoin("pr-4 w-18 text-center")}>
           <a
             href={`#dao${verseId}`}
             className="underline text-gray-800 hover:text-gray-500  dark:hover:text-gray-200 dark:text-gray-400 "
@@ -28,7 +29,9 @@ export function AudioTitle({ className }: { className?: string }) {
             </h5>
           </a>
         </div>
-      ) : null}
+      ) : (
+        <div>Not playing</div>
+      )}
     </div>
   );
 }

@@ -49,10 +49,19 @@ AUDIO_FILES := audio/translations/01gou.mp3 audio/translations/02gou.mp3 audio/t
 audio/translations/%.mp3: translations/files/%.txt audio/buildAudio.ts
 	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
+UPLOAD_FILES := $(addprefix upload/audio/translations/, $(notdir $(AUDIO_FILES)))
+
 # audio/translations/%.txt: translations/files/%.txt audio/buildAudio.ts
 # 	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
+upload/audio/translations/%.mp3: audio/translations/%.mp3
+	pnpm local tsx materials/audio/uploadAudio.ts $< $@
+
+upload-audio: $(UPLOAD_FILES)
+
 audio: $(AUDIO_FILES)
+
+
 
 ##################
 # Explanations
@@ -68,6 +77,7 @@ explanations/explanations.json: explanations/buildExplanations.ts $(EXPLANATION_
 ##################
 # Descriptions
 ##################
+
 descriptions: descriptions/descriptions.json
 
 descriptions-clean:
