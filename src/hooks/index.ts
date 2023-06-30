@@ -1,7 +1,11 @@
-import { Entry } from "@prisma/client";
+import { Definition, Entry } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import type { NormalizedDict } from "../../types/materials";
+import type {
+  DenormalizedDictSchema,
+  EntryResult,
+  NormalizedDict,
+} from "../../types/materials";
 import * as kv from "../lib/keyValueStore";
 import { queryClient } from "../lib/reactQuery";
 import { trpcClient } from "../lib/trpcClient";
@@ -41,8 +45,13 @@ export function useDefinition(char: string) {
       ]);
       if (!dictionary) {
         console.log("cache miss");
-        const result = await trpcClient.definition.findOne.query(char);
-        return result;
+        const result: {
+          data: EntryResult[];
+        } = await fetch("/api/dictionary/definition?query=" + char).then(
+          (res) => res.json()
+        );
+        // const result = await trpcClient.definition.findOne.query(char);
+        return result.data;
       }
       const matchingEntries = findMatchingEntries(dictionary, char);
       console.log("cache hit", matchingEntries);
@@ -83,9 +92,12 @@ export function useCacheDictionary(dictType: "all" = "all") {
       if (existingDict) {
         return existingDict;
       }
-      const result = await trpcClient.definition.fetchUniqueCharsDict.query(
-        dictType
-      );
+      const result: DenormalizedDictSchema = await fetch(
+        "/api/dictionary"
+      ).then((res) => res.json());
+      // const result = await trpcClient.definition.fetchUniqueCharsDict.query(
+      //   dictType
+      // );
       const normalizedDict = normalizeDict(result);
 
       await kv.set(ctx.queryKey, normalizedDict);

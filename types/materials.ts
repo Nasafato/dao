@@ -33,8 +33,9 @@ export const DenormalizedDictSchema = z.object({
     relevancy: z.array(z.number()),
   }),
 });
+export type EntryResult = Entry & { definitions: Definition[] };
 export type DenormalizedDictSchema = z.infer<typeof DenormalizedDictSchema>;
-export type NormalizedDict = Array<Entry & { definitions: Definition[] }>;
+export type NormalizedDict = Array<EntryResult>;
 
 /*
  * Eleven Labs API
