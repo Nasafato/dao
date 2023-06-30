@@ -27,7 +27,7 @@ export function VersesEnglish({
           {verses.map((verse, index) => {
             const verseId = index + 1;
             return (
-              <div key={verseId} className={VerseStyle({ size: "large" })}>
+              <div key={verseId} className={VerseStyle({ size: "medium" })}>
                 <header className="flex items-center justify-between">
                   <a
                     className={HeadingStyle()}

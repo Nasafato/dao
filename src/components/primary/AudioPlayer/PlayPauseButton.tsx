@@ -3,7 +3,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { twJoin } from "tailwind-merge";
 import { AudioFile } from "../../../../types/materials";
 import { useDaoStore } from "../../../state/store";
-import { TooltipStyle, button } from "../../../styles";
+import { TooltipStyle, ButtonStyle } from "../../../styles";
 import { checkForAudio } from "../DownloadAudioButton";
 
 export function PlayPauseButton({
@@ -22,7 +22,7 @@ export function PlayPauseButton({
     <Tooltip.Root>
       <Tooltip.Trigger asChild>
         <button
-          className={button({
+          className={ButtonStyle({
             color: "secondary",
             size: "sm",
             ring: true,

@@ -9,7 +9,7 @@ import { Spinner } from "../shared/Spinner";
 import { useDaoStore } from "../../state/store";
 import { useMutation } from "@tanstack/react-query";
 import { buildVerseMediaSourceUrl } from "../../utils";
-import { button } from "../../styles";
+import { ButtonStyle } from "../../styles";
 import { AudioFile } from "../../../types/materials";
 
 export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
@@ -63,14 +63,14 @@ export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
     return (
       <button onClick={onClearDownloadClick} className="group">
         <CheckIcon
-          className={button({
+          className={ButtonStyle({
             size: "md",
             color: "green",
             class: "group-hover:hidden",
           })}
         />
         <XMarkIcon
-          className={button({
+          className={ButtonStyle({
             size: "md",
             color: "red",
             class: "hidden group-hover:block",
@@ -84,7 +84,7 @@ export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
     return (
       <button className="group">
         <Spinner
-          className={button({
+          className={ButtonStyle({
             size: "md",
             color: "secondary",
             class: "fill-gray-800",
@@ -97,7 +97,7 @@ export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
   return (
     <button onClick={onClick} type="button">
       <ArrowDownTrayIcon
-        className={button({ color: "secondary", size: "md" })}
+        className={ButtonStyle({ color: "secondary", size: "md" })}
         // className="w-5 h-5 text-gray-600 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200" />
       />
     </button>
