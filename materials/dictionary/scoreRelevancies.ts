@@ -3,9 +3,9 @@ import {
   DbDefinition,
   DbEntry,
   db,
-  definitions,
-  entries,
-} from "../../src/lib/db";
+  DefinitionsTable,
+  EntriesTable,
+} from "../../src/lib/edgeDb";
 import { benchmark, processLines, withStdinStdout } from "../cliUtils";
 
 type EntryRelevance = {
@@ -95,10 +95,10 @@ function generateValues(updates: { id: number; relevancy: number }[]) {
 function createEntriesUpdateSql(values: SQL) {
   const createSql = sql`
   WITH vals (id, relevancy) AS (VALUES ${values})
-  UPDATE ${entries}
-  SET ${sql.raw(entries.relevancy.name)} = vals.relevancy
+  UPDATE ${EntriesTable}
+  SET ${sql.raw(EntriesTable.relevancy.name)} = vals.relevancy
   FROM vals
-  WHERE ${entries.id} = vals.id;
+  WHERE ${EntriesTable.id} = vals.id;
 `;
   return createSql;
 }
@@ -106,10 +106,10 @@ function createEntriesUpdateSql(values: SQL) {
 function createDefinitionsUpdateSql(values: SQL) {
   const createSql = sql`
   WITH vals (id, relevancy) AS (VALUES ${values})
-  UPDATE ${definitions}
-  SET ${sql.raw(definitions.relevancy.name)} = vals.relevancy
+  UPDATE ${DefinitionsTable}
+  SET ${sql.raw(DefinitionsTable.relevancy.name)} = vals.relevancy
   FROM vals
-  WHERE ${definitions.id} = vals.id;
+  WHERE ${DefinitionsTable.id} = vals.id;
 `;
   return createSql;
 }
@@ -119,18 +119,18 @@ async function main() {
     const chars = (await processLines(input)).map((s) => s.trim());
     const dbEntries = await db
       .select()
-      .from(entries)
+      .from(EntriesTable)
       .where(
         or(
-          inArray(entries.simplified, chars),
-          inArray(entries.traditional, chars)
+          inArray(EntriesTable.simplified, chars),
+          inArray(EntriesTable.traditional, chars)
         )
       );
     const dbEntryIds = dbEntries.map((e) => e.id);
     const dbDefs = await db
       .select()
-      .from(definitions)
-      .where(inArray(definitions.entryId, dbEntryIds));
+      .from(DefinitionsTable)
+      .where(inArray(DefinitionsTable.entryId, dbEntryIds));
 
     const numItems = chars.length;
     const allEntries: EntryRelevance[] = [];
