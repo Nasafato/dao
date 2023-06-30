@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
-import { DenormalizedDictSchema } from "../../../../types/materials";
+// @ts-ignore
+import UniqueAllCharsDict from "../../../../materials/dictionary/uniqueAllCharsDict.json";
 
-const UniqueAllCharsDict: DenormalizedDictSchema = require("../../../materials/dictionary/uniqueAllCharsDict.json");
-
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 export async function GET() {
   return NextResponse.json({ data: UniqueAllCharsDict });
