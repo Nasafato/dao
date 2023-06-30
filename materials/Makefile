@@ -58,24 +58,26 @@ TRANSLATIONS_GOU := $(call FILTER_IN,gou,$(TRANSLATIONS))
 # 	@echo $^
 
 # AUDIO_FILES:= $(shell printf 'audio/files/english_gou-generated-%02d.mp3 ' {1..3})
-AUDIO_FILES:= $(shell printf 'audio/files/english_gou-generated-%02d.mp3 ' {1..3})
 
-audio/files/%.mp3: $(TRANSLATIONS_GOU) audio/buildAudio.ts
-	pnpm local tsx materials/audio/buildAudio.ts $< $@
-
-UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(AUDIO_FILES)))
-
-# audio/translations/%.txt: translations/files/%.txt audio/buildAudio.ts
-# 	pnpm local tsx materials/audio/buildAudio.ts $< $@
+ENGLISH_GOU_AUDIO := $(shell printf 'audio/files/english_gou-%02d-generated.mp3 ' {1..3})
+CHINESE_HUMAN_AUDIO := $(shell printf 'audio/files/chinese-%02d-human.mp3 ' {1..81})
+CHINESE_GENERATED_AUDIO := $(shell printf 'audio/files/chinese-%02d-generated.mp3 ' {1..81})
+ALL_AUDIO := $(ENGLISH_GOU_AUDIO) $(CHINESE_HUMAN_AUDIO) $(CHINESE_GENERATED_AUDIO)
+# UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(ALL_AUDIO)))
+UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(ENGLISH_GOU_AUDIO)))
 
 upload/audio/files/%.mp3: audio/files/%.mp3
 	pnpm local tsx materials/audio/uploadAudio.ts $< $@
 
 upload-audio: $(UPLOAD_FILES)
 
-audio: $(AUDIO_FILES)
+audio/files/%-generated.mp3: translations/files/%.txt audio/buildAudio.ts
+	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
+build-audio: $(ENGLISH_GOU_AUDIO)
 
+audio/availableAudio.json: $(ALL_AUDIO) audio/buildAvailableAudio.ts
+	pnpm local tsx materials/audio/buildAvailableAudio.ts
 
 ##################
 # Explanations

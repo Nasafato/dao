@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DAO_VERSES, DAO_COMBINED } from "../../lib/daoText";
+import { DAO_VERSES, DAO_COMBINED } from "../../lib/materials";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const verseRouter = createTRPCRouter({

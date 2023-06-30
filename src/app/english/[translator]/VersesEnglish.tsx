@@ -4,7 +4,7 @@ import Link from "next/link";
 import { twJoin } from "tailwind-merge";
 import { Translators } from "../../../../types/materials";
 import { Tooltip } from "../../../components/Tooltip";
-import { DAO_COMBINED } from "../../../lib/daoText";
+import { DAO_COMBINED } from "../../../lib/materials";
 import {
   HeadingStyle,
   SecondaryDarkModeTextStyle,

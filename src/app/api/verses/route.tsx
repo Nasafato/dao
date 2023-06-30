@@ -1,4 +1,4 @@
-import { DAO_VERSES } from "@/lib/daoText";
+import { DAO_VERSES } from "@/lib/materials";
 import { NextResponse } from "next/server";
 
 export async function GET() {

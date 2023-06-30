@@ -2,8 +2,8 @@ export const runtime = "edge";
 export const revalidate = 60;
 
 import { ImageResponse } from "next/server";
-import { DAO_VERSES } from "../lib/daoText";
-import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../lib/daoText";
+import { DAO_VERSES } from "../lib/materials";
+import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../lib/materials";
 import { twJoin } from "tailwind-merge";
 import { fetchFont } from "../serverUtils";
 import { OgLayout } from "../components/OgLayout";

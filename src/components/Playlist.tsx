@@ -9,17 +9,11 @@ import { background, border, button } from "../styles";
 import { buildAudioFile } from "../utils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
-
-const verses: Array<{ id: number; title: string }> = [];
-for (let i = 0; i < 81; i++) {
-  verses.push({
-    id: i + 1,
-    title: `第${i + 1}章`,
-  });
-}
+import { PlaylistChinese } from "./PlaylistChinese";
+import { PlaylistEnglish } from "./PlaylistEnglish";
 
 export function Playlist() {
-  const audioVerseId = useDaoStore((state) => state.audioFile?.verseId);
+  const audioFile = useDaoStore((state) => state.audioFile);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
   const language = useDaoStore((state) => state.playlistLanguage);
@@ -77,35 +71,16 @@ export function Playlist() {
               )
             )}
           </section>
-          <section className={twJoin("flex-0 h-full overflow-scroll")}>
-            <div className="">
-              <ul>
-                {verses.map((v) => (
-                  <li
-                    key={v.id}
-                    className={twJoin(audioVerseId === v.id && "inverse")}
-                  >
-                    <div
-                      className={twJoin(
-                        "py-2 px-3 flex items-center gap-x-2",
-                        background()
-                      )}
-                    >
-                      <DownloadAudioButton verseId={v.id} />
-                      <PlayPauseButton
-                        audioFile={buildAudioFile({
-                          verseId: v.id,
-                          translator: "gou",
-                          speaker: "human",
-                          language: "chinese",
-                        })}
-                      />
-                      <h5>{v.title}</h5>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <section
+            className={twJoin(
+              "flex-0 h-full overflow-scroll overscroll-contain"
+            )}
+          >
+            {language === "Chinese" ? (
+              <PlaylistChinese currentlyPlayingAudioFile={audioFile} />
+            ) : (
+              <PlaylistEnglish currentlyPlayingAudioFile={audioFile} />
+            )}
           </section>
         </div>
         {/* <div>

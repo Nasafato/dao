@@ -1,4 +1,4 @@
-import { DAO_VERSES } from "../../lib/daoText";
+import { DAO_VERSES } from "../../lib/materials";
 import { VersesChinese } from "./VersesChinese";
 
 export default function VersesChinesePage() {

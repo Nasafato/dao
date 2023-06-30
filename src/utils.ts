@@ -7,6 +7,7 @@ import {
   Languages,
   NormalizedDict,
   Translators,
+  buildAudioFileName,
 } from "../types/materials";
 import { CDN_URL } from "./consts";
 
@@ -36,26 +37,29 @@ export function capitalize(str: string) {
 }
 
 export function buildAudioFile(input: AudioFileInput): AudioFile {
-  const { verseId, speaker, translator, language } = input;
-  const verseIdStr = verseId < 10 ? "0" + verseId : verseId;
-  let url;
+  const { verseId, translator } = input;
+  const audioName = buildAudioFileName(input);
   let title;
+  const url = `${CDN_URL}/${audioName}.mp3`;
   if (input.language === "english") {
     if (!translator) {
       throw new Error("English requires a translator.");
     }
-    url = `${CDN_URL}/${speaker}-${verseIdStr}-${language}-${translator}`;
-    title = `Verse ${verseId} [English - ${capitalize(translator)}]`;
+    title = `Verse ${verseId} (${capitalize(translator)})`;
   } else {
-    url = `${CDN_URL}/${speaker}-${verseIdStr}-${language}.mp3`;
     title = `第${verseId}章`;
   }
 
   return {
     ...input,
+    audioName,
     url,
     title,
   };
+}
+
+export function audioFilesEqual(a: AudioFile, b: AudioFile) {
+  return a.url === b.url;
 }
 
 export function buildVerseMediaSourceUrl(

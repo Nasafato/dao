@@ -14,6 +14,7 @@ async function main() {
     if (!apiKey) {
       throw new Error("ELEVEN_LABS_API_KEY not set");
     }
+    console.log(text);
     const stream = await fetch(
       `${BASE_URL}/text-to-speech/${JOSH_VOICE_ID}/stream`,
       {

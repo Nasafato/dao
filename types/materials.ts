@@ -110,6 +110,7 @@ export type AudioFileInput = z.infer<typeof AudioFileInput>;
 export const AudioFile = AudioFileBase.extend({
   url: z.string(),
   title: z.string(),
+  audioName: z.string(),
 });
 export type AudioFile = z.infer<typeof AudioFile>;
 
@@ -135,8 +136,8 @@ export function buildAudioFileName({
   const verseIdStr = verseId.toString().padStart(2, "0");
   const segments = [
     `${language}${translator ? `_${translator}` : ""}`,
-    speaker,
     verseIdStr,
+    speaker,
   ];
   return segments.join("-");
 }
