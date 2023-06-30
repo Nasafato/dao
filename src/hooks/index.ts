@@ -38,6 +38,17 @@ export type CachedResult = (Entry & {
 export function useDefinition(char: string) {
   const query = useQuery({
     queryKey: ["definition", char],
+    initialData: () => {
+      const dictionary = queryClient.getQueryData<NormalizedDict>([
+        "dictionary",
+        "all",
+      ]);
+      if (!dictionary) {
+        return [];
+      }
+      const matchingEntries = findMatchingEntries(dictionary, char);
+      return matchingEntries;
+    },
     queryFn: async () => {
       const dictionary = queryClient.getQueryData<NormalizedDict>([
         "dictionary",
