@@ -10,6 +10,7 @@ import {
   buildAudioFileName,
 } from "../types/materials";
 import { CDN_URL } from "./consts";
+import { DbEntryWithDefinitions } from "./lib/edgeDb";
 
 export function tryParseDaoIndex(i: unknown) {
   const result = Number(i);
@@ -198,9 +199,7 @@ export function useQueryParam(key: string) {
   return query;
 }
 
-export function sortEntriesByRelevancy(
-  entries: Array<Entry & { definitions: Definition[] }>
-) {
+export function sortEntriesByRelevancy(entries: Array<DbEntryWithDefinitions>) {
   return entries
     .sort((a, b) => {
       return b.relevancy - a.relevancy;
@@ -227,7 +226,7 @@ export function findMatchingEntries(dict: NormalizedDict, char: string) {
 }
 
 export function normalizeDict(dict: DenormalizedDictSchema) {
-  const entries: Record<string, Entry & { definitions: Definition[] }> = {};
+  const entries: Record<string, DbEntryWithDefinitions> = {};
   for (let i = 0; i < dict.id.length; i++) {
     const entryId = dict.id[i];
     entries[entryId] = {

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Entry, Definition } from "@prisma/client";
+import { DbEntryWithDefinitions } from "../src/lib/edgeDb";
 
 export const Translators = ["gou", "goddard", "legge", "susuki"] as const;
 export const Languages = ["chinese", "english"] as const;
@@ -33,9 +34,8 @@ export const DenormalizedDictSchema = z.object({
     relevancy: z.array(z.number()),
   }),
 });
-export type EntryResult = Entry & { definitions: Definition[] };
 export type DenormalizedDictSchema = z.infer<typeof DenormalizedDictSchema>;
-export type NormalizedDict = Array<EntryResult>;
+export type NormalizedDict = Array<DbEntryWithDefinitions>;
 
 /*
  * Eleven Labs API

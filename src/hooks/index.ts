@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import type {
   DenormalizedDictSchema,
-  EntryResult,
   NormalizedDict,
 } from "../../types/materials";
 import * as kv from "../lib/keyValueStore";
 import { queryClient } from "../lib/reactQuery";
 import { trpcClient } from "../lib/trpcClient";
 import { findMatchingEntries, normalizeDict } from "../utils";
+import { DbEntryWithDefinitions } from "../lib/edgeDb";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -46,7 +46,7 @@ export function useDefinition(char: string) {
       if (!dictionary) {
         console.log("cache miss");
         const result: {
-          data: EntryResult[];
+          data: DbEntryWithDefinitions[];
         } = await fetch("/api/dictionary/definition?query=" + char).then(
           (res) => res.json()
         );
@@ -86,22 +86,23 @@ export function useCacheDictionary(dictType: "all" = "all") {
   const query = useQuery({
     queryKey: ["dictionary", dictType],
     queryFn: async (ctx) => {
-      const existingDict = await kv.get<Record<string, CachedResult>>(
-        ctx.queryKey
-      );
+      const existingDict = await kv.get<DbEntryWithDefinitions[]>(ctx.queryKey);
       if (existingDict) {
         return existingDict;
       }
-      const result: DenormalizedDictSchema = await fetch(
+      const result: { data: DenormalizedDictSchema } = await fetch(
         "/api/dictionary"
       ).then((res) => res.json());
       // const result = await trpcClient.definition.fetchUniqueCharsDict.query(
       //   dictType
       // );
-      const normalizedDict = normalizeDict(result);
+      const normalizedDict = normalizeDict(result.data);
+      console.log("Cached dict", normalizedDict);
 
-      await kv.set(ctx.queryKey, normalizedDict);
       return normalizedDict;
+    },
+    onSuccess: (data) => {
+      kv.set(["dictionary", dictType], data);
     },
     networkMode: "offlineFirst",
     enabled: true,

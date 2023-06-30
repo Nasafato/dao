@@ -12,10 +12,12 @@ export const runtime = "edge";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const searchTerm = searchParams.get("query");
+  console.error("No search term");
   if (!searchTerm) {
     return NextResponse.json({ data: [] });
   }
 
+  console.error("Finding matches");
   const matches = await db
     .select()
     .from(EntriesTable)
@@ -27,6 +29,7 @@ export async function GET(req: Request) {
       )
     );
 
+  console.error("Grouping matches", matches);
   const matchesByEntryId: Record<number, DbEntryWithDefinitions> = {};
   for (const match of matches) {
     const {
@@ -41,6 +44,7 @@ export async function GET(req: Request) {
     }
   }
   const data = Object.values(matchesByEntryId);
+  console.error("Returning data", data);
 
   return NextResponse.json({ data });
 }
