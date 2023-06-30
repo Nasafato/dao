@@ -17,15 +17,15 @@ export const LayoutPaddingStyle = "px-5 lg:px-24 py-2";
 export const MainLayoutHorizontalPaddingStyle = "px-5 lg:px-24";
 
 export const IconButtonColor =
-  "text-gray-500 dark:text-gray-300 hover:bg-gray-200 hover:dark:bg-gray-700";
+  "text-gray-500  dark:text-gray-300 hover:bg-gray-200 hover:dark:bg-gray-700";
 export const HeaderHeight = "h-12";
-export const FooterHeight = "h-14";
-export const BottomSpacing = "bottom-14";
+export const FooterHeight = "h-20";
+export const BottomSpacing = "bottom-20";
 export const verticalSpacing = tv({
-  base: `bottom-14`,
+  base: `bottom-20`,
   variants: {
     orientation: {
-      bottom: "bottom-14 top-auto",
+      bottom: "bottom-20 top-auto",
       top: "top-14 bottom-auto",
     },
   },
@@ -59,7 +59,7 @@ export const VerseStyle = tv({
   variants: {
     size: {
       small: "text-sm",
-      medium: "text-md",
+      medium: "text-base",
       large: "text-lg",
       xl: "text-xl",
     },
@@ -81,7 +81,7 @@ export const HeadingStyle = tv({
   },
 });
 
-export const button = tv({
+export const ButtonStyle = tv({
   base: `
     justify-center flex items-center
     rounded-sm

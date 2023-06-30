@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Container } from "../../components/shared/PageLayout";
-import { HeadingStyle, button } from "../../styles";
+import { HeadingStyle, ButtonStyle } from "../../styles";
 import { usePathname } from "next/navigation";
 import { Translators } from "../../../types/materials";
 import { capitalize } from "../../utils";
@@ -24,7 +24,7 @@ export default function VersesEnglishLayout({
               <Link
                 key={t}
                 href={`/english/${t}`}
-                className={` ${button()} py-1 px-2 hover:bg-gray-200 dark:hover:bg-gray-800 ${
+                className={` ${ButtonStyle()} py-1 px-2 hover:bg-gray-200 dark:hover:bg-gray-800 ${
                   isActive ? "bg-gray-200 dark:bg-gray-800" : ""
                 } `}
               >

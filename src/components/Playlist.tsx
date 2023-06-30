@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { twJoin } from "tailwind-merge";
 import { useDaoStore } from "../state/store";
-import { background, border, button } from "../styles";
+import { background, border, ButtonStyle } from "../styles";
 import { buildAudioFile } from "../utils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
@@ -32,16 +32,16 @@ export function Playlist() {
         <div className={twJoin("h-[400px] flex flex-col")}>
           <section
             className={
-              "flex-1 flex items-center justify-between border-b py-1 px-2 " +
+              "flex-1 flex items-center justify-between border-b py-2 px-3 " +
               border()
             }
           >
             <h3 className="text-sm font-semibold leading-6">Playlist</h3>
             <button
               type="button"
-              className={button({
+              className={ButtonStyle({
                 color: "icon",
-                size: "md",
+                size: "lg",
               })}
               onClick={() => setIsPlaylistOpen(false)}
             >
@@ -51,14 +51,14 @@ export function Playlist() {
           </section>
           <section
             className={
-              "flex-1 flex items-center justify-start border-b py-1 px-2 gap-x-2 " +
+              "flex-1 flex items-center justify-start border-b py-2 px-3 gap-x-2 " +
               border()
             }
           >
             {([{ language: "Chinese" }, { language: "English" }] as const).map(
               (choice) => (
                 <button
-                  className={`${button()} px-1 ${
+                  className={`${ButtonStyle()} px-2 py-1 ${
                     choice.language === language && "bg-gray-200"
                   }`}
                   onClick={() => {
@@ -113,8 +113,8 @@ export const PlaylistButton = (Playlist.Button = function PlaylistButton() {
   return (
     <button
       onClick={() => setIsPlaylistOpen(!isOpen)}
-      className={button({
-        size: "md",
+      className={ButtonStyle({
+        size: "lg",
         class: "ml-3",
         color: "icon",
       })}

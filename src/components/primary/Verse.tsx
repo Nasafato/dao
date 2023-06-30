@@ -89,15 +89,15 @@ export function Verse({
             language: "chinese",
           })}
         />
-        <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} />
+        {/* <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} /> */}
 
         <div className="grid items-center justify-self-end flex-1">
           <div className="items-center flex gap-x-1 justify-end">
-            <AuxVerseLearningMenu
+            {/* <AuxVerseLearningMenu
               verse={verse}
               verseStatus={verseStatus}
               updateStatusMutation={updateStatusMutation}
-            />
+            /> */}
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <button

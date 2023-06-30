@@ -11,7 +11,7 @@ import {
   SoftBorderStyle,
   background,
   border,
-  button,
+  ButtonStyle,
 } from "../styles";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
@@ -110,7 +110,13 @@ function LinkWithChildren({
   let content;
   if (!link.children) {
     content = (
-      <Link href={link.href} className={className}>
+      <Link
+        href={link.href}
+        className={twJoin(
+          pathname?.includes(link.href) ? "underline" : "",
+          className
+        )}
+      >
         {name}
       </Link>
     );
@@ -119,11 +125,7 @@ function LinkWithChildren({
       <Menu as="div" className="relative">
         <Menu.Button className="hover:underline">
           <div className="flex items-center text gap-x-1">
-            <Link
-              href={pathname?.includes("chinese") ? "/english/gou" : "/chinese"}
-            >
-              {name}
-            </Link>
+            {name}
             <ChevronDownIcon className="h-4 w-4" />
           </div>
         </Menu.Button>
