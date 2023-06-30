@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { AuxVerseMemoryTestModal } from "../components/auxiliary/AuxVerseMemoryTestModal";
 import { Verses } from "../components/primary/Verses";
 import { Container } from "../components/shared/PageLayout";
-import { DAO_VERSES } from "../lib/daoText";
+import { DAO_VERSES } from "../lib/materials";
 import { DaoVerse } from "../types";
 
 const inter = Inter({ subsets: ["latin"] });

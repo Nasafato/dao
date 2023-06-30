@@ -4,14 +4,14 @@ export const revalidate = 60;
 import { computeUniqueChars, fetchFont } from "@/serverUtils";
 import { ImageResponse } from "next/server";
 import { twJoin } from "tailwind-merge";
-import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../../../lib/daoText";
+import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../../../lib/materials";
 import {
   OgLayout,
   TranslationStyle,
   VerseStyle,
   font,
 } from "../../../components/OgLayout";
-import { DAO_VERSES } from "../../../lib/daoText";
+import { DAO_VERSES } from "../../../lib/materials";
 import { convertNumberToChinese } from "@/serverUtils";
 
 export default async function VerseDetailsOG({

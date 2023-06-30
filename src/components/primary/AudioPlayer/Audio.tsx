@@ -4,7 +4,7 @@ import { useDaoStore } from "../../../state/store";
 export function Audio() {
   const ref = useRef<HTMLAudioElement>(null);
   const progress = useDaoStore((state) => state.audioProgress);
-  const audioUrl = useDaoStore((state) => state.audioUrl);
+  const audioUrl = useDaoStore((state) => state.audioFile?.url ?? null);
   const audioStatus = useDaoStore((state) => state.audioStatus);
   const setAudioStatus = useDaoStore((state) => state.setAudioStatus);
   const setVisualProgress = useDaoStore((state) => state.setVisualProgress);

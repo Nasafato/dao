@@ -43,16 +43,41 @@ verses/dao.json: verses/build.ts verses/dao.txt
 # Audio Recordings: Generate for only translations for now.
 ##################
 
-# AUDIO_FILES := audio/translations/01gou.txt
-AUDIO_FILES := audio/translations/01gou.mp3 audio/translations/02gou.mp3 audio/translations/03gou.mp3
+FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
+FILTER_IN = $(foreach v,$(2),$(if $(findstring $(1),$(v)),$(v),))
 
-audio/translations/%.mp3: translations/files/%.txt audio/buildAudio.ts
+TRANSLATIONS := $(wildcard translations/files/*)
+TRANSLATIONS_GOU := $(call FILTER_IN,gou,$(TRANSLATIONS))
+
+# print_list: $(TRANSLATIONS)
+# 	@echo $^
+# print_translations:
+# 	@echo '$(TRANSLATIONS)'
+
+# print_list: $(TRANSLATIONS_GOU)
+# 	@echo $^
+
+# AUDIO_FILES:= $(shell printf 'audio/files/english_gou-generated-%02d.mp3 ' {1..3})
+
+ENGLISH_GOU_AUDIO := $(shell printf 'audio/files/english_gou-%02d-generated.mp3 ' {1..3})
+CHINESE_HUMAN_AUDIO := $(shell printf 'audio/files/chinese-%02d-human.mp3 ' {1..81})
+CHINESE_GENERATED_AUDIO := $(shell printf 'audio/files/chinese-%02d-generated.mp3 ' {1..81})
+ALL_AUDIO := $(ENGLISH_GOU_AUDIO) $(CHINESE_HUMAN_AUDIO) $(CHINESE_GENERATED_AUDIO)
+# UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(ALL_AUDIO)))
+UPLOAD_FILES := $(addprefix upload/audio/files/, $(notdir $(ENGLISH_GOU_AUDIO)))
+
+upload/audio/files/%.mp3: audio/files/%.mp3
+	pnpm local tsx materials/audio/uploadAudio.ts $< $@
+
+upload-audio: $(UPLOAD_FILES)
+
+audio/files/%-generated.mp3: translations/files/%.txt audio/buildAudio.ts
 	pnpm local tsx materials/audio/buildAudio.ts $< $@
 
-# audio/translations/%.txt: translations/files/%.txt audio/buildAudio.ts
-# 	pnpm local tsx materials/audio/buildAudio.ts $< $@
+build-audio: $(ENGLISH_GOU_AUDIO)
 
-audio: $(AUDIO_FILES)
+audio/availableAudio.json: $(ALL_AUDIO) audio/buildAvailableAudio.ts
+	pnpm local tsx materials/audio/buildAvailableAudio.ts
 
 ##################
 # Explanations
@@ -68,6 +93,7 @@ explanations/explanations.json: explanations/buildExplanations.ts $(EXPLANATION_
 ##################
 # Descriptions
 ##################
+
 descriptions: descriptions/descriptions.json
 
 descriptions-clean:

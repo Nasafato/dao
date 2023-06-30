@@ -1,24 +1,22 @@
 import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
-import { useDaoStore } from "../../../state/store";
-import { buildVerseMediaSourceUrl } from "../../../utils";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { twJoin } from "tailwind-merge";
+import { AudioFile } from "../../../../types/materials";
+import { useDaoStore } from "../../../state/store";
 import { TooltipStyle, button } from "../../../styles";
 import { checkForAudio } from "../DownloadAudioButton";
-import { twJoin } from "tailwind-merge";
 
 export function PlayPauseButton({
-  verseId,
   className,
+  audioFile,
 }: {
-  verseId: number;
   className?: string;
+  audioFile: AudioFile;
 }) {
-  const audioUrl = useDaoStore((state) => state.audioUrl);
+  const audioUrl = useDaoStore((state) => state.audioFile?.url);
   const status = useDaoStore((state) => state.audioStatus);
   const setAudioStatus = useDaoStore((state) => state.setAudioStatus);
-  const playAudioUrl = useDaoStore((state) => state.playAudioUrl);
-  const verseMediaSource = buildVerseMediaSourceUrl(verseId);
+  const playAudio = useDaoStore((state) => state.playAudio);
 
   return (
     <Tooltip.Root>
@@ -36,19 +34,19 @@ export function PlayPauseButton({
           //   className
           // )}
           onClick={() => {
-            if (audioUrl === verseMediaSource) {
+            if (audioUrl === audioFile.url) {
               if (status === "playing") {
                 setAudioStatus("paused");
               } else {
                 setAudioStatus("playing");
               }
             } else {
-              playAudioUrl(verseMediaSource, verseId);
-              checkForAudio(verseMediaSource);
+              playAudio(audioFile);
+              checkForAudio(audioFile.url);
             }
           }}
         >
-          {status === "playing" && audioUrl === verseMediaSource ? (
+          {status === "playing" && audioUrl === audioFile.url ? (
             <PauseIcon className="h-2 w-2" />
           ) : (
             <PlayIcon className="h-2 w-2" />
@@ -58,7 +56,7 @@ export function PlayPauseButton({
       <Tooltip.Portal>
         <Tooltip.Content
           sideOffset={3}
-          side={verseId === 1 ? "bottom" : "top"}
+          side={audioFile.verseId === 1 ? "bottom" : "top"}
           className={twJoin(TooltipStyle().content())}
         >
           Play recording

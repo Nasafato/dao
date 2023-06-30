@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { DaoVerse } from "@/types";
+import { AudioFile, Languages, Translators } from "../../types/materials";
 
 interface DaoStore {
   /* Language. */
@@ -16,12 +17,12 @@ interface DaoStore {
   setFooterOpen: (status: boolean) => void;
 
   /* Audio. */
-  audioVerseId: number | null;
-  audioUrl: string | null;
+
+  audioFile: AudioFile | null;
   audioStatus: "playing" | "paused";
   setAudioStatus: (status: "playing" | "paused") => void;
-  setAudioUrl: (url: string) => void;
-  playAudioUrl: (url: string, verseId: number) => void;
+  setAudio(file: AudioFile): void;
+  playAudio(file: AudioFile): void;
   audioProgress: number;
   audioDuration: number;
   visualProgress: number;
@@ -34,6 +35,8 @@ interface DaoStore {
   /* Playlist. */
   isPlaylistOpen: boolean;
   setIsPlaylistOpen: (status: boolean) => void;
+  playlistLanguage: "English" | "Chinese";
+  setPlaylistLanguage: (language: "English" | "Chinese") => void;
 
   /* Popover. */
   isPopoverOpen: boolean;
@@ -45,11 +48,14 @@ export const useDaoStore = create<DaoStore>((set) => ({
 
   isPlaylistOpen: false,
   setIsPlaylistOpen: (status: boolean) => set({ isPlaylistOpen: status }),
+  playlistLanguage: "Chinese",
+  setPlaylistLanguage: (language: "English" | "Chinese") =>
+    set({ playlistLanguage: language }),
 
   isPopoverOpen: false,
   setIsPopoverOpen: (status: boolean) => set({ isPopoverOpen: status }),
 
-  audioVerseId: null,
+  audioFile: null,
   audioDuration: 0.0,
   audioProgress: 0.0,
   visualProgress: 0.0,
@@ -63,13 +69,14 @@ export const useDaoStore = create<DaoStore>((set) => ({
   audioStatus: "paused",
   setAudioStatus: (status: "playing" | "paused") =>
     set({ audioStatus: status }),
-  setAudioUrl: (url: string) => set({ audioUrl: url }),
-  playAudioUrl: (url: string, verseId: number) =>
+  setAudio: (metadata) => {
+    set({ audioFile: metadata });
+  },
+  playAudio: (file: AudioFile) =>
     set({
-      audioUrl: url,
+      audioFile: file,
       audioStatus: "playing",
       audioProgress: 0.0,
-      audioVerseId: verseId,
     }),
   verseBeingTested: null,
   setVerseBeingTested: (verse: DaoVerse | null) => {

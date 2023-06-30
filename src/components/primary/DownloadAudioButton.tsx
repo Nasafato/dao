@@ -10,9 +10,10 @@ import { useDaoStore } from "../../state/store";
 import { useMutation } from "@tanstack/react-query";
 import { buildVerseMediaSourceUrl } from "../../utils";
 import { button } from "../../styles";
+import { AudioFile } from "../../../types/materials";
 
-export function DownloadAudioButton({ verseId }: { verseId: number }) {
-  const audioUrl = buildVerseMediaSourceUrl(verseId);
+export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
+  const audioUrl = audioFile.url;
   const cachedAudio = useDaoStore((state) => state.cachedAudio);
   const setAudioCached = useDaoStore((state) => state.setAudioCached);
   const isAudioCached = useDaoStore((state) => state.cachedAudio[audioUrl]);

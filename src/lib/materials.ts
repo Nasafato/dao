@@ -13,3 +13,6 @@ export const DAO_VERSES = Array.from(DAO_TEXT).map((value, index) => {
 
 const daoCombined: VerseCombined[] = require("../../materials/combined.json");
 export const DAO_COMBINED = daoCombined;
+
+import availableAudioFiles from "../../materials/audio/availableFiles.json";
+export { availableAudioFiles };

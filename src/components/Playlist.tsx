@@ -6,21 +6,18 @@ import { Fragment } from "react";
 import { twJoin } from "tailwind-merge";
 import { useDaoStore } from "../state/store";
 import { background, border, button } from "../styles";
+import { buildAudioFile } from "../utils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
-
-const verses: Array<{ id: number; title: string }> = [];
-for (let i = 0; i < 81; i++) {
-  verses.push({
-    id: i + 1,
-    title: `第${i + 1}章`,
-  });
-}
+import { PlaylistChinese } from "./PlaylistChinese";
+import { PlaylistEnglish } from "./PlaylistEnglish";
 
 export function Playlist() {
-  const audioVerseId = useDaoStore((state) => state.audioVerseId);
+  const audioFile = useDaoStore((state) => state.audioFile);
   const isOpen = useDaoStore((state) => state.isPlaylistOpen);
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
+  const language = useDaoStore((state) => state.playlistLanguage);
+  const setPlaylistLanguage = useDaoStore((state) => state.setPlaylistLanguage);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -33,13 +30,13 @@ export function Playlist() {
         )}
       >
         <div className={twJoin("h-[400px] flex flex-col")}>
-          <div
+          <section
             className={
-              "flex-1 flex items-start justify-between border-b py-2 px-3 " +
+              "flex-1 flex items-center justify-between border-b py-1 px-2 " +
               border()
             }
           >
-            <h3 className="text-base font-semibold leading-6">Playlist</h3>
+            <h3 className="text-sm font-semibold leading-6">Playlist</h3>
             <button
               type="button"
               className={button({
@@ -51,30 +48,40 @@ export function Playlist() {
               <span className="sr-only">Close panel</span>
               <XMarkIcon className="h-4 w-4" aria-hidden="true" />
             </button>
-          </div>
-          <div className={twJoin("flex-0 h-full overflow-scroll")}>
-            <div className="">
-              <ul>
-                {verses.map((v) => (
-                  <li
-                    key={v.id}
-                    className={twJoin(audioVerseId === v.id && "inverse")}
-                  >
-                    <div
-                      className={twJoin(
-                        "py-2 px-3 flex items-center gap-x-2",
-                        background()
-                      )}
-                    >
-                      <DownloadAudioButton verseId={v.id} />
-                      <PlayPauseButton verseId={v.id} />
-                      <h5>{v.title}</h5>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </section>
+          <section
+            className={
+              "flex-1 flex items-center justify-start border-b py-1 px-2 gap-x-2 " +
+              border()
+            }
+          >
+            {([{ language: "Chinese" }, { language: "English" }] as const).map(
+              (choice) => (
+                <button
+                  className={`${button()} px-1 ${
+                    choice.language === language && "bg-gray-200"
+                  }`}
+                  onClick={() => {
+                    setPlaylistLanguage(choice.language);
+                  }}
+                  key={choice.language}
+                >
+                  {choice.language}
+                </button>
+              )
+            )}
+          </section>
+          <section
+            className={twJoin(
+              "flex-0 h-full overflow-scroll overscroll-contain"
+            )}
+          >
+            {language === "Chinese" ? (
+              <PlaylistChinese currentlyPlayingAudioFile={audioFile} />
+            ) : (
+              <PlaylistEnglish currentlyPlayingAudioFile={audioFile} />
+            )}
+          </section>
         </div>
         {/* <div>
           <div
