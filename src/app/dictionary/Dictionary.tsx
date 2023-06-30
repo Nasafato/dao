@@ -7,6 +7,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SingleCharDefinition } from "../../components/primary/SingleCharDefinition";
 import { Spinner } from "../../components/shared/Spinner";
 import { trpcClient } from "../../lib/trpcClient";
+import { TRPCClientError } from "@trpc/client";
 
 const LiStyle =
   "ring-1 ring-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
@@ -51,6 +52,7 @@ export function Dictionary() {
     },
     networkMode: "offlineFirst",
     enabled: !!searchTerm && searchTerm.length > 0,
+    retry: false,
   });
 
   const handleSubmit = async (event: FormEvent) => {
@@ -63,6 +65,37 @@ export function Dictionary() {
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const renderResults = () => {
+    const { error } = searchQuery;
+    if (error) {
+      if (error instanceof TRPCClientError) {
+        return <div>Error: {error.message}</div>;
+      }
+
+      return <div>Error: {error.toString()}</div>;
+    }
+    if (searchQuery.isLoading && !(searchQuery.fetchStatus === "idle")) {
+      return (
+        <div className="flex items-center gap-x-1">
+          Searching... <Spinner className="h-4 w-4" />
+        </div>
+      );
+    }
+
+    if (searchQuery.data) {
+      if (searchQuery.data.length < 1) {
+        return <div>No results.</div>;
+      }
+      return <SingleCharDefinition entries={searchQuery.data} />;
+    }
+
+    if (searchTerm.length > 0) {
+      return <div>No results.</div>;
+    }
+
+    return null;
+  };
 
   return (
     <div className="py-2 max-w-sm mx-auto">
@@ -111,17 +144,7 @@ export function Dictionary() {
           />
         </form>
       </div>
-      <div className="mt-8">
-        {searchQuery.isLoading && !(searchQuery.fetchStatus === "idle") ? (
-          <div className="flex items-center gap-x-1">
-            Searching... <Spinner className="h-4 w-4" />
-          </div>
-        ) : searchQuery.data ? (
-          <SingleCharDefinition entries={searchQuery.data} />
-        ) : searchTerm.length > 0 ? (
-          <div>Nothing found</div>
-        ) : null}
-      </div>
+      <div className="mt-8">{renderResults()}</div>
     </div>
   );
 }
