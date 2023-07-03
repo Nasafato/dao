@@ -1,10 +1,12 @@
 import { useDaoStore } from "@/state/store";
 import { BorderStyle, SoftBorderStyle } from "@/styles";
 import { twJoin } from "tailwind-merge";
+import { LanguageDisplayMap, capitalize } from "../../../utils";
 
 export function AudioTitle({ className }: { className?: string }) {
   const audioFile = useDaoStore((state) => state.audioFile);
   const verseId = useDaoStore((state) => state.audioFile?.verseId);
+
   return (
     <div
       className={twJoin(
@@ -13,21 +15,27 @@ export function AudioTitle({ className }: { className?: string }) {
         className
       )}
     >
-      {verseId ? (
-        <div className={twJoin("pr-4 w-18 text-center")}>
+      {audioFile ? (
+        <div className={twJoin("pr-4")}>
           <a
             href={`#dao${verseId}`}
-            className="underline text-gray-800 hover:text-gray-500  dark:hover:text-gray-200 dark:text-gray-400 "
+            className="block mb-1 underline underline-offset-4 text-gray-800 hover:text-gray-500  dark:hover:text-gray-200 dark:text-gray-400 "
           >
             <h5
               className={twJoin(
-                "text-center text-lg flex items-center font-semibold capitalize justify-center",
+                "text-center text-lg flex items-center font-semibold capitalize",
                 SoftBorderStyle
               )}
             >
-              {verseId}
+              {audioFile.title}
             </h5>
           </a>
+          <div className="text-xs">
+            {LanguageDisplayMap[audioFile.language]}
+          </div>
+          <div className="text-xs">
+            {audioFile.translator ? capitalize(audioFile.translator) : null}
+          </div>
         </div>
       ) : (
         <div>Not playing</div>
