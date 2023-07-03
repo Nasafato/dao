@@ -46,7 +46,7 @@ export function buildAudioFile(input: AudioFileInput): AudioFile {
     if (!translator) {
       throw new Error("English requires a translator.");
     }
-    title = `Verse ${verseId} (${capitalize(translator)})`;
+    title = `Verse ${verseId}`;
   } else {
     title = `第${verseId}章`;
   }
@@ -253,3 +253,10 @@ export function normalizeDict(dict: DenormalizedDictSchema) {
 
   return Object.values(entries);
 }
+
+export const LanguageDisplayMap: Readonly<
+  Record<(typeof Languages)[number], string>
+> = {
+  chinese: "中文",
+  english: "English",
+} as const;
