@@ -18,13 +18,7 @@ function getLocale(request: NextRequest) {
   return locale;
 }
 
-const whitelist = ["_next", ".png", "manifest.json", "api"];
-
 export function middleware(request: NextRequest) {
-  // Check if there is any supported locale in the pathname
-  if (whitelist.some((name) => request.nextUrl.pathname.includes(name))) {
-    return NextResponse.next();
-  }
   if (request.nextUrl.pathname === "/" || request.nextUrl.pathname === "") {
     const locale = getLocale(request);
     const url = new URL(`/${locale}/verses/chinese`, request.url);
@@ -51,7 +45,9 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    "/((?!_next).*)",
+    // "/((?!api|_next|.*..*).*)/",
+    // "/((?!api|_next|.*\\..*).*|manifest.json)",
+    "/((?!_next|.*.json|.*\\..*).*)",
     // Optional: only run on root (/) URL
     // '/'
   ],
