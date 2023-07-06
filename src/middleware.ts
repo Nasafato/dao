@@ -25,6 +25,10 @@ export function middleware(request: NextRequest) {
   if (whitelist.some((name) => request.nextUrl.pathname.includes(name))) {
     return NextResponse.next();
   }
+  if (request.nextUrl.pathname === "/" || request.nextUrl.pathname === "") {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}/verses/chinese`));
+  }
 
   const pathname = request.nextUrl.pathname;
   const pathnameIsMissingLocale = locales.every(
