@@ -10,5 +10,5 @@ export default function Verses({
 }
 
 export async function generateStaticParams() {
-  return Languages;
+  return Languages.map((language) => ({ language }));
 }

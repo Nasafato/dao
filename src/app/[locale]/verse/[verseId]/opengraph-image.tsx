@@ -21,21 +21,21 @@ export default async function VerseDetailsOG({
 }) {
   const inter300 = fetch(
     new URL(
-      `../../../../node_modules/@fontsource/inter/files/inter-latin-300-normal.woff`,
+      `../../../../../node_modules/@fontsource/inter/files/inter-latin-300-normal.woff`,
       import.meta.url
     )
   ).then((res) => res.arrayBuffer());
 
   const inter600 = fetch(
     new URL(
-      `../../../../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff`,
+      `../../../../../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff`,
       import.meta.url
     )
   ).then((res) => res.arrayBuffer());
 
   const robotoMono400 = fetch(
     new URL(
-      `../../../../node_modules/@fontsource/roboto-mono/files/roboto-mono-latin-400-normal.woff`,
+      `../../../../../node_modules/@fontsource/roboto-mono/files/roboto-mono-latin-400-normal.woff`,
       import.meta.url
     )
   ).then((res) => res.arrayBuffer());
