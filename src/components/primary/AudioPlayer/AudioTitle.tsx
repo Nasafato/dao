@@ -1,7 +1,7 @@
 import { useDaoStore } from "@/state/store";
 import { BorderStyle, SoftBorderStyle } from "@/styles";
 import { twJoin } from "tailwind-merge";
-import { LanguageDisplayMap, capitalize } from "../../../utils";
+import { LanguageDisplayMap, capitalize } from "@/utils";
 
 export function AudioTitle({ className }: { className?: string }) {
   const audioFile = useDaoStore((state) => state.audioFile);

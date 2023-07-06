@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { normalizeDict } from "../utils";
+import { normalizeDict } from "@/utils";
 
 test("dict normalized", async () => {
   const uniqueAllCharsDict = await import(
-    "../../materials/dictionary/uniqueAllCharsDict.json"
+    "materials/dictionary/uniqueAllCharsDict.json"
   );
   const normalizedDict = normalizeDict(uniqueAllCharsDict);
 

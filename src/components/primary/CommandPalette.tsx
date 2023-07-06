@@ -2,7 +2,7 @@
 import { atom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { tryParseDaoIndex } from "../../utils";
+import { tryParseDaoIndex } from "@/utils";
 // import MediaControls from "./MediaControls";
 // import { AudioPlayer } from "./HeadlessAudioPlayer";
 

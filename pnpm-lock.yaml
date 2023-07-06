@@ -5,6 +5,7 @@ specifiers:
   '@fontsource/inter': ^5.0.3
   '@fontsource/noto-sans-sc': ^5.0.3
   '@fontsource/roboto-mono': ^5.0.3
+  '@formatjs/intl-localematcher': ^0.4.0
   '@headlessui/react': ^1.7.14
   '@heroicons/react': ^2.0.17
   '@hookform/resolvers': ^3.1.0
@@ -20,6 +21,7 @@ specifiers:
   '@trpc/react-query': ^10.25.1
   '@trpc/server': ^10.25.1
   '@types/cli-progress': ^3.11.0
+  '@types/negotiator': ^0.6.1
   '@types/node': 18.15.11
   '@types/react': 18.0.33
   '@types/react-dom': 18.0.11
@@ -35,6 +37,7 @@ specifiers:
   eslint-config-next: 13.3.0
   idb: ^7.1.1
   jotai: ^2.0.4
+  negotiator: ^0.6.3
   next: 13.4.7
   next-auth: ^4.22.1
   node-fetch: ^3.3.1
@@ -64,6 +67,7 @@ dependencies:
   '@fontsource/inter': 5.0.3
   '@fontsource/noto-sans-sc': 5.0.3
   '@fontsource/roboto-mono': 5.0.3
+  '@formatjs/intl-localematcher': 0.4.0
   '@headlessui/react': 1.7.14_biqbaboplfbrettd7655fr4n2y
   '@heroicons/react': 2.0.17_react@18.2.0
   '@hookform/resolvers': 3.1.0_react-hook-form@7.44.2
@@ -91,6 +95,7 @@ dependencies:
   eslint-config-next: 13.3.0_voubu7prgxjfsfbgx5d4sqnwiy
   idb: 7.1.1
   jotai: 2.0.4_react@18.2.0
+  negotiator: 0.6.3
   next: 13.4.7_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.22.1_5v7kwk6wz2hvmegftnptprfjvm
   postcss: 8.4.21
@@ -111,6 +116,7 @@ dependencies:
 devDependencies:
   '@next/bundle-analyzer': 13.4.6
   '@types/cli-progress': 3.11.0
+  '@types/negotiator': 0.6.1
   dotenv-cli: 7.2.1
   node-fetch: 3.3.1
   playwright: 1.34.1
@@ -1608,6 +1614,12 @@ packages:
     resolution: {integrity: sha512-tNMpDt9ugssSfoPdH9attR+8iNtaEwXr9IzWbdAWFNk6VhrrQoo9ldHaGCC3Z73Xb+okerVVq2nuSZ34PPzaQg==}
     dev: false
 
+  /@formatjs/intl-localematcher/0.4.0:
+    resolution: {integrity: sha512-bRTd+rKomvfdS4QDlVJ6TA/Jx1F2h/TBVO5LjvhQ7QPPHp19oPNMIum7W2CMEReq/zPxpmCeB31F9+5gl/qtvw==}
+    dependencies:
+      tslib: 2.5.3
+    dev: false
+
   /@headlessui/react/1.7.14_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-znzdq9PG8rkwcu9oQ2FwIy0ZFtP9Z7ycS+BAqJ3R5EIqC/0bJGvhT7193rFf+45i9nnPsYvCQVW4V/bB9Xc+gA==}
     engines: {node: '>=10'}
@@ -2463,6 +2475,10 @@ packages:
   /@types/ms/0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: false
+
+  /@types/negotiator/0.6.1:
+    resolution: {integrity: sha512-c4mvXFByghezQ/eVGN5HvH/jI63vm3B7FiE81BUzDAWmuiohRecCO6ddU60dfq29oKUMiQujsoB2h0JQC7JHKA==}
+    dev: true
 
   /@types/node/18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
@@ -5091,6 +5107,11 @@ packages:
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+    dev: false
+
+  /negotiator/0.6.3:
+    resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
+    engines: {node: '>= 0.6'}
     dev: false
 
   /next-auth/4.22.1_5v7kwk6wz2hvmegftnptprfjvm:

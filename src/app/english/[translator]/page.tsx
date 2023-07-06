@@ -1,4 +1,4 @@
-import { Translators } from "../../../../types/materials";
+import { Translators } from "types/materials";
 import { VersesEnglish } from "./VersesEnglish";
 
 export default async function VersesEnglishPage(props: {

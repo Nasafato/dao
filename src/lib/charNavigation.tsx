@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { Definition } from "../components/primary/Definition";
+import { Definition } from "@/components/primary/Definition";
 import {
   usePopoverApi,
   usePopoverData,
-} from "../components/primary/PopoverProvider";
+} from "@/components/primary/PopoverProvider";
 
 export function buildCharId(args: {
   verseId: number;

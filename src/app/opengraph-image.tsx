@@ -2,11 +2,11 @@ export const runtime = "edge";
 export const revalidate = 60;
 
 import { ImageResponse } from "next/server";
-import { DAO_VERSES } from "../lib/materials";
-import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "../lib/materials";
+import { DAO_VERSES } from "@/lib/materials";
+import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "@/lib/materials";
 import { twJoin } from "tailwind-merge";
-import { fetchFont } from "../serverUtils";
-import { OgLayout } from "../components/OgLayout";
+import { fetchFont } from "@/serverUtils";
+import { OgLayout } from "@/components/OgLayout";
 
 export default async function MainOG() {
   const inter300 = fetch(

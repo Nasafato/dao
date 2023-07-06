@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { Container } from "../../components/shared/PageLayout";
-import { HeadingStyle, ButtonStyle } from "../../styles";
+import { Container } from "@/components/shared/PageLayout";
+import { HeadingStyle, ButtonStyle } from "@/styles";
 import { usePathname } from "next/navigation";
-import { Translators } from "../../../types/materials";
-import { capitalize } from "../../utils";
+import { Translators } from "types/materials";
+import { capitalize } from "@/utils";
 import { twJoin } from "tailwind-merge";
 
 export default function VersesEnglishLayout({

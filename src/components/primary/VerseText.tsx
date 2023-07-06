@@ -1,5 +1,5 @@
-import { punctuation } from "../../consts";
-import { buildCharId } from "../../lib/charNavigation";
+import { punctuation } from "@/consts";
+import { buildCharId } from "@/lib/charNavigation";
 import { VerseChar } from "./VerseChar";
 
 export function VerseText({

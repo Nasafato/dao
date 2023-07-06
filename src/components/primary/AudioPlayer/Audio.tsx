@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useDaoStore } from "../../../state/store";
+import { useDaoStore } from "@/state/store";
 
 export function Audio() {
   const ref = useRef<HTMLAudioElement>(null);

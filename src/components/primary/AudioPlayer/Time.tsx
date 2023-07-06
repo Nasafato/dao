@@ -1,4 +1,4 @@
-import { useDaoStore } from "../../../state/store";
+import { useDaoStore } from "@/state/store";
 
 interface Props {
   isBeginning?: boolean;

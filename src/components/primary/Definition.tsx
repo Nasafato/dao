@@ -1,7 +1,7 @@
 import { twJoin } from "tailwind-merge";
-import { useDefinition } from "../../hooks";
-import { BackgroundStyle, BorderStyle, TextStyle, border } from "../../styles";
-import { Spinner } from "../shared/Spinner";
+import { useDefinition } from "@/hooks";
+import { BackgroundStyle, BorderStyle, TextStyle, border } from "@/styles";
+import { Spinner } from "@/components/shared/Spinner";
 import { SingleCharDefinition } from "./SingleCharDefinition";
 
 export function Definition({

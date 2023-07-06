@@ -1,6 +1,6 @@
 import { twJoin } from "tailwind-merge";
-import { DefinitionOutput } from "../../server/routers/_app";
-import { replaceNumericalPinyin, sortEntriesByRelevancy } from "../../utils";
+import { DefinitionOutput } from "@/server/routers/_app";
+import { replaceNumericalPinyin, sortEntriesByRelevancy } from "@/utils";
 
 export function SingleCharDefinition({
   entries: entries,

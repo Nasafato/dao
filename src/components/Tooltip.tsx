@@ -1,5 +1,5 @@
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import { TooltipStyle } from "../styles";
+import { TooltipStyle } from "@/styles";
 import { twJoin } from "tailwind-merge";
 
 export function Tooltip({

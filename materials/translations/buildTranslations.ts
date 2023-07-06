@@ -4,7 +4,7 @@ import {
   VerseTranslation,
   Translators,
   VerseTranslationSchema,
-} from "../../types/materials";
+} from "types/materials";
 
 async function main() {
   const translationFiles = await fs.promises.readdir(

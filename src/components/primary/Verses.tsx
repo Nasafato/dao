@@ -1,6 +1,6 @@
-import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
-import { useVerseMemoryStatusesQuery } from "../../lib/reactQuery";
-import { DaoVerse } from "../../types";
+import { VerseMemoryStatusType } from "@/lib/localDb/verseMemoryStatus";
+import { useVerseMemoryStatusesQuery } from "@/lib/reactQuery";
+import { DaoVerse } from "@/types";
 import { CommandPalette } from "./CommandPalette";
 import { Verse } from "./Verse";
 

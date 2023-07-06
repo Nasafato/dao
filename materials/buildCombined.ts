@@ -1,5 +1,5 @@
 import fs from "fs";
-import { VerseCombined } from "../types/materials";
+import { VerseCombined } from "types/materials";
 
 async function main() {
   const args = process.argv.slice(2);

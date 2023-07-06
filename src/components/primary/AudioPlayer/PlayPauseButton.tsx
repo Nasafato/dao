@@ -1,10 +1,10 @@
 import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { twJoin } from "tailwind-merge";
-import { AudioFile } from "../../../../types/materials";
-import { useDaoStore } from "../../../state/store";
-import { TooltipStyle, ButtonStyle } from "../../../styles";
-import { checkForAudio } from "../DownloadAudioButton";
+import { AudioFile } from "types/materials";
+import { useDaoStore } from "@/state/store";
+import { TooltipStyle, ButtonStyle } from "@/styles";
+import { checkForAudio } from "@/components/primary/DownloadAudioButton";
 
 export function PlayPauseButton({
   className,

@@ -1,15 +1,12 @@
 import { Definition, Entry } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import type {
-  DenormalizedDictSchema,
-  NormalizedDict,
-} from "../../types/materials";
-import * as kv from "../lib/keyValueStore";
-import { queryClient } from "../lib/reactQuery";
-import { trpcClient } from "../lib/trpcClient";
-import { findMatchingEntries, normalizeDict } from "../utils";
-import { DbEntryWithDefinitions } from "../lib/edgeDb";
+import type { DenormalizedDictSchema, NormalizedDict } from "types/materials";
+import * as kv from "@/lib/keyValueStore";
+import { queryClient } from "@/lib/reactQuery";
+import { trpcClient } from "@/lib/trpcClient";
+import { findMatchingEntries, normalizeDict } from "@/utils";
+import { DbEntryWithDefinitions } from "@/lib/edgeDb";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);

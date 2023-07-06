@@ -1,6 +1,6 @@
-import { prisma } from "../../src/lib/db";
-import type { DenormalizedDictSchema } from "../../types/materials";
-import { processLines, withStdinStdout, benchmark } from "../cliUtils";
+import { prisma } from "@/lib/db";
+import type { DenormalizedDictSchema } from "types/materials";
+import { processLines, withStdinStdout, benchmark } from "materials/cliUtils";
 
 async function main() {
   await withStdinStdout(async (ctx, input) => {

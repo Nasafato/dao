@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { twJoin } from "tailwind-merge";
-import { useRenderNextOrPrevChar, useCharInfo } from "../lib/charNavigation";
+import { useRenderNextOrPrevChar, useCharInfo } from "@/lib/charNavigation";
 
 const CharNavButtonStyle = "p-2";
 const CharNavArrowStyle = "h-5 w-5 hover:text-gray-400";

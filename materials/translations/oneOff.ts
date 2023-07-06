@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { buildTranslationName } from "../../types/materials";
+import { buildTranslationName } from "types/materials";
 
 async function main() {
   const files = await fs.promises.readdir(path.join(__dirname, "files"));

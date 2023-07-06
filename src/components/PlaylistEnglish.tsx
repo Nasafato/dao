@@ -1,10 +1,10 @@
 import { twJoin } from "tailwind-merge";
-import { background } from "../styles";
-import { buildAudioFile } from "../utils";
+import { background } from "@/styles";
+import { buildAudioFile } from "@/utils";
 import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
-import { AudioFile } from "../../types/materials";
-import { availableAudioFiles } from "../lib/materials";
+import { AudioFile } from "types/materials";
+import { availableAudioFiles } from "@/lib/materials";
 
 const verses: Array<{ id: number; title: string }> = [];
 for (let i = 0; i < 81; i++) {

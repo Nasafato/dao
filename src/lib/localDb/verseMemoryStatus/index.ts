@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
-import { awaitDbInit, wrappedDb as db } from "../db";
+import { awaitDbInit, wrappedDb as db } from "@/lib/localDb/db";
 import {
   MEMORY_STATUS,
   arraySchema,

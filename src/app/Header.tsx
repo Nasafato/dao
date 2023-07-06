@@ -12,7 +12,7 @@ import {
   background,
   border,
   ButtonStyle,
-} from "../styles";
+} from "@/styles";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -33,10 +33,10 @@ const links: Link[] = [
       if (path === "/") {
         return "Chinese";
       }
-      if (path.includes("/chinese")) {
+      if (path.includes("/verses/chinese")) {
         return "Chinese";
       }
-      if (path.includes("/english")) {
+      if (path.includes("/verses/english")) {
         return "English";
       }
       return "Verses";
@@ -45,11 +45,11 @@ const links: Link[] = [
     children: [
       {
         name: "Chinese",
-        href: "/chinese",
+        href: "/verses/chinese",
       },
       {
         name: "English",
-        href: "/english/gou",
+        href: "/verses/english/gou",
       },
     ],
   },

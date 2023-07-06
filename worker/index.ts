@@ -1,4 +1,4 @@
-import { DAO_CDN_MP3_CACHE, CDN_URL } from "../src/consts";
+import { DAO_CDN_MP3_CACHE } from "@/consts";
 
 declare let self: ServiceWorkerGlobalScope;
 

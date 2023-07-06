@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { wrap } from "idb";
-import { DATE_CONSTS } from "../../consts";
+import { DATE_CONSTS } from "@/consts";
 import { awaitDbInit, db as unwrappedDb } from "./db";
 import { VerseMemoryStatus } from "./verseMemoryStatus";
 import { VerseMemoryTest } from "./verseMemoryTest";

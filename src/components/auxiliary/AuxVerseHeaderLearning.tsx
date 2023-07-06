@@ -1,16 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-  USER_ID,
-} from "../../lib/localDb/db";
+import { INDEXED_DB_NAME, INDEXED_DB_VERSION, USER_ID } from "@/lib/localDb/db";
 import {
   VerseMemoryStatus,
   VerseMemoryStatusType,
-} from "../../lib/localDb/verseMemoryStatus";
-import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
-import { queryClient } from "../../lib/reactQuery";
-import { DaoVerse } from "../../types";
+} from "@/lib/localDb/verseMemoryStatus";
+import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
+import { queryClient } from "@/lib/reactQuery";
+import { DaoVerse } from "@/types";
 import { AuxVerseStatus } from "./AuxVerseStatus";
 
 interface AuxVerseHeaderLearningProps {

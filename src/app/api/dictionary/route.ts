@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 // @ts-ignore
-import UniqueAllCharsDict from "../../../../materials/dictionary/uniqueAllCharsDict.json";
+import UniqueAllCharsDict from "materials/dictionary/uniqueAllCharsDict.json";
 
 export const runtime = "edge";
 
