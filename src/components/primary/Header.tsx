@@ -1,11 +1,11 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
-import { useTheme } from "../../state/theme";
+import { useTheme } from "@/state/theme";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDaoStore } from "../../state/store";
+import { useDaoStore } from "@/state/store";
 import { twJoin } from "tailwind-merge";
-import { BackgroundStyle, BorderStyle } from "../../styles";
+import { BackgroundStyle, BorderStyle } from "@/styles";
 
 const links = [
   {

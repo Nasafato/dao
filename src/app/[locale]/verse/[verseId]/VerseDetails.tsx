@@ -2,13 +2,13 @@
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-import { PopoverProvider } from "../../../components/primary/PopoverProvider";
-import { VerseDescription } from "../../../components/primary/VerseDescription";
-import { VerseHeaderStyle } from "../../../components/primary/VerseHeader";
-import { VerseText } from "../../../components/primary/VerseText";
-import { Container } from "../../../components/shared/PageLayout";
-import { SecondaryDarkModeTextStyle } from "../../../styles";
-import { VerseCombined } from "../../../../types/materials";
+import { PopoverProvider } from "@/components/primary/PopoverProvider";
+import { VerseDescription } from "@/components/primary/VerseDescription";
+import { VerseHeaderStyle } from "@/components/primary/VerseHeader";
+import { VerseText } from "@/components/primary/VerseText";
+import { Container } from "@/components/shared/PageLayout";
+import { SecondaryDarkModeTextStyle } from "@/styles";
+import { VerseCombined } from "types/materials";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 

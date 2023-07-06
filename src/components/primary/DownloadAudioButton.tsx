@@ -4,13 +4,13 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { useCallback, useEffect, useState } from "react";
-import { DAO_CDN_MP3_CACHE } from "../../consts";
-import { Spinner } from "../shared/Spinner";
-import { useDaoStore } from "../../state/store";
+import { DAO_CDN_MP3_CACHE } from "@/consts";
+import { Spinner } from "@/components/shared/Spinner";
+import { useDaoStore } from "@/state/store";
 import { useMutation } from "@tanstack/react-query";
-import { buildVerseMediaSourceUrl } from "../../utils";
-import { ButtonStyle } from "../../styles";
-import { AudioFile } from "../../../types/materials";
+import { buildVerseMediaSourceUrl } from "@/utils";
+import { ButtonStyle } from "@/styles";
+import { AudioFile } from "types/materials";
 
 export function DownloadAudioButton({ audioFile }: { audioFile: AudioFile }) {
   const audioUrl = audioFile.url;

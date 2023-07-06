@@ -7,11 +7,8 @@ import React, {
   useState,
 } from "react";
 import colors from "tailwindcss/colors";
-import {
-  computePopoverDimensions,
-  computePosition,
-} from "../../lib/positioning";
-import { useDaoStore } from "../../state/store";
+import { computePopoverDimensions, computePosition } from "@/lib/positioning";
+import { useDaoStore } from "@/state/store";
 
 export type Popover = {
   content: React.ReactNode;

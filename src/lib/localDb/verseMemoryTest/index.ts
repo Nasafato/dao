@@ -1,4 +1,4 @@
-import { awaitDbInit, wrappedDb as db } from "../db";
+import { awaitDbInit, wrappedDb as db } from "@/lib/localDb/db";
 import {
   VerseMemoryTestSchemaArray as arraySchema,
   VerserMemoryTestIndexes as indexes,

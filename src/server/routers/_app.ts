@@ -1,5 +1,5 @@
 import { inferRouterOutputs } from "@trpc/server";
-import { createTRPCRouter } from "../trpc";
+import { createTRPCRouter } from "@/server/trpc";
 import { verseRouter } from "./verse";
 // import { exampleRouter } from "~/server/api/routers/example";
 import { definitionRouter } from "./definition";

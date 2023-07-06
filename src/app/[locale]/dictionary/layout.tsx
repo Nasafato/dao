@@ -1,5 +1,5 @@
 "use client";
-import { Providers } from "../Providers";
+import { Providers } from "@/app/Providers";
 
 export default function DictionaryLayout({
   children,

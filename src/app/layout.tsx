@@ -2,14 +2,14 @@ import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { twJoin } from "tailwind-merge";
-import { Footer } from "../components/primary/Footer";
-import { Popover } from "../components/primary/VersesPopover";
-import { MainLayoutHorizontalPaddingStyle } from "../styles";
+import { Footer } from "@/components/primary/Footer";
+import { Popover } from "@/components/primary/VersesPopover";
+import { MainLayoutHorizontalPaddingStyle } from "@/styles";
 import { Header } from "./Header";
 import { Providers } from "./Providers";
 import { Setup } from "./Setup";
 import { themeEffect } from "./theme-effect";
-import { Playlist } from "../components/Playlist";
+import { Playlist } from "@/components/Playlist";
 
 export default function RootLayout({
   children,

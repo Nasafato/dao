@@ -4,9 +4,9 @@ import { MagnifyingGlassCircleIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import { SingleCharDefinition } from "../../components/primary/SingleCharDefinition";
-import { Spinner } from "../../components/shared/Spinner";
-import { trpcClient } from "../../lib/trpcClient";
+import { SingleCharDefinition } from "@/components/primary/SingleCharDefinition";
+import { Spinner } from "@/components/shared/Spinner";
+import { trpcClient } from "@/lib/trpcClient";
 import { TRPCClientError } from "@trpc/client";
 
 const LiStyle =

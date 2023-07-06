@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { initializeDb } from "../lib/localDb/db";
-import { useCacheDictionary } from "../hooks";
-import { initializeKeyValueStore } from "../lib/keyValueStore";
+import { initializeDb } from "@/lib/localDb/db";
+import { useCacheDictionary } from "@/hooks";
+import { initializeKeyValueStore } from "@/lib/keyValueStore";
 
 let init = false;
 

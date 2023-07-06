@@ -1,4 +1,4 @@
-import { DAO_COMBINED } from "../../../lib/materials";
+import { DAO_COMBINED } from "@/lib/materials";
 import { VerseDetails } from "./VerseDetails";
 
 export default async function VerseDetailsPage({

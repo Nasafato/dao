@@ -2,8 +2,8 @@ import { ForwardIcon, PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useDaoStore } from "@/state/store";
 import { twJoin } from "tailwind-merge";
-import { buildAudioFile, buildVerseMediaSourceUrl } from "../../../utils";
-import { Languages } from "../../../../types/materials";
+import { buildAudioFile, buildVerseMediaSourceUrl } from "@/utils";
+import { Languages } from "types/materials";
 
 const LightColorStyle = "text-gray-400 hover:text-gray-500";
 const SkipButtonStyle = twJoin(

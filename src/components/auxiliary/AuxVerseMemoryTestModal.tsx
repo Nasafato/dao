@@ -5,12 +5,12 @@ import {
   INDEXED_DB_VERSION,
   USER_ID,
   reportMemoryTestResult,
-} from "../../lib/localDb";
-import { VerseMemoryStatus } from "../../lib/localDb/verseMemoryStatus";
-import { queryClient, useVerseMemoryStatusQuery } from "../../lib/reactQuery";
-import { useDaoStore } from "../../state/store";
-import { Countdown } from "../shared/Countdown";
-import { Spinner } from "../shared/Spinner";
+} from "@/lib/localDb";
+import { VerseMemoryStatus } from "@/lib/localDb/verseMemoryStatus";
+import { queryClient, useVerseMemoryStatusQuery } from "@/lib/reactQuery";
+import { useDaoStore } from "@/state/store";
+import { Countdown } from "@/components/shared/Countdown";
+import { Spinner } from "@/components/shared/Spinner";
 
 export function AuxVerseMemoryTestModal() {
   const verse = useDaoStore((state) => state.verseBeingTested);

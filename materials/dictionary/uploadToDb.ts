@@ -3,7 +3,7 @@ import cliProgress from "cli-progress";
 import fs from "fs/promises";
 import { CONFIG, Entry, EntrySchema } from "./config";
 import { z } from "zod";
-import { prisma } from "../../src/lib/db";
+import { prisma } from "@/lib/db";
 
 const EntrySchemaArray = z.array(EntrySchema);
 

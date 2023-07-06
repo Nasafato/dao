@@ -1,9 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  CharMap,
-  addToRefMap,
-  useCharNavigation,
-} from "../../lib/charNavigation";
+import { CharMap, addToRefMap, useCharNavigation } from "@/lib/charNavigation";
 
 export function VerseChar({ char, charId }: { char: string; charId: string }) {
   const { renderCharId } = useCharNavigation();

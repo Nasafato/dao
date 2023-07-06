@@ -1,6 +1,6 @@
 import { openDB, deleteDB, wrap, unwrap } from "idb";
 import { useQuery } from "@tanstack/react-query";
-import { initializeDbPromise } from "../lib/localDb/db";
+import { initializeDbPromise } from "@/lib/localDb/db";
 
 interface IndexedDbViewerProps {
   dbName: string;

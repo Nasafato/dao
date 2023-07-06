@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { Readable } from "stream";
-import { processLines, withStdinStdout } from "../cliUtils";
+import { processLines, withStdinStdout } from "materials/cliUtils";
 
 const JOSH_VOICE_ID = "TxGEqnHWrfWFTfGW9XjX";
 

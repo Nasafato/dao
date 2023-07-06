@@ -2,14 +2,10 @@
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { twJoin } from "tailwind-merge";
-import { Translators } from "../../../../types/materials";
-import { Tooltip } from "../../../components/Tooltip";
-import { DAO_COMBINED } from "../../../lib/materials";
-import {
-  HeadingStyle,
-  SecondaryDarkModeTextStyle,
-  VerseStyle,
-} from "../../../styles";
+import { Translators } from "types/materials";
+import { Tooltip } from "@/components/Tooltip";
+import { DAO_COMBINED } from "@/lib/materials";
+import { HeadingStyle, SecondaryDarkModeTextStyle, VerseStyle } from "@/styles";
 
 export function VersesEnglish({
   translator,

@@ -8,7 +8,7 @@ import {
   NormalizedDict,
   Translators,
   buildAudioFileName,
-} from "../types/materials";
+} from "types/materials";
 import { CDN_URL } from "./consts";
 import { DbEntryWithDefinitions } from "./lib/edgeDb";
 

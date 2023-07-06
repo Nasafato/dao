@@ -1,4 +1,4 @@
-import { withStdinStdout } from "../cliUtils";
+import { withStdinStdout } from "materials/cliUtils";
 import fetch from "node-fetch";
 
 const BASE_URL = `https://${process.env.BUNNYCDN_STORAGE_ENDPOINT}`;

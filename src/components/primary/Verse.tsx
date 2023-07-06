@@ -8,33 +8,29 @@ import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
 import { twMerge as twJoin } from "tailwind-merge";
-import { useMoreQuery } from "../../hooks";
-import {
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-  USER_ID,
-} from "../../lib/localDb";
+import { useMoreQuery } from "@/hooks";
+import { INDEXED_DB_NAME, INDEXED_DB_VERSION, USER_ID } from "@/lib/localDb";
 import {
   VerseMemoryStatus,
   VerseMemoryStatusType,
-} from "../../lib/localDb/verseMemoryStatus";
-import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
-import { queryClient } from "../../lib/reactQuery";
+} from "@/lib/localDb/verseMemoryStatus";
+import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
+import { queryClient } from "@/lib/reactQuery";
 import {
   SecondaryButtonStyle,
   SecondaryDarkModeTextStyle,
   TooltipStyle,
-} from "../../styles";
-import { DaoVerse } from "../../types";
-import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
-import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
-import { Spinner } from "../shared/Spinner";
+} from "@/styles";
+import { DaoVerse } from "@/types";
+import { AuxVerseHeaderLearning } from "@/components/auxiliary/AuxVerseHeaderLearning";
+import { AuxVerseLearningMenu } from "@/components/auxiliary/AuxVerseLearningMenu";
+import { Spinner } from "@/components/shared/Spinner";
 import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
-import { Languages } from "../../../types/materials";
-import { buildAudioFile, buildVerseMediaSourceUrl } from "../../utils";
+import { Languages } from "types/materials";
+import { buildAudioFile, buildVerseMediaSourceUrl } from "@/utils";
 
 export function Verse({
   verse,

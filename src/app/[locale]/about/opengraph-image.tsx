@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/server";
 import { twJoin } from "tailwind-merge";
-import { OgLayout } from "../../components/OgLayout";
-import { computeUniqueChars, fetchFont } from "../../serverUtils";
+import { OgLayout } from "@/components/OgLayout";
+import { computeUniqueChars, fetchFont } from "@/serverUtils";
 
 export default async function AboutOg() {
   const uniqueChars = computeUniqueChars("道德经");

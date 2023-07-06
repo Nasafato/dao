@@ -1,4 +1,4 @@
-import { processLines, withStdinStdout } from "../cliUtils";
+import { processLines, withStdinStdout } from "materials/cliUtils";
 
 async function main() {
   await withStdinStdout(async (ctx, input) => {

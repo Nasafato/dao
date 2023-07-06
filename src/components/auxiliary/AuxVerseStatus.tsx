@@ -1,12 +1,12 @@
 import { AcademicCapIcon } from "@heroicons/react/20/solid";
 import { UseMutationResult } from "@tanstack/react-query";
-import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
-import { useDaoStore } from "../../state/store";
-import { DaoVerse } from "../../types";
-import { Spinner } from "../shared/Spinner";
-import { Countdown } from "../shared/Countdown";
-import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
-import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "../../styles";
+import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
+import { useDaoStore } from "@/state/store";
+import { DaoVerse } from "@/types";
+import { Spinner } from "@/components/shared/Spinner";
+import { Countdown } from "@/components/shared/Countdown";
+import { VerseMemoryStatusType } from "@/lib/localDb/verseMemoryStatus";
+import { SecondaryButtonStyle, SecondaryDarkModeTextStyle } from "@/styles";
 import { twMerge } from "tailwind-merge";
 
 export function AuxVerseStatus({
