@@ -27,7 +27,8 @@ export function middleware(request: NextRequest) {
   }
   if (request.nextUrl.pathname === "/" || request.nextUrl.pathname === "") {
     const locale = getLocale(request);
-    return NextResponse.redirect(new URL(`/${locale}/verses/chinese`));
+    const url = new URL(`/${locale}/verses/chinese`, request.url);
+    return NextResponse.redirect(url);
   }
 
   const pathname = request.nextUrl.pathname;
