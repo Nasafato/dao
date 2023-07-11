@@ -1,29 +1,32 @@
-"use client";
-import Link from "next/link";
-import { Container } from "@/components/shared/PageLayout";
-import { HeadingStyle, ButtonStyle } from "@/styles";
-import { usePathname } from "next/navigation";
-import { Translators } from "types/materials";
+import { ButtonStyle, HeadingStyle } from "@/styles";
 import { capitalize } from "@/utils";
+import Link from "next/link";
 import { twJoin } from "tailwind-merge";
+import { Translators } from "types/materials";
 
-export default function VersesEnglishLayout({
+export default function TranslatorLayout({
   children,
+  params,
 }: {
-  children: React.ReactNode;
+  children: any;
+  params: {
+    locale: string;
+    language: string;
+    translator: string;
+  };
 }) {
-  const pathname = usePathname();
   return (
-    <Container>
+    <div>
       <nav className="mb-8">
         <h3 className={twJoin(HeadingStyle(), "mb-1")}>Translation</h3>
         <div className="flex items-center gap-x-2">
           {Translators.map((t) => {
-            const isActive = pathname?.includes(t) ?? false;
+            // const isActive = pathname?.includes(t) ?? false;
+            const isActive = params.translator === t;
             return (
               <Link
                 key={t}
-                href={`/english/${t}`}
+                href={`/verses/english/${t}`}
                 className={` ${ButtonStyle()} py-1 px-2 hover:bg-gray-200 dark:hover:bg-gray-800 ${
                   isActive ? "bg-gray-200 dark:bg-gray-800" : ""
                 } `}
@@ -35,6 +38,6 @@ export default function VersesEnglishLayout({
         </div>
       </nav>
       {children}
-    </Container>
+    </div>
   );
 }

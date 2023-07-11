@@ -1,7 +1,8 @@
 export const runtime = "edge";
 export const revalidate = 60;
 
-import { computeUniqueChars, fetchFont } from "@/serverUtils";
+import { fetchFont } from "@/serverUtils";
+import { computeUniqueChars, convertNumberToChinese } from "@/utils";
 import { ImageResponse } from "next/server";
 import { twJoin } from "tailwind-merge";
 import { TRANSLATIONS_COMBINED as TRANSLATIONS } from "@/lib/materials";
@@ -12,7 +13,6 @@ import {
   font,
 } from "@/components/OgLayout";
 import { DAO_VERSES } from "@/lib/materials";
-import { convertNumberToChinese } from "@/serverUtils";
 
 export default async function VerseDetailsOG({
   params,

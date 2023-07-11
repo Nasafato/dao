@@ -1,0 +1,25 @@
+{
+  "Header": {
+    "Verses": {
+      "base": "诗篇",
+      "english": "英文",
+      "chinese": "中文"
+    },
+    "About": "关于我们",
+    "Dictionary": "词典"
+  },
+  "Playlist": {
+    "title": "播放列表",
+    "choices": {
+      "english": "英文",
+      "chinese": "中文"
+    }
+  },
+  "ModeToggle": {
+    "choices": {
+      "dark": "深色",
+      "light": "浅色",
+      "system": "系统"
+    }
+  }
+}

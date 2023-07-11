@@ -1,5 +1,3 @@
-import { Definition, Entry } from "@prisma/client";
-import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AudioFile,
   AudioFileInput,
@@ -11,6 +9,10 @@ import {
 } from "types/materials";
 import { CDN_URL } from "./consts";
 import { DbEntryWithDefinitions } from "./lib/edgeDb";
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 export function tryParseDaoIndex(i: unknown) {
   const result = Number(i);
@@ -31,10 +33,6 @@ export function forceQueryParamString(param: string | string[] | undefined) {
   }
 
   return param;
-}
-
-export function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export function buildAudioFile(input: AudioFileInput): AudioFile {
@@ -141,62 +139,9 @@ export function replaceNumericalPinyin(str: string) {
 
 // console.log(replaceNumericalPinyin("CL:塊|块[kuai4]")); // Outputs: CL:塊|块[kuài]
 
-function compareInputs<T>(
-  inputKeys: string[],
-  oldInputs: Record<string, T>,
-  newInputs: Record<string, T>
-) {
-  inputKeys.forEach((key) => {
-    const oldInput = oldInputs[key];
-    const newInput = newInputs[key];
-    if (oldInput !== newInput) {
-      console.log(`Input ${key} changed from ${oldInput} to ${newInput}`);
-    }
-  });
-}
-
-export function useDependenciesDebugger<T>(inputs: Record<string, T>) {
-  const oldInputsRef = useRef(inputs);
-  const inputValuesArray = Object.values(inputs);
-  const inputKeysArray = Object.keys(inputs);
-  useMemo(() => {
-    const oldInputs = oldInputsRef.current;
-    compareInputs(inputKeysArray, oldInputs, inputs);
-
-    oldInputsRef.current = inputs;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, inputValuesArray);
-}
-
-function parseQueryParam(query: string) {
+export function parseQueryParam(query: string) {
   const params = new URLSearchParams(query.slice(1));
   return params.get("query");
-}
-
-export function useQueryParam(key: string) {
-  const [query, setQuery] = useState<string | null>(null);
-  useEffect(() => {
-    const listener = () => {
-      const location = window.location;
-      const query = parseQueryParam(location.search);
-      // console.log("popstate query", query);
-      setQuery(query);
-    };
-    window.addEventListener("popstate", listener);
-
-    return () => {
-      window.removeEventListener("popstate", listener);
-    };
-  }, [key]);
-
-  useEffect(() => {
-    const location = window.location;
-    const query = parseQueryParam(location.search);
-    setQuery(query);
-    // console.log("initial query", query);
-  }, []);
-
-  return query;
 }
 
 export function sortEntriesByRelevancy(entries: Array<DbEntryWithDefinitions>) {
@@ -260,3 +205,62 @@ export const LanguageDisplayMap: Readonly<
   chinese: "中文",
   english: "English",
 } as const;
+
+export function getNestedValue(obj: any, str: string) {
+  const parts = str.split(".");
+
+  const getValue = (obj: any, path: string[]): unknown => {
+    if (path.length === 0) {
+      return obj;
+    }
+
+    return getValue(obj[path[0]], path.slice(1));
+  };
+
+  return getValue(obj, parts);
+}
+
+export function computeUniqueChars(text: string) {
+  const map: Record<string, boolean> = {};
+  for (const char of text) {
+    map[char] = true;
+  }
+  const uniqueChars = Object.keys(map).join("");
+  return uniqueChars;
+}
+
+export function convertNumberToChinese(number: number) {
+  // Support 1 through 99
+  const numbers = [
+    "零",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "七",
+    "八",
+    "九",
+    "十",
+  ] as const;
+  if (number < 11) {
+    return numbers[number];
+  }
+  const tens = Math.floor(number / 10);
+  const remainder = number % 10;
+  return `${tens === 1 ? "" : numbers[tens]}十${
+    remainder === 0 ? "" : numbers[remainder]
+  }`;
+}
+
+export function padVerseId(verseId: string | number) {
+  let verseIdNumber;
+  if (typeof verseId === "string") {
+    verseIdNumber = Number(verseId);
+  } else {
+    verseIdNumber = verseId;
+  }
+
+  return `${verseIdNumber < 10 ? "0" : ""}${verseIdNumber}`;
+}

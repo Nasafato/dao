@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { ComputerDesktopIcon } from "@heroicons/react/20/solid";
-import { themeEffect } from "./theme-effect";
+import { themeEffect } from "../app/theme-effect";
 
 export function ThemeToggle() {
   // a `null` preference implies auto
@@ -44,7 +44,7 @@ export function ThemeToggle() {
   });
 
   return (
-    <div className="group flex items-center gap-x-1">
+    <div className="group flex items-center gap-x-1 font-mono">
       {/*
         the `theme-auto:` plugin is registered in `tailwind.config.js` and
         works similarly to the `dark:` prefix, which depends on the `theme-effect.ts` behavior

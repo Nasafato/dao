@@ -1,32 +1,42 @@
-import { Header } from "@/app/Header";
-import { Providers } from "@/app/Providers";
+import { Header } from "@/components/Header";
+import { Providers } from "@/components/Providers";
 import { Setup } from "@/app/Setup";
+import { IntlContextProvider } from "@/components/IntlProvider";
 import { Footer } from "@/components/primary/Footer";
 import { Popover } from "@/components/primary/VersesPopover";
+import { getDictionary } from "@/locales/getDictionary";
 import { MainLayoutHorizontalPaddingStyle } from "@/styles";
 import "@/styles/globals.css";
+import "server-only";
 import { twJoin } from "tailwind-merge";
 
-export default function LocaleRootLayout({
+export default async function LocaleRootLayout({
   children,
+  params: { locale },
 }: {
   children: React.ReactNode;
+  params: {
+    locale: string;
+  };
 }) {
+  const dict = await getDictionary(locale);
   return (
-    <Providers>
-      <Header />
-      <Setup />
-      <main
-        className={twJoin(
-          MainLayoutHorizontalPaddingStyle,
-          "pb-16 lg:pb-24 pt-4 lg:pt-8 mt-12"
-        )}
-      >
-        {children}
-      </main>
-      <Footer />
-      <Popover></Popover>
-    </Providers>
+    <IntlContextProvider locale={locale} dict={dict}>
+      <Providers>
+        <Header />
+        <Setup />
+        <main
+          className={twJoin(
+            MainLayoutHorizontalPaddingStyle,
+            "pb-28 lg:pb-32 pt-4 lg:pt-8 mt-12"
+          )}
+        >
+          {children}
+        </main>
+        <Footer />
+        <Popover></Popover>
+      </Providers>
+    </IntlContextProvider>
   );
 }
 

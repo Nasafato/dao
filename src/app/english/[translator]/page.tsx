@@ -1,5 +1,5 @@
 import { Translators } from "types/materials";
-import { VersesEnglish } from "./VersesEnglish";
+import { VersesEnglish } from "../../../components/primary/VersesEnglish";
 
 export default async function VersesEnglishPage(props: {
   params: { translator: (typeof Translators)[number] };

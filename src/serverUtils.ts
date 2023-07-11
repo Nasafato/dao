@@ -1,13 +1,4 @@
-export function padVerseId(verseId: string | number) {
-  let verseIdNumber;
-  if (typeof verseId === "string") {
-    verseIdNumber = Number(verseId);
-  } else {
-    verseIdNumber = verseId;
-  }
-
-  return `${verseIdNumber < 10 ? "0" : ""}${verseIdNumber}`;
-}
+import "server-only";
 
 export async function fetchFont(
   text: string,
@@ -36,38 +27,4 @@ export async function fetchFont(
   const res = await fetch(resource[1]);
 
   return res.arrayBuffer();
-}
-
-export function computeUniqueChars(text: string) {
-  const map: Record<string, boolean> = {};
-  for (const char of text) {
-    map[char] = true;
-  }
-  const uniqueChars = Object.keys(map).join("");
-  return uniqueChars;
-}
-
-export function convertNumberToChinese(number: number) {
-  // Support 1 through 99
-  const numbers = [
-    "零",
-    "一",
-    "二",
-    "三",
-    "四",
-    "五",
-    "六",
-    "七",
-    "八",
-    "九",
-    "十",
-  ] as const;
-  if (number < 11) {
-    return numbers[number];
-  }
-  const tens = Math.floor(number / 10);
-  const remainder = number % 10;
-  return `${tens === 1 ? "" : numbers[tens]}十${
-    remainder === 0 ? "" : numbers[remainder]
-  }`;
 }

@@ -17,7 +17,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "types/*": ["./types/*"],
-      "materials/*": ["./materials/*"]
+      "materials/*": ["./materials/*"],
+      "dictionaries/*": ["./dictionaries/*"]
     },
     "plugins": [
       {

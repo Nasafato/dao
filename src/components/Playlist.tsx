@@ -2,7 +2,7 @@
 import { Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment } from "react";
+import { Fragment, useTransition } from "react";
 import { twJoin } from "tailwind-merge";
 import { useDaoStore } from "@/state/store";
 import { background, border, ButtonStyle } from "@/styles";
@@ -11,6 +11,7 @@ import { PlayPauseButton } from "./primary/AudioPlayer/PlayPauseButton";
 import { DownloadAudioButton } from "./primary/DownloadAudioButton";
 import { PlaylistChinese } from "./PlaylistChinese";
 import { PlaylistEnglish } from "./PlaylistEnglish";
+import { useIntl, useTranslation } from "@/components/IntlProvider";
 
 export function Playlist() {
   const audioFile = useDaoStore((state) => state.audioFile);
@@ -18,6 +19,7 @@ export function Playlist() {
   const setIsPlaylistOpen = useDaoStore((state) => state.setIsPlaylistOpen);
   const language = useDaoStore((state) => state.playlistLanguage);
   const setPlaylistLanguage = useDaoStore((state) => state.setPlaylistLanguage);
+  const { t } = useTranslation();
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -36,7 +38,9 @@ export function Playlist() {
               border()
             }
           >
-            <h3 className="text-sm font-semibold leading-6">Playlist</h3>
+            <h3 className="text-sm font-semibold leading-6">
+              {t("Playlist.title")}
+            </h3>
             <button
               type="button"
               className={ButtonStyle({
@@ -55,21 +59,24 @@ export function Playlist() {
               border()
             }
           >
-            {([{ language: "Chinese" }, { language: "English" }] as const).map(
-              (choice) => (
-                <button
-                  className={`${ButtonStyle()} px-2 py-1 ${
-                    choice.language === language && "bg-gray-200"
-                  }`}
-                  onClick={() => {
-                    setPlaylistLanguage(choice.language);
-                  }}
-                  key={choice.language}
-                >
-                  {choice.language}
-                </button>
-              )
-            )}
+            {(
+              [
+                { language: t("Playlist.choices.chinese"), id: "Chinese" },
+                { language: t("Playlist.choices.english"), id: "English" },
+              ] as const
+            ).map((choice) => (
+              <button
+                className={`${ButtonStyle()} px-2 py-1 ${
+                  choice.id === language && "bg-gray-200"
+                }`}
+                onClick={() => {
+                  setPlaylistLanguage(choice.id);
+                }}
+                key={choice.id}
+              >
+                {choice.language}
+              </button>
+            ))}
           </section>
           <section
             className={twJoin(

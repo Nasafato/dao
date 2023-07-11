@@ -36,9 +36,9 @@ export function VersesEnglish({
                     anchor={
                       <Link
                         href={{
-                          pathname: `/verses/${verseId}`,
+                          pathname: `/verse/${verseId}`,
                           hash: `#dao${verseId}`,
-                          query: { prev: `/english/${translator}` },
+                          query: { prev: `/verses/english/${translator}` },
                         }}
                         className={`
                         ${SecondaryDarkModeTextStyle}

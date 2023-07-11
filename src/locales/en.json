@@ -1,0 +1,25 @@
+{
+  "Header": {
+    "Verses": {
+      "base": "Verses",
+      "english": "English",
+      "chinese": "Chinese"
+    },
+    "About": "About",
+    "Dictionary": "Dictionary"
+  },
+  "Playlist": {
+    "title": "Playlist",
+    "choices": {
+      "english": "English",
+      "chinese": "Chinese"
+    }
+  },
+  "ModeToggle": {
+    "choices": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    }
+  }
+}

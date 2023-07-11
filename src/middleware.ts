@@ -2,25 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 
-let headers = { "accept-language": "en-US,en;q=0.5" };
-let languages = new Negotiator({ headers }).languages();
-let locales = ["en-US", "nl-NL", "nl"];
+let locales = ["en-US", "zh", "nl"];
 let defaultLocale = "en-US";
-
-match(languages, locales, defaultLocale); // -> 'en-US'
 
 // Get the preferred locale, similar to above or using a library
 function getLocale(request: NextRequest) {
-  let languages = new Negotiator({ headers }).languages();
-  let locales = ["en-US", "nl-NL", "nl"];
-  let defaultLocale = "en-US";
+  let languages = new Negotiator({
+    headers: Object.fromEntries(new Map(request.headers).entries()),
+  }).languages();
   const locale = match(languages, locales, defaultLocale); // -> 'en-US'
   return locale;
 }
 
 export function middleware(request: NextRequest) {
+  const localeCookie = request.cookies.get("NEXT_LOCALE");
+  const locale = localeCookie?.value ?? getLocale(request);
   if (request.nextUrl.pathname === "/" || request.nextUrl.pathname === "") {
-    const locale = getLocale(request);
     const url = new URL(`/${locale}/verses/chinese`, request.url);
     return NextResponse.redirect(url);
   }
@@ -32,8 +29,6 @@ export function middleware(request: NextRequest) {
 
   // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
-
     // e.g. incoming request is /products
     // The new URL is now /en-US/products
     return NextResponse.redirect(

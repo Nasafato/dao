@@ -38,7 +38,8 @@ export function getNextCharId(charId: string, forward = true) {
   const nextCharId = charIds[index + addend];
   if (!nextCharId) return null;
 
-  const isInVerseDetails = location.pathname.includes("/verse");
+  const parts = location.pathname.split("/");
+  const isInVerseDetails = parts.some((part) => part === "verse");
   if (isInVerseDetails) {
     const { verseId } = extractCharInfoFromId(charId);
     const { verseId: nextCharVerseId } = extractCharInfoFromId(nextCharId);

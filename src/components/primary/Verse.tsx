@@ -1,13 +1,4 @@
-import {
-  ArrowRightIcon,
-  ChevronUpDownIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useState } from "react";
-import { twMerge as twJoin } from "tailwind-merge";
+import { Spinner } from "@/components/shared/Spinner";
 import { useMoreQuery } from "@/hooks";
 import { INDEXED_DB_NAME, INDEXED_DB_VERSION, USER_ID } from "@/lib/localDb";
 import {
@@ -22,15 +13,21 @@ import {
   TooltipStyle,
 } from "@/styles";
 import { DaoVerse } from "@/types";
-import { AuxVerseHeaderLearning } from "@/components/auxiliary/AuxVerseHeaderLearning";
-import { AuxVerseLearningMenu } from "@/components/auxiliary/AuxVerseLearningMenu";
-import { Spinner } from "@/components/shared/Spinner";
+import { buildAudioFile } from "@/utils";
+import {
+  ArrowRightIcon,
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
+import { useState } from "react";
+import { twMerge as twJoin } from "tailwind-merge";
 import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
-import { Languages } from "types/materials";
-import { buildAudioFile, buildVerseMediaSourceUrl } from "@/utils";
 
 export function Verse({
   verse,
@@ -144,10 +141,10 @@ export function Verse({
               <Tooltip.Trigger asChild>
                 <Link
                   href={{
-                    pathname: `/verses/${verse.id}`,
+                    pathname: `/verse/${verse.id}`,
                     hash: `#dao${verse.id}`,
                     query: {
-                      prev: `/chinese`,
+                      prev: `/verses/chinese`,
                     },
                   }}
                   className={twJoin(

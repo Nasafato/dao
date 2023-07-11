@@ -1,7 +1,8 @@
+import { OgLayout } from "@/components/OgLayout";
+import { fetchFont } from "@/serverUtils";
+import { computeUniqueChars } from "@/utils";
 import { ImageResponse } from "next/server";
 import { twJoin } from "tailwind-merge";
-import { OgLayout } from "@/components/OgLayout";
-import { computeUniqueChars, fetchFont } from "@/serverUtils";
 
 export default async function AboutOg() {
   const uniqueChars = computeUniqueChars("道德经");

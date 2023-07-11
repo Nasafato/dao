@@ -1,12 +1,12 @@
-import { Definition, Entry } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import type { DenormalizedDictSchema, NormalizedDict } from "types/materials";
+import { DbEntryWithDefinitions } from "@/lib/edgeDb";
 import * as kv from "@/lib/keyValueStore";
 import { queryClient } from "@/lib/reactQuery";
 import { trpcClient } from "@/lib/trpcClient";
-import { findMatchingEntries, normalizeDict } from "@/utils";
-import { DbEntryWithDefinitions } from "@/lib/edgeDb";
+import { findMatchingEntries, normalizeDict, parseQueryParam } from "@/utils";
+import { Entry } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { DenormalizedDictSchema, NormalizedDict } from "types/materials";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -152,3 +152,56 @@ export function useCacheDictionary(dictType: "all" = "all") {
 //     isFetched: queryResult.isFetched,
 //   };
 // }
+
+export function useQueryParam(key: string) {
+  const [query, setQuery] = useState<string | null>(null);
+  useEffect(() => {
+    const listener = () => {
+      const location = window.location;
+      const query = parseQueryParam(location.search);
+      // console.log("popstate query", query);
+      setQuery(query);
+    };
+    window.addEventListener("popstate", listener);
+
+    return () => {
+      window.removeEventListener("popstate", listener);
+    };
+  }, [key]);
+
+  useEffect(() => {
+    const location = window.location;
+    const query = parseQueryParam(location.search);
+    setQuery(query);
+    // console.log("initial query", query);
+  }, []);
+
+  return query;
+}
+
+export function useDependenciesDebugger<T>(inputs: Record<string, T>) {
+  const oldInputsRef = useRef(inputs);
+  const inputValuesArray = Object.values(inputs);
+  const inputKeysArray = Object.keys(inputs);
+  useMemo(() => {
+    const oldInputs = oldInputsRef.current;
+    compareInputs(inputKeysArray, oldInputs, inputs);
+
+    oldInputsRef.current = inputs;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, inputValuesArray);
+}
+
+function compareInputs<T>(
+  inputKeys: string[],
+  oldInputs: Record<string, T>,
+  newInputs: Record<string, T>
+) {
+  inputKeys.forEach((key) => {
+    const oldInput = oldInputs[key];
+    const newInput = newInputs[key];
+    if (oldInput !== newInput) {
+      console.log(`Input ${key} changed from ${oldInput} to ${newInput}`);
+    }
+  });
+}

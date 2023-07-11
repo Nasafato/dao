@@ -1,6 +1,5 @@
-import { z } from "zod";
-import type { Entry, Definition } from "@prisma/client";
 import { DbEntryWithDefinitions } from "@/lib/edgeDb";
+import { z } from "zod";
 
 export const Translators = ["gou", "goddard", "legge", "susuki"] as const;
 export const Languages = ["chinese", "english"] as const;

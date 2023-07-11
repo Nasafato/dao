@@ -28,7 +28,7 @@ export function VerseDetails({ verse }: { verse: VerseCombined }) {
             fallback={
               <Link
                 href={{
-                  pathname: "/chinese",
+                  pathname: "/verses/chinese",
                   hash: `#dao${verseId}`,
                 }}
                 className={twMerge(
@@ -63,7 +63,7 @@ function LinkWithSearchParams({ verseId }: { verseId: number }) {
   return (
     <Link
       href={{
-        pathname: prevLink ? prevLink : "/chinese",
+        pathname: prevLink ? prevLink : "/verses/chinese",
         hash: `#dao${verseId}`,
       }}
       className={twMerge(
