@@ -1,0 +1,43 @@
+{
+  "Header": {
+    "Verses": {
+      "base": "诗篇",
+      "english": "英文",
+      "chinese": "中文"
+    },
+    "About": "关于我们",
+    "Dictionary": "词典"
+  },
+  "Playlist": {
+    "title": "播放列表",
+    "choices": {
+      "english": "英文",
+      "chinese": "中文"
+    }
+  },
+  "ThemeToggle": {
+    "choices": {
+      "dark": "深色",
+      "light": "浅色",
+      "system": "系统"
+    }
+  },
+  "Verses": {
+    "goTo": {
+      "base": "前往",
+      "tooltip": "前往诗篇"
+    },
+    "back": {
+      "base": "返回",
+      "tooltip": "返回诗篇"
+    },
+    "showMore": {
+      "tooltip": "显示更多"
+    }
+  },
+  "Footer": {
+    "AudioPlayer": {
+      "notPlaying": "未播放"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { DaoVerse } from "@/types";
-import { AudioFile, Languages, Translators } from "../../types/materials";
+import { AudioFile, Languages, Translators } from "types/materials";
 
 interface DaoStore {
   /* Language. */

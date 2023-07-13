@@ -1,7 +1,7 @@
-import { VerseCombined, VerseTranslation } from "../../types/materials";
+import { VerseCombined, VerseTranslation } from "types/materials";
 
-const TRANSLATIONS_COMBINED: VerseTranslation[] = require("../../materials/translations/translations.json");
-const DAO_TEXT: string[] = require("../../materials/verses/dao.json");
+const TRANSLATIONS_COMBINED: VerseTranslation[] = require("materials/translations/translations.json");
+const DAO_TEXT: string[] = require("materials/verses/dao.json");
 
 export { TRANSLATIONS_COMBINED };
 export const DAO_VERSES = Array.from(DAO_TEXT).map((value, index) => {
@@ -11,8 +11,8 @@ export const DAO_VERSES = Array.from(DAO_TEXT).map((value, index) => {
   };
 });
 
-const daoCombined: VerseCombined[] = require("../../materials/combined.json");
+const daoCombined: VerseCombined[] = require("materials/combined.json");
 export const DAO_COMBINED = daoCombined;
 
-import availableAudioFiles from "../../materials/audio/availableFiles.json";
+import availableAudioFiles from "materials/audio/availableFiles.json";
 export { availableAudioFiles };

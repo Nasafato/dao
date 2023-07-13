@@ -146,3 +146,12 @@ export const TooltipStyle = tv({
     arrow: "fill-back dark:fill-white",
   },
 });
+
+export const MenuStyle = tv({
+  slots: {
+    button: "hover:underline",
+    items: `${border()} ${background()} absolute top-6 right-0 border w-32`,
+    item: "block px-3 py-2 hover:underline",
+    activeItem: "bg-gray-200 dark:bg-gray-800",
+  },
+});

@@ -1,11 +1,11 @@
-import { twJoin } from "tailwind-merge";
-import { punctuation } from "../../consts";
-import { buildCharId } from "../../lib/charNavigation";
+import { punctuation } from "@/consts";
+import { buildCharId } from "@/lib/charNavigation";
+import { HeadingStyle } from "@/styles";
+import { capitalize } from "@/utils";
 import ReactMarkdown from "react-markdown";
-import { HeadingStyle } from "../../styles";
-import { capitalize } from "../../utils";
+import { twJoin } from "tailwind-merge";
+import { VerseCombined } from "types/materials";
 import { VerseChar } from "./VerseChar";
-import { VerseCombined } from "../../../types/materials";
 
 const TRANSLATORS = ["gou", "legge", "goddard", "susuki"] as const;
 

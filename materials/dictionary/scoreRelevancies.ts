@@ -5,8 +5,8 @@ import {
   db,
   DefinitionsTable,
   EntriesTable,
-} from "../../src/lib/edgeDb";
-import { benchmark, processLines, withStdinStdout } from "../cliUtils";
+} from "@/lib/edgeDb";
+import { benchmark, processLines, withStdinStdout } from "materials/cliUtils";
 
 type EntryRelevance = {
   id: number;

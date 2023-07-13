@@ -1,0 +1,43 @@
+{
+  "Header": {
+    "Verses": {
+      "base": "Verses",
+      "english": "English",
+      "chinese": "Chinese"
+    },
+    "About": "About",
+    "Dictionary": "Dictionary"
+  },
+  "Playlist": {
+    "title": "Playlist",
+    "choices": {
+      "english": "English",
+      "chinese": "Chinese"
+    }
+  },
+  "ThemeToggle": {
+    "choices": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System"
+    }
+  },
+  "Verses": {
+    "goTo": {
+      "base": "Go to",
+      "tooltip": "Go to verse"
+    },
+    "back": {
+      "base": "Back",
+      "tooltip": "Back to verses"
+    },
+    "showMore": {
+      "base": "Show more"
+    }
+  },
+  "Footer": {
+    "AudioPlayer": {
+      "notPlaying": "Not playing"
+    }
+  }
+}

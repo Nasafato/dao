@@ -8,12 +8,12 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { UseMutationResult } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { twJoin } from "tailwind-merge";
-import { VerseMemoryStatusType } from "../../lib/localDb/verseMemoryStatus";
-import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
-import { useDaoStore } from "../../state/store";
-import { SecondaryButtonStyle, TooltipStyle } from "../../styles";
-import { DaoVerse } from "../../types";
-import { Spinner } from "../shared/Spinner";
+import { VerseMemoryStatusType } from "@/lib/localDb/verseMemoryStatus";
+import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
+import { useDaoStore } from "@/state/store";
+import { SecondaryButtonStyle, TooltipStyle } from "@/styles";
+import { DaoVerse } from "@/types";
+import { Spinner } from "@/components/shared/Spinner";
 
 export function AuxVerseLearningMenu({
   verse,

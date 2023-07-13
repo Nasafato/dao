@@ -1,11 +1,11 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
-import { useTheme } from "../../state/theme";
+import { useTheme } from "@/state/theme";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDaoStore } from "../../state/store";
+import { useDaoStore } from "@/state/store";
 import { twJoin } from "tailwind-merge";
-import { BackgroundStyle, BorderStyle } from "../../styles";
+import { BackgroundStyle, BorderStyle } from "@/styles";
 
 const links = [
   {
@@ -47,36 +47,6 @@ export function Header() {
       ))}
     </ul>
   );
-  // right = (
-  //   <button onClick={toggleReaderMode}>
-  //     {readerMode ? "Disable reader mode" : "Enable reader mode"}
-  //   </button>
-  // );
-  // if (session) {
-  //   right = (
-  //     <div className="flex items-center gap-x-2 text-xs">
-  //       <div className="rounded-full py-2 px-3 ring-1 ring-gray-950/5">
-  //         {session.user?.name ?? "No name"}
-  //       </div>
-  //       <button
-  //         onClick={() => signOut()}
-  //         className="px-2 py1 text-center hover:text-gray-500"
-  //       >
-  //         Sign out
-  //       </button>
-  //     </div>
-  //   );
-  // } else if (status === "loading") {
-  //   right = <div className="text-xs flex items-center">Loading...</div>;
-  // } else {
-  //   right = (
-  //     <div className="text-xs flex items-center">
-  //       <Link href="/api/auth/signin" data-active={isActive("/signup")}>
-  //         Log in
-  //       </Link>
-  //     </div>
-  //   );
-  // }
 
   return (
     <nav

@@ -1,3 +1,19 @@
+import { Spinner } from "@/components/shared/Spinner";
+import { useMoreQuery } from "@/hooks";
+import { INDEXED_DB_NAME, INDEXED_DB_VERSION, USER_ID } from "@/lib/localDb";
+import {
+  VerseMemoryStatus,
+  VerseMemoryStatusType,
+} from "@/lib/localDb/verseMemoryStatus";
+import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
+import { queryClient } from "@/lib/reactQuery";
+import {
+  SecondaryButtonStyle,
+  SecondaryDarkModeTextStyle,
+  TooltipStyle,
+} from "@/styles";
+import { DaoVerse } from "@/types";
+import { buildAudioFile } from "@/utils";
 import {
   ArrowRightIcon,
   ChevronUpDownIcon,
@@ -6,35 +22,13 @@ import {
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { twMerge as twJoin } from "tailwind-merge";
-import { useMoreQuery } from "../../hooks";
-import {
-  INDEXED_DB_NAME,
-  INDEXED_DB_VERSION,
-  USER_ID,
-} from "../../lib/localDb";
-import {
-  VerseMemoryStatus,
-  VerseMemoryStatusType,
-} from "../../lib/localDb/verseMemoryStatus";
-import { MEMORY_STATUS } from "../../lib/localDb/verseMemoryStatus/schema";
-import { queryClient } from "../../lib/reactQuery";
-import {
-  SecondaryButtonStyle,
-  SecondaryDarkModeTextStyle,
-  TooltipStyle,
-} from "../../styles";
-import { DaoVerse } from "../../types";
-import { AuxVerseHeaderLearning } from "../auxiliary/AuxVerseHeaderLearning";
-import { AuxVerseLearningMenu } from "../auxiliary/AuxVerseLearningMenu";
-import { Spinner } from "../shared/Spinner";
 import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
-import { Languages } from "../../../types/materials";
-import { buildAudioFile, buildVerseMediaSourceUrl } from "../../utils";
+import { useTranslation } from "@/components/IntlProvider";
 
 export function Verse({
   verse,
@@ -68,6 +62,7 @@ export function Verse({
       ]);
     },
   });
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -139,7 +134,7 @@ export function Verse({
                   side={verseId === 1 ? "bottom" : "top"}
                   className={twJoin(TooltipStyle().content())}
                 >
-                  Show more
+                  {t("Verses.showMore.tooltip")}
                   <Tooltip.Arrow className={TooltipStyle().arrow()} />
                 </Tooltip.Content>
               </Tooltip.Portal>
@@ -148,10 +143,10 @@ export function Verse({
               <Tooltip.Trigger asChild>
                 <Link
                   href={{
-                    pathname: `/verses/${verse.id}`,
+                    pathname: `/verse/${verse.id}`,
                     hash: `#dao${verse.id}`,
                     query: {
-                      prev: `/chinese`,
+                      prev: `/verses/chinese`,
                     },
                   }}
                   className={twJoin(
@@ -159,7 +154,7 @@ export function Verse({
                     "text-sm flex items-center hover:underline gap-x-1 px-1"
                   )}
                 >
-                  Go{" "}
+                  {t("Verses.goTo.base")}{" "}
                   <ArrowRightIcon
                     className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
                   />
@@ -171,7 +166,7 @@ export function Verse({
                   side={verseId === 1 ? "bottom" : "top"}
                   className={twJoin(TooltipStyle().content())}
                 >
-                  Go to verse page
+                  {t("Verses.goTo.tooltip")}
                   <Tooltip.Arrow className={TooltipStyle().arrow()} />
                 </Tooltip.Content>
               </Tooltip.Portal>

@@ -1,4 +1,12 @@
 {
   "extends": "next/core-web-vitals",
-  "ignorePatterns": ["*.md"]
+  "ignorePatterns": ["*.md"],
+  "rules": {
+    // "no-restricted-imports": [
+    //   "error",
+    //   {
+    //     "patterns": [".*"]
+    //   }
+    // ]
+  }
 }

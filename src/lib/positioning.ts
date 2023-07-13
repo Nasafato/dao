@@ -1,4 +1,4 @@
-import { Arrow } from "../components/primary/PopoverProvider";
+import { Arrow } from "@/components/primary/PopoverProvider";
 
 interface ComputePositionArgs {
   anchorElement: HTMLElement;

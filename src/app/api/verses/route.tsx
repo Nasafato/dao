@@ -1,3 +1,4 @@
+import "server-only";
 import { DAO_VERSES } from "@/lib/materials";
 import { NextResponse } from "next/server";
 

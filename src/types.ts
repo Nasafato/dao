@@ -28,3 +28,18 @@ export const VerseToUserSchema = z.object({
 });
 
 export type VerseToUserSchemaType = z.infer<typeof VerseToUserSchema>;
+
+export type Dict = {
+  [key: string]: string | Dict;
+};
+
+export type Link = {
+  key: string;
+  name: React.ReactNode;
+  href: string;
+  children?: Link[];
+};
+
+export type LinkWithChildren = Link & {
+  children: Link[];
+};

@@ -1,16 +1,16 @@
 "use client";
 import { twJoin } from "tailwind-merge";
-import { useDaoStore } from "../../state/store";
+import { useDaoStore } from "@/state/store";
 import {
   BackgroundStyle,
   FooterHeight,
   MainLayoutHorizontalPaddingStyle,
   border,
-} from "../../styles";
-import { DefinitionNavigation } from "../DefinitionNavigation";
+} from "@/styles";
+import { DefinitionNavigation } from "@/components/DefinitionNavigation";
 
-import { Playlist, PlaylistButton } from "../Playlist";
-import { Container } from "../shared/PageLayout";
+import { Playlist, PlaylistButton } from "@/components/Playlist";
+import { Container } from "@/components/shared/PageLayout";
 import { Audio } from "./AudioPlayer/Audio";
 import { AudioController } from "./AudioPlayer/AudioController";
 import { AudioTimeController } from "./AudioPlayer/AudioTimeController";

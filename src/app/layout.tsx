@@ -1,17 +1,9 @@
+import { themeEffect } from "@/app/theme-effect";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
-import { twJoin } from "tailwind-merge";
-import { Footer } from "../components/primary/Footer";
-import { Popover } from "../components/primary/VersesPopover";
-import { MainLayoutHorizontalPaddingStyle } from "../styles";
-import { Header } from "./Header";
-import { Providers } from "./Providers";
-import { Setup } from "./Setup";
-import { themeEffect } from "./theme-effect";
-import { Playlist } from "../components/Playlist";
 
-export default function RootLayout({
+export default function LocaleRootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -27,20 +19,7 @@ export default function RootLayout({
       </head>
 
       <body>
-        <Providers>
-          <Header />
-          <Setup />
-          <main
-            className={twJoin(
-              MainLayoutHorizontalPaddingStyle,
-              "pb-16 lg:pb-24 pt-4 lg:pt-8 mt-12"
-            )}
-          >
-            {children}
-          </main>
-          <Footer />
-          <Popover></Popover>
-        </Providers>
+        {children}
         <div id="popover-portal"></div>
         <div id="command-palette-portal"></div>
         <Analytics />

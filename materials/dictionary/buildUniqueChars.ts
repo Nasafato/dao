@@ -1,5 +1,5 @@
-import DAO_JSON from "../verses/dao.json";
-import DESCRIPTIONS_JSON from "../descriptions/descriptions.json";
+import DAO_JSON from "materials/verses/dao.json";
+import DESCRIPTIONS_JSON from "materials//descriptions/descriptions.json";
 import fs from "fs";
 import { join } from "path";
 

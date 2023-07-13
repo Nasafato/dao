@@ -1,4 +1,4 @@
-import { punctuation } from "../materials/consts";
+import { punctuation } from "materials/consts";
 
 function generateClozes(
   sentence: string,
