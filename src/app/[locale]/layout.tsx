@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
-import { Setup } from "@/app/Setup";
+import { Setup } from "@/components/Setup";
 import { IntlContextProvider } from "@/components/IntlProvider";
 import { Footer } from "@/components/primary/Footer";
 import { Popover } from "@/components/primary/VersesPopover";

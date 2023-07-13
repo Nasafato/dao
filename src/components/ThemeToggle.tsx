@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
-import { ComputerDesktopIcon } from "@heroicons/react/20/solid";
 import { themeEffect } from "../app/theme-effect";
+import { useTranslation } from "@/components/IntlProvider";
 
 export function ThemeToggle() {
   // a `null` preference implies auto
@@ -42,6 +42,8 @@ export function ThemeToggle() {
     window.addEventListener("storage", onStorageChange);
     return () => window.removeEventListener("storage", onStorageChange);
   });
+
+  const { t } = useTranslation();
 
   return (
     <div className="group flex items-center gap-x-1 font-mono">
@@ -117,10 +119,10 @@ export function ThemeToggle() {
           `}
       >
         {preference === null
-          ? "System"
+          ? t("ThemeToggle.choices.system")
           : preference === "dark"
-          ? "Dark"
-          : "Light"}
+          ? t("ThemeToggle.choices.dark")
+          : t("ThemeToggle.choices.light")}
       </span>
     </div>
   );

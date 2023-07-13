@@ -1,12 +1,13 @@
 import { twJoin } from "tailwind-merge";
-import { DefinitionOutput } from "@/server/routers/_app";
+// import { DefinitionOutput } from "@/server/routers/_app";
 import { replaceNumericalPinyin, sortEntriesByRelevancy } from "@/utils";
+import { DbEntryWithDefinitions } from "@/lib/edgeDb";
 
 export function SingleCharDefinition({
   entries: entries,
   className,
 }: {
-  entries: DefinitionOutput;
+  entries: DbEntryWithDefinitions[];
   className?: string;
 }) {
   const sortedEntries = sortEntriesByRelevancy(entries);

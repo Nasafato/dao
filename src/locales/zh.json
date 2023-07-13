@@ -15,11 +15,29 @@
       "chinese": "中文"
     }
   },
-  "ModeToggle": {
+  "ThemeToggle": {
     "choices": {
       "dark": "深色",
       "light": "浅色",
       "system": "系统"
+    }
+  },
+  "Verses": {
+    "goTo": {
+      "base": "前往",
+      "tooltip": "前往诗篇"
+    },
+    "back": {
+      "base": "返回",
+      "tooltip": "返回诗篇"
+    },
+    "showMore": {
+      "tooltip": "显示更多"
+    }
+  },
+  "Footer": {
+    "AudioPlayer": {
+      "notPlaying": "未播放"
     }
   }
 }

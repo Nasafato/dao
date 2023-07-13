@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Dictionary, Fallback } from "./Dictionary";
+import { Dictionary, Fallback } from "@/components/Dictionary";
 import { Container } from "@/components/shared/PageLayout";
 
 export default function DictionaryPage() {

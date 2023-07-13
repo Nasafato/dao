@@ -22,12 +22,13 @@ import {
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { twMerge as twJoin } from "tailwind-merge";
 import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
+import { useTranslation } from "@/components/IntlProvider";
 
 export function Verse({
   verse,
@@ -61,6 +62,7 @@ export function Verse({
       ]);
     },
   });
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -132,7 +134,7 @@ export function Verse({
                   side={verseId === 1 ? "bottom" : "top"}
                   className={twJoin(TooltipStyle().content())}
                 >
-                  Show more
+                  {t("Verses.showMore.tooltip")}
                   <Tooltip.Arrow className={TooltipStyle().arrow()} />
                 </Tooltip.Content>
               </Tooltip.Portal>
@@ -152,7 +154,7 @@ export function Verse({
                     "text-sm flex items-center hover:underline gap-x-1 px-1"
                   )}
                 >
-                  Go{" "}
+                  {t("Verses.goTo.base")}{" "}
                   <ArrowRightIcon
                     className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
                   />
@@ -164,7 +166,7 @@ export function Verse({
                   side={verseId === 1 ? "bottom" : "top"}
                   className={twJoin(TooltipStyle().content())}
                 >
-                  Go to verse page
+                  {t("Verses.goTo.tooltip")}
                   <Tooltip.Arrow className={TooltipStyle().arrow()} />
                 </Tooltip.Content>
               </Tooltip.Portal>

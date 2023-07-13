@@ -1,3 +1,4 @@
+import { useTranslation } from "@/components/IntlProvider";
 import { useDaoStore } from "@/state/store";
 import { BorderStyle, SoftBorderStyle } from "@/styles";
 import { LanguageDisplayMap, capitalize } from "@/utils";
@@ -6,6 +7,7 @@ import { twJoin } from "tailwind-merge";
 export function AudioTitle({ className }: { className?: string }) {
   const audioFile = useDaoStore((state) => state.audioFile);
   const verseId = useDaoStore((state) => state.audioFile?.verseId);
+  const { t } = useTranslation();
 
   return (
     <div
@@ -38,7 +40,7 @@ export function AudioTitle({ className }: { className?: string }) {
           </div>
         </div>
       ) : (
-        <div>Not playing</div>
+        <div>{t("Footer.AudioPlayer.notPlaying")}</div>
       )}
     </div>
   );

@@ -11,9 +11,11 @@ import { SecondaryDarkModeTextStyle } from "@/styles";
 import { VerseCombined } from "types/materials";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useTranslation } from "@/components/IntlProvider";
 
 export function VerseDetails({ verse }: { verse: VerseCombined }) {
   const verseId = verse.verseId;
+  const { t } = useTranslation();
 
   return (
     <PopoverProvider>
@@ -42,7 +44,7 @@ export function VerseDetails({ verse }: { verse: VerseCombined }) {
                     SecondaryDarkModeTextStyle
                   )}
                 />
-                Back
+                {t("Verses.back.base")}
               </Link>
             }
           >
@@ -59,6 +61,7 @@ export function VerseDetails({ verse }: { verse: VerseCombined }) {
 function LinkWithSearchParams({ verseId }: { verseId: number }) {
   const searchParams = useSearchParams();
   const prevLink = searchParams?.get("prev");
+  const { t } = useTranslation();
 
   return (
     <Link
@@ -74,7 +77,7 @@ function LinkWithSearchParams({ verseId }: { verseId: number }) {
       <ArrowLeftIcon
         className={twMerge("w-3 h-3 mr-1", SecondaryDarkModeTextStyle)}
       />
-      Back
+      {t("Verses.back.base")}
     </Link>
   );
 }

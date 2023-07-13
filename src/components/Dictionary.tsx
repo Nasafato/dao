@@ -6,8 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SingleCharDefinition } from "@/components/primary/SingleCharDefinition";
 import { Spinner } from "@/components/shared/Spinner";
-import { trpcClient } from "@/lib/trpcClient";
-import { TRPCClientError } from "@trpc/client";
+import { useDefinition } from "@/hooks";
 
 const LiStyle =
   "ring-1 ring-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
@@ -44,16 +43,20 @@ export function Dictionary() {
     [router]
   );
 
-  const searchQuery = useQuery({
-    queryKey: ["search", searchTerm],
-    queryFn: async () => {
-      const result = await trpcClient.definition.findOne.query(searchTerm);
-      return result;
-    },
-    networkMode: "offlineFirst",
+  const searchQuery = useDefinition(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
-    retry: false,
   });
+  // const searchQuery = useQuery({
+  //   queryKey: ["search", searchTerm],
+  //   queryFn: async () => {
+
+  //     const result = {};
+  //     return result;
+  //   },
+  //   networkMode: "offlineFirst",
+  //   enabled: !!searchTerm && searchTerm.length > 0,
+  //   retry: false,
+  // });
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -69,10 +72,6 @@ export function Dictionary() {
   const renderResults = () => {
     const { error } = searchQuery;
     if (error) {
-      if (error instanceof TRPCClientError) {
-        return <div>Error: {error.message}</div>;
-      }
-
       return <div>Error: {error.toString()}</div>;
     }
     if (searchQuery.isLoading && !(searchQuery.fetchStatus === "idle")) {

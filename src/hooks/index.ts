@@ -1,12 +1,16 @@
 import { DbEntryWithDefinitions } from "@/lib/edgeDb";
 import * as kv from "@/lib/keyValueStore";
 import { queryClient } from "@/lib/reactQuery";
-import { trpcClient } from "@/lib/trpcClient";
 import { findMatchingEntries, normalizeDict, parseQueryParam } from "@/utils";
 import { Entry } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { DenormalizedDictSchema, NormalizedDict } from "types/materials";
+import {
+  VerseCombinedSchema,
+  type DenormalizedDictSchema,
+  type NormalizedDict,
+  type VerseCombined,
+} from "types/materials";
 
 export function useLogPropChanges(props: any) {
   const prevProps = useRef(props);
@@ -32,7 +36,10 @@ export type CachedResult = (Entry & {
   definitions: string[];
 })[];
 
-export function useDefinition(char: string) {
+export function useDefinition(
+  char: string,
+  { enabled = true }: { enabled?: boolean } = { enabled: true }
+) {
   const query = useQuery({
     queryKey: ["definition", char],
     initialData: () => {
@@ -52,7 +59,7 @@ export function useDefinition(char: string) {
         "all",
       ]);
       if (!dictionary) {
-        console.log("cache miss");
+        console.log("cache miss: dict not cached");
         const result: {
           data: DbEntryWithDefinitions[];
         } = await fetch("/api/dictionary/definition?query=" + char).then(
@@ -62,12 +69,21 @@ export function useDefinition(char: string) {
         return result.data;
       }
       const matchingEntries = findMatchingEntries(dictionary, char);
+      if (matchingEntries.length === 0) {
+        console.log("cache miss: char not in dict");
+        const result: {
+          data: DbEntryWithDefinitions[];
+        } = await fetch("/api/dictionary/definition?query=" + char).then(
+          (res) => res.json()
+        );
+        // const result = await trpcClient.definition.findOne.query(char);
+        return result.data;
+      }
       console.log("cache hit", matchingEntries);
-
       return matchingEntries;
     },
     networkMode: "offlineFirst",
-    enabled: !!char,
+    enabled: !!char && enabled,
   });
 
   return query;
@@ -80,8 +96,12 @@ export function useMoreQuery(
   const query = useQuery({
     queryKey: ["description", verseId],
     queryFn: async () => {
-      const result = await trpcClient.verse.findDescription.query(verseId);
-      return result;
+      const result = await fetch(`/api/verses/${verseId}`).then((res) =>
+        res.json()
+      );
+      // const result = await trpcClient.verse.findDescription.query(verseId);
+
+      return VerseCombinedSchema.parse(result);
     },
     networkMode: "offlineFirst",
     enabled: opts.enabled ? !!verseId : false,
@@ -101,9 +121,6 @@ export function useCacheDictionary(dictType: "all" = "all") {
       const result: { data: DenormalizedDictSchema } = await fetch(
         "/api/dictionary"
       ).then((res) => res.json());
-      // const result = await trpcClient.definition.fetchUniqueCharsDict.query(
-      //   dictType
-      // );
       const normalizedDict = normalizeDict(result.data);
       console.log("Cached dict", normalizedDict);
 

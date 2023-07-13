@@ -15,11 +15,29 @@
       "chinese": "Chinese"
     }
   },
-  "ModeToggle": {
+  "ThemeToggle": {
     "choices": {
       "dark": "Dark",
       "light": "Light",
       "system": "System"
+    }
+  },
+  "Verses": {
+    "goTo": {
+      "base": "Go to",
+      "tooltip": "Go to verse"
+    },
+    "back": {
+      "base": "Back",
+      "tooltip": "Back to verses"
+    },
+    "showMore": {
+      "base": "Show more"
+    }
+  },
+  "Footer": {
+    "AudioPlayer": {
+      "notPlaying": "Not playing"
     }
   }
 }
