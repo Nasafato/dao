@@ -2,7 +2,7 @@ import { SHARED_METADATA } from "@/app/sharedMetadata";
 import { themeEffect } from "@/app/theme-effect";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 
 export default function LocaleRootLayout({
   children,
@@ -29,6 +29,14 @@ export default function LocaleRootLayout({
   );
 }
 
-export const metadata: Metadata = {
-  ...SHARED_METADATA,
-};
+export async function generateMetadata(
+  { params, ...rest }: { params: { locale: string } },
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
+  console.log(params, rest);
+  console.log("locale", params.locale);
+
+  return {
+    ...SHARED_METADATA,
+  };
+}
