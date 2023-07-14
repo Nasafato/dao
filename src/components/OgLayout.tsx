@@ -1,23 +1,21 @@
-export function OgLayout({ children }: { children: React.ReactNode }) {
+export function OgLayout({
+  children,
+  style,
+}: {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+}) {
   return (
     <div
-      tw="flex p-20 h-full w-full bg-white flex-col"
-      style={font("Inter 300")}
+      tw="flex flex-col w-full h-full items-center justify-center bg-white"
+      style={style}
     >
-      <header tw="flex text-[36px] w-full items-center">
-        <div tw="font-bold flex items-center" style={font("Inter 600")}>
-          <span tw="mr-2">DAODEJING </span>
-          <span tw="text-[60px]" style={font("Noto Sans SC 400")}>
-            道德经
-          </span>
+      <div tw="bg-black flex rounded-sm text-xl">
+        <div tw="bg-white bottom-4 left-4 border-4 border-black rounded-sm px-8 py-4 text-[64px]">
+          Daodejing.app
         </div>
-        <div tw="grow" />
-        <div tw="text-[28px]">daodejing.app</div>
-      </header>
-
-      <main tw="flex mt-10 flex-col w-full" style={font("Noto Sans SC 400")}>
-        {children}
-      </main>
+      </div>
+      <div tw="mt-[32px] flex">{children}</div>
     </div>
   );
 }
