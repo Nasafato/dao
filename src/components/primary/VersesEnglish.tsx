@@ -68,7 +68,7 @@ export function VersesEnglish({
           <h2 className={HeadingStyle()}>The rest</h2>
           <p
             className={VerseStyle({
-              size: "large",
+              size: "medium",
             })}
           >
             I haven&apos;t translated these yet. Stay tuned.
@@ -86,7 +86,7 @@ export function VersesEnglish({
             <div
               key={verseId}
               className={VerseStyle({
-                size: "large",
+                size: "medium",
               })}
             >
               <a
