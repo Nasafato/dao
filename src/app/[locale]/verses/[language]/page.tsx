@@ -1,5 +1,7 @@
+import { SHARED_METADATA } from "@/app/sharedMetadata";
 import { VersesChinese } from "@/components/VersesChinese";
 import { VersesEnglish } from "@/components/primary/VersesEnglish";
+import { ResolvingMetadata, Metadata } from "next";
 import { Languages } from "types/materials";
 
 export default async function Verses({
@@ -27,4 +29,13 @@ export default async function Verses({
 
 export async function generateStaticParams() {
   return Languages.map((language) => ({ language }));
+}
+
+export async function generateMetadata(
+  { params, ...rest }: { params: { locale: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  return {
+    ...SHARED_METADATA,
+  };
 }

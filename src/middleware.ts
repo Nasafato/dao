@@ -8,12 +8,20 @@ function getLocale(request: NextRequest) {
   let languages = new Negotiator({
     headers: Object.fromEntries(new Map(request.headers).entries()),
   }).languages();
-  const locale = match(
-    languages,
-    i18n.locales as unknown as string[],
-    i18n.defaultLocale
-  ); // -> 'en-US'
-  return locale;
+  if (languages[0] === "*") {
+    languages = ["en-US"];
+  }
+  try {
+    const locale = match(
+      languages,
+      i18n.locales as unknown as string[],
+      i18n.defaultLocale
+    );
+    return locale; // -> 'en-US'
+  } catch (err) {
+    console.error("err", err);
+    return i18n.defaultLocale;
+  }
 }
 
 export function middleware(request: NextRequest) {
@@ -50,7 +58,7 @@ export const config = {
     // Skip all internal paths (_next)
     // "/((?!api|_next|.*..*).*)/",
     // "/((?!api|_next|.*\\..*).*|manifest.json)",
-    "/((?!_next|.*.json|api|.*\\..*).*)",
+    "/((?!_next|.*.json|api|opengraph-image|.*\\..*).*)",
     // Optional: only run on root (/) URL
     // '/'
   ],
