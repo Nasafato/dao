@@ -7,8 +7,12 @@ import { Popover } from "@/components/primary/VersesPopover";
 import { getDictionary } from "@/locales/getDictionary";
 import { MainLayoutHorizontalPaddingStyle } from "@/styles";
 import "@/styles/globals.css";
-import "server-only";
 import { twJoin } from "tailwind-merge";
+import { i18n } from "@/i18nConfig";
+
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ locale }));
+}
 
 export default async function LocaleRootLayout({
   children,
