@@ -18,7 +18,6 @@ export const SHARED_METADATA: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: APP_DEFAULT_TITLE,
-    // startUpImage: [],
   },
   metadataBase: new URL("https://daodejing.app"),
   formatDetection: {
