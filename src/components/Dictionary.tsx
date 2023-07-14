@@ -7,12 +7,14 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SingleCharDefinition } from "@/components/primary/SingleCharDefinition";
 import { Spinner } from "@/components/shared/Spinner";
 import { useDefinition } from "@/hooks";
+import { useLocale } from "@/components/IntlProvider";
 
 const LiStyle =
   "ring-1 ring-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
 const commonSearchTerms = ["药", "冰", "道", "名", "为", "圣"];
 
 export function Dictionary() {
+  const locale = useLocale();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const searchParams = useSearchParams();
@@ -31,21 +33,26 @@ export function Dictionary() {
   const updateSearchTerm = useCallback(
     (searchTerm: string) => {
       if (searchTerm) {
-        router.push(`/dictionary?query=${encodeURIComponent(searchTerm)}`);
+        router.push(
+          `/${locale}/dictionary?query=${encodeURIComponent(searchTerm)}`
+        );
       } else {
-        router.push("/dictionary");
+        router.push(`/${locale}/dictionary`);
       }
       setSearchTerm(searchTerm);
       if (inputRef.current) {
         inputRef.current.value = searchTerm;
       }
     },
-    [router]
+    [router, locale]
   );
 
   const searchQuery = useDefinition(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
   });
+  console.log("searchTerm", searchTerm);
+  console.log(searchQuery.status);
+  console.log(searchQuery.data);
   // const searchQuery = useQuery({
   //   queryKey: ["search", searchTerm],
   //   queryFn: async () => {
@@ -74,7 +81,10 @@ export function Dictionary() {
     if (error) {
       return <div>Error: {error.toString()}</div>;
     }
-    if (searchQuery.isLoading && !(searchQuery.fetchStatus === "idle")) {
+    if (
+      searchQuery.isLoading ||
+      (searchQuery.isFetching && !(searchQuery.fetchStatus === "idle"))
+    ) {
       return (
         <div className="flex items-center gap-x-1">
           Searching... <Spinner className="h-4 w-4" />
@@ -83,13 +93,13 @@ export function Dictionary() {
     }
 
     if (searchQuery.data) {
-      if (searchQuery.data.length < 1) {
-        return <div>No results.</div>;
+      if (searchTerm.length > 0 && searchQuery.data.length < 1) {
+        return <div>No results found.</div>;
       }
       return <SingleCharDefinition entries={searchQuery.data} />;
     }
 
-    if (searchTerm.length > 0) {
+    if (searchQuery.isFetched && searchTerm.length > 0) {
       return <div>No results.</div>;
     }
 

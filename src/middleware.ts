@@ -14,7 +14,12 @@ function getLocale(request: NextRequest) {
 
 export function middleware(request: NextRequest) {
   const localeCookie = request.cookies.get("NEXT_LOCALE");
-  const locale = localeCookie?.value ?? getLocale(request);
+  let locale;
+  if (i18n.locales.includes(localeCookie?.value ?? "")) {
+    locale = localeCookie?.value;
+  } else {
+    locale = getLocale(request);
+  }
   if (request.nextUrl.pathname === "/" || request.nextUrl.pathname === "") {
     const url = new URL(`/${locale}/verses/chinese`, request.url);
     return NextResponse.redirect(url);
