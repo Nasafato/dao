@@ -44,14 +44,14 @@ const links: Link[] = [
 export function Header() {
   let right = null;
   right = (
-    <>
+    <div className="flex">
       <ul className="flex text-sm items-center font-sans">
         {links.map((link) => (
           <LinkWithChildren link={link} key={link.href} />
         ))}
       </ul>
-      {/* <LocaleSwitcher /> */}
-    </>
+      <LocaleSwitcher />
+    </div>
   );
 
   return (
@@ -60,7 +60,6 @@ export function Header() {
         HeaderHeight,
         "px-5 lg:px-24 py-2 fixed top-0 w-full bg-white dark:bg-gray-950 z-20 border-b",
         border()
-        // SoftBorderStyle
       )}
     >
       <div className="m-auto max-w-xl text-sm h-full flex items-center">

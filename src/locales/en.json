@@ -6,7 +6,10 @@
       "chinese": "Chinese"
     },
     "About": "About",
-    "Dictionary": "Dictionary"
+    "Dictionary": "Dictionary",
+    "LocaleSwitcher": {
+      "system": "System"
+    }
   },
   "Playlist": {
     "title": "Playlist",
@@ -20,6 +23,28 @@
       "dark": "Dark",
       "light": "Light",
       "system": "System"
+    }
+  },
+  "About": {
+    "About": {
+      "title": "About",
+      "content": "This is a local-first mobile-friendly app for reading and listening to the Dao De Jing (also known as the Tao Te Ching)."
+    },
+    "Dao": {
+      "title": "What is the Dao?",
+      "content": "The Dao is a Chinese philosophical text composed over 2,000 years ago. It's one of the most translated works in world literature, and its influence is felt throughout Chinese culture, art, history, and religion. It is eighty one verses of classical Chinese, written as poetry, that illuminates the nature of reality and how to live and govern harmoniously."
+    },
+    "HowToUse": {
+      "title": "How to use this app",
+      "content": "Right now, there is the original Chinese text, along with three complete English translations, plus an ongoing translation by me. Each verse has a simplified explanation in Chinese. I'm working on simplified explanations in English. You can play Chinese audio for each verse, or listen to one of the generated recordings for my translations. You can click on characters to see their meaning and pronunciation, as well as navigate forward and backward through the verse with the arrow keys."
+    },
+    "Why": {
+      "title": "Why build this",
+      "content": "I am trying to memorize the Dao. I need to be able to read and listen to it offline and look up character definitions as well. Since none existed, I built this."
+    },
+    "WhyMemorize": {
+      "title": "Why memorize the Dao",
+      "content": "What is your mind if not your brain plus the sum of your past experiences? Those experiences leave grooves, and those grooves turn into your thoughts and actions. To memorize a text is to let it become part of you more fully than just reading it once or twice. Most knowledge in the world becomes outdated within a week, or a month, or a year. I would like to spend my time on something that lasts, and these eighty one verses have certainly lasted."
     }
   },
   "Verses": {
@@ -39,5 +64,10 @@
     "AudioPlayer": {
       "notPlaying": "Not playing"
     }
+  },
+  "Dictionary": {
+    "commonSearchTerms": "Common search terms",
+    "noResults": "No results",
+    "searching": "Searching..."
   }
 }
