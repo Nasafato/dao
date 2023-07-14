@@ -6,7 +6,10 @@
       "chinese": "Chinese"
     },
     "About": "About",
-    "Dictionary": "Dictionary"
+    "Dictionary": "Dictionary",
+    "LocaleSwitcher": {
+      "system": "System"
+    }
   },
   "Playlist": {
     "title": "Playlist",

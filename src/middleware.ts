@@ -1,21 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
-import { i18n } from "@/i18nConfig";
+import { Locale, i18n } from "@/i18nConfig";
 
 // Get the preferred locale, similar to above or using a library
 function getLocale(request: NextRequest) {
   let languages = new Negotiator({
     headers: Object.fromEntries(new Map(request.headers).entries()),
   }).languages();
-  const locale = match(languages, i18n.locales, i18n.defaultLocale); // -> 'en-US'
+  const locale = match(
+    languages,
+    i18n.locales as unknown as string[],
+    i18n.defaultLocale
+  ); // -> 'en-US'
   return locale;
 }
 
 export function middleware(request: NextRequest) {
   const localeCookie = request.cookies.get("NEXT_LOCALE");
   let locale;
-  if (i18n.locales.includes(localeCookie?.value ?? "")) {
+  const cookieValue = (localeCookie?.value ?? "") as Locale;
+  if (i18n.locales.includes(cookieValue)) {
     locale = localeCookie?.value;
   } else {
     locale = getLocale(request);

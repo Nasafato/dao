@@ -6,7 +6,10 @@
       "chinese": "中文"
     },
     "About": "关于我们",
-    "Dictionary": "词典"
+    "Dictionary": "词典",
+    "LocaleSwitcher": {
+      "system": "系统"
+    }
   },
   "Playlist": {
     "title": "播放列表",
