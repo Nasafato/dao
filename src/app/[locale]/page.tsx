@@ -10,9 +10,6 @@ export async function generateMetadata(
   { params, ...rest }: { params: { locale: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  console.log(params, rest);
-  console.log("locale", params.locale);
-
   return {
     ...SHARED_METADATA,
   };
