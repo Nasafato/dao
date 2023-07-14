@@ -3,11 +3,18 @@
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  FormEvent,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { SingleCharDefinition } from "@/components/primary/SingleCharDefinition";
 import { Spinner } from "@/components/shared/Spinner";
 import { useDefinition } from "@/hooks";
-import { useLocale } from "@/components/IntlProvider";
+import { useLocale, useTranslation } from "@/components/IntlProvider";
 
 const LiStyle =
   "ring-1 ring-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
@@ -18,6 +25,7 @@ export function Dictionary() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
   const query = searchParams?.get("query");
   useEffect(() => {
     if (!query || query.length < 1) {
@@ -50,9 +58,6 @@ export function Dictionary() {
   const searchQuery = useDefinition(searchTerm, {
     enabled: !!searchTerm && searchTerm.length > 0,
   });
-  console.log("searchTerm", searchTerm);
-  console.log(searchQuery.status);
-  console.log(searchQuery.data);
   // const searchQuery = useQuery({
   //   queryKey: ["search", searchTerm],
   //   queryFn: async () => {
@@ -87,20 +92,20 @@ export function Dictionary() {
     ) {
       return (
         <div className="flex items-center gap-x-1">
-          Searching... <Spinner className="h-4 w-4" />
+          {t("Dictionary.searching")} <Spinner className="h-4 w-4" />
         </div>
       );
     }
 
     if (searchQuery.data) {
       if (searchTerm.length > 0 && searchQuery.data.length < 1) {
-        return <div>No results found.</div>;
+        return <div>{t("Dictionary.noResults")}</div>;
       }
       return <SingleCharDefinition entries={searchQuery.data} />;
     }
 
     if (searchQuery.isFetched && searchTerm.length > 0) {
-      return <div>No results.</div>;
+      return <div>{t("Dictionary.noResults")}</div>;
     }
 
     return null;
@@ -109,7 +114,9 @@ export function Dictionary() {
   return (
     <div className="py-2 max-w-sm mx-auto">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold mb-1">Common search terms</h3>
+        <h3 className="text-sm font-semibold mb-1">
+          {t("Dictionary.commonSearchTerms")}
+        </h3>
         <ul className="flex gap-x-2">
           {commonSearchTerms.map((term) => (
             <li className={LiStyle} key={term}>
@@ -159,10 +166,13 @@ export function Dictionary() {
 }
 
 export function Fallback() {
+  const { t } = useTranslation();
   return (
     <div className="py-2 max-w-sm mx-auto">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold mb-1">Common search terms</h3>
+        <h3 className="text-sm font-semibold mb-1">
+          {t("Dictionary.commonSearchTerms")}
+        </h3>
         <ul className="flex gap-x-2">
           {commonSearchTerms.map((term) => (
             <li className={LiStyle} key={term}>

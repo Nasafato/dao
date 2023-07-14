@@ -55,7 +55,7 @@ export function Playlist() {
           </section>
           <section
             className={
-              "flex-1 flex items-center justify-start border-b py-2 px-3 gap-x-2 " +
+              "flex-1 flex items-center justify-start border-b py-2 px-3 gap-x-2" +
               border()
             }
           >
@@ -67,7 +67,7 @@ export function Playlist() {
             ).map((choice) => (
               <button
                 className={`${ButtonStyle()} px-2 py-1 ${
-                  choice.id === language && "bg-gray-200"
+                  choice.id === language && "underline underline-offset-4"
                 }`}
                 onClick={() => {
                   setPlaylistLanguage(choice.id);

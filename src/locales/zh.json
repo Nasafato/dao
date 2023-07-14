@@ -61,5 +61,10 @@
     "AudioPlayer": {
       "notPlaying": "未播放"
     }
+  },
+  "Dictionary": {
+    "commonSearchTerms": "常见搜索词",
+    "noResults": "无结果",
+    "searching": "正在搜索..."
   }
 }

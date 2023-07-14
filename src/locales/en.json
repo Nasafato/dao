@@ -61,5 +61,10 @@
     "AudioPlayer": {
       "notPlaying": "Not playing"
     }
+  },
+  "Dictionary": {
+    "commonSearchTerms": "Common search terms",
+    "noResults": "No results",
+    "searching": "Searching..."
   }
 }
