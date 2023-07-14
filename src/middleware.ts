@@ -50,7 +50,7 @@ export const config = {
     // Skip all internal paths (_next)
     // "/((?!api|_next|.*..*).*)/",
     // "/((?!api|_next|.*\\..*).*|manifest.json)",
-    "/((?!_next|.*.json|api|.*\\..*).*)",
+    "/((?!_next|.*.json|api|opengraph-image|.*\\..*).*)",
     // Optional: only run on root (/) URL
     // '/'
   ],
