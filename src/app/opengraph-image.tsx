@@ -1,3 +1,4 @@
+import { OgDefaultContent } from "@/components/OgDefault";
 import { OgLayout, font } from "@/components/OgLayout";
 import { fetchFont, fetchRelevantFont } from "@/serverUtils";
 import { computeUniqueChars } from "@/utils";
@@ -14,9 +15,7 @@ export default async function RootOg() {
   return new ImageResponse(
     (
       <OgLayout style={font("Noto Serif")}>
-        <div tw="flex text-[48px]" style={font("Noto Serif SC")}>
-          Read the Dao. The 道德经.
-        </div>
+        <OgDefaultContent />
       </OgLayout>
     ),
     {

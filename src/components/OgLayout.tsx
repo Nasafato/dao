@@ -11,7 +11,7 @@ export function OgLayout({
       style={style}
     >
       <div tw="bg-black flex rounded-sm text-xl">
-        <div tw="bg-white bottom-4 left-4 border-4 border-black rounded-sm px-8 py-4 text-[64px]">
+        <div tw="bg-white bottom-4 left-4 border-4 border-black rounded-sm px-8 py-4 text-[58px]">
           Daodejing.app
         </div>
       </div>
