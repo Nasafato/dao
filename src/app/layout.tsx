@@ -53,6 +53,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
+    images: "https://daodejing.b-cdn.net/og-image.png",
     type: "website",
     siteName: APP_NAME,
     title: {
