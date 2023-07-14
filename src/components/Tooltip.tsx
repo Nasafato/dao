@@ -6,13 +6,17 @@ export function Tooltip({
   anchor,
   content,
   side,
+  defaultOpen,
+  open,
 }: {
   anchor: React.ReactNode;
   content: React.ReactNode;
   side: "top" | "bottom";
+  defaultOpen?: boolean;
+  open?: boolean;
 }) {
   return (
-    <RadixTooltip.Root>
+    <RadixTooltip.Root defaultOpen={defaultOpen ?? false} open={open}>
       <RadixTooltip.Trigger asChild>{anchor}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content
