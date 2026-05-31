@@ -1,13 +1,21 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowLeft,
+  ArrowLeftFromLine,
+  ArrowRight,
+  ArrowRightFromLine,
+} from "lucide-react";
 import { twJoin } from "tailwind-merge";
 import { useRenderNextOrPrevChar, useCharInfo } from "@/lib/charNavigation";
 import { Tooltip } from "@/components/Tooltip";
 import { KeyboardButton } from "@/components/KeyboardButton";
 
-const CharNavButtonStyle = "p-2";
-const CharNavArrowStyle = "h-5 w-5 hover:text-gray-400";
+const CharNavButtonStyle =
+  "flex h-12 w-12 items-center justify-center rounded-full touch-manipulation active:bg-gray-100 min-[380px]:h-14 min-[380px]:w-14 dark:active:bg-gray-800";
+const CharNavArrowStyle = "h-7 w-7 min-[380px]:h-9 min-[380px]:w-9";
+const CharNavExpandArrowStyle = "h-6 w-6 min-[380px]:h-7 min-[380px]:w-7";
 
-const SurroundingCharStyle = "text-sm text-gray-500 w-4";
+const SurroundingCharStyle =
+  "w-5 text-center text-lg leading-none text-gray-500 min-[380px]:w-6 min-[380px]:text-xl";
 
 export function DefinitionNavigation({ className }: { className?: string }) {
   const { extendNextChar, extendPrevChar, renderNextChar, renderPrevChar } =
@@ -15,8 +23,34 @@ export function DefinitionNavigation({ className }: { className?: string }) {
   const { currChar, nextChar, prevChar } = useCharInfo();
   return (
     <div
-      className={twJoin("flex gap-x-3 items-center justify-center", className)}
+      className={twJoin(
+        "flex h-14 w-full items-center justify-between px-1 min-[380px]:px-1.5",
+        className
+      )}
     >
+      <Tooltip
+        side="top"
+        anchor={
+          <button
+            type="button"
+            aria-label="Expand selection left"
+            className={twJoin(CharNavButtonStyle, !prevChar && "opacity-30")}
+            onClick={extendPrevChar}
+          >
+            <ArrowLeftFromLine
+              className={CharNavExpandArrowStyle}
+              strokeWidth={2.3}
+            />
+          </button>
+        }
+        content={
+          <div className="flex items-center">
+            <span className="mr-1 text-xs">Shift +</span>
+            <KeyboardButton>{"<-"}</KeyboardButton>
+            <span className="ml-1"> : Expand left</span>
+          </div>
+        }
+      />
       <span className={SurroundingCharStyle}>{prevChar?.char}</span>
       <Tooltip
         side="top"
@@ -33,7 +67,7 @@ export function DefinitionNavigation({ className }: { className?: string }) {
               }
             }}
           >
-            <ArrowLeftIcon className={CharNavArrowStyle} />
+            <ArrowLeft className={CharNavArrowStyle} strokeWidth={2.3} />
           </button>
         }
         content={
@@ -43,7 +77,9 @@ export function DefinitionNavigation({ className }: { className?: string }) {
           </div>
         }
       />
-      <span className="font-medium w-4">{currChar?.char}</span>
+      <span className="w-6 text-center text-2xl font-medium leading-none">
+        {currChar?.char}
+      </span>
       <Tooltip
         side="top"
         content={
@@ -65,11 +101,34 @@ export function DefinitionNavigation({ className }: { className?: string }) {
               }
             }}
           >
-            <ArrowRightIcon className={CharNavArrowStyle} />
+            <ArrowRight className={CharNavArrowStyle} strokeWidth={2.3} />
           </button>
         }
       />
       <span className={SurroundingCharStyle}>{nextChar?.char}</span>
+      <Tooltip
+        side="top"
+        anchor={
+          <button
+            type="button"
+            aria-label="Expand selection right"
+            className={twJoin(CharNavButtonStyle, !nextChar && "opacity-30")}
+            onClick={extendNextChar}
+          >
+            <ArrowRightFromLine
+              className={CharNavExpandArrowStyle}
+              strokeWidth={2.3}
+            />
+          </button>
+        }
+        content={
+          <div className="flex items-center">
+            <span className="mr-1 text-xs">Shift +</span>
+            <KeyboardButton>{"->"}</KeyboardButton>
+            <span className="ml-1"> : Expand right</span>
+          </div>
+        }
+      />
     </div>
   );
 }

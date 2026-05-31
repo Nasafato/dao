@@ -56,7 +56,7 @@ export function ReaderSettings() {
   return (
     <div
       ref={panelRef}
-      className="fixed bottom-24 right-4 z-30 flex flex-col items-end gap-2"
+      className="fixed bottom-4 right-4 z-30 flex flex-col items-end gap-2"
     >
       {isOpen && (
         <div

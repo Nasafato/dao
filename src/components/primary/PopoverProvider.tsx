@@ -114,7 +114,6 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
 
   const api = useMemo(() => {
     const renderPopover = (args: RenderPopoverArgs) => {
-      if (!popoverRef.current) return;
       const { anchor, content } = args;
       if (prevAnchor.current && prevAnchor.current !== anchor) {
         setAnchorColor(prevAnchor.current, "inherit");
