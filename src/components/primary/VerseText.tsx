@@ -137,7 +137,7 @@ function PinyinOverlay({
       {labels.map((label) => (
         <span
           key={label.index}
-          className="absolute select-none whitespace-nowrap text-right font-sans tracking-normal text-gray-500 dark:text-gray-400"
+          className="absolute select-none whitespace-nowrap text-center font-sans tracking-normal text-gray-500 dark:text-gray-400"
           style={{
             fontSize: label.fontSize,
             left: label.left,
