@@ -1,5 +1,6 @@
 "use client";
 import { AuxVerseMemoryTestModal } from "@/components/auxiliary/AuxVerseMemoryTestModal";
+import { ReaderSettings } from "@/components/primary/ReaderSettings";
 import { Verses } from "@/components/primary/Verses";
 import { Container } from "@/components/shared/PageLayout";
 import { DaoVerse } from "@/types";
@@ -11,6 +12,7 @@ export function VersesChinese({ verses }: { verses: DaoVerse[] }) {
         <AuxVerseMemoryTestModal />
         <Verses verses={verses} />
       </Container>
+      <ReaderSettings />
     </>
   );
 }

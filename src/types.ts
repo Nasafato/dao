@@ -17,8 +17,11 @@ export const DictionarySchema = z.record(DictionaryEntrySchema);
 
 export type DictionarySchemaType = z.infer<typeof DictionarySchema>;
 
+export type VersePinyin = Array<string | null>;
+
 export type DaoVerse = {
   id: number;
+  pinyin?: VersePinyin;
   text: string;
 };
 
