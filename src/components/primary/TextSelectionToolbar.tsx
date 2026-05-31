@@ -41,9 +41,19 @@ export function TextSelectionToolbar({
     const range = activeSelection.getRangeAt(0);
     const selectedText = activeSelection.toString();
     if (activeSelection.isCollapsed || !selectedText.trim()) {
+      delete document.documentElement.dataset.readerCharacterSelection;
       setSelection(null);
       return;
     }
+
+    if (
+      document.documentElement.dataset.readerCharacterSelection === "true" &&
+      selectedText.trim().length <= 1
+    ) {
+      setSelection(null);
+      return;
+    }
+    delete document.documentElement.dataset.readerCharacterSelection;
 
     if (!doesRangeTouchReaderText(range, root)) {
       setSelection(null);
@@ -118,6 +128,7 @@ export function TextSelectionToolbar({
   }, [selection]);
 
   const clearSelection = useCallback(() => {
+    delete document.documentElement.dataset.readerCharacterSelection;
     window.getSelection()?.removeAllRanges();
     setSelection(null);
   }, []);

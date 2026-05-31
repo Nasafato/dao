@@ -3,6 +3,7 @@ import { useVerseMemoryStatusesQuery } from "@/lib/reactQuery";
 import { DaoVerse } from "@/types";
 import { useRef } from "react";
 import { CommandPalette } from "./CommandPalette";
+import { ReaderCharacterLookup } from "./ReaderCharacterLookup";
 import { TextSelectionToolbar } from "./TextSelectionToolbar";
 import { Verse } from "./Verse";
 
@@ -31,6 +32,7 @@ export function Verses({ verses }: VerseProps) {
           );
         })}
       </div>
+      <ReaderCharacterLookup rootRef={readerRef} />
       <TextSelectionToolbar rootRef={readerRef} />
       <CommandPalette />
     </>
