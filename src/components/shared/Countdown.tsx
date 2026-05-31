@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState, type JSX } from "react";
 
 interface CountdownProps {
   targetDate: Date;

@@ -7,6 +7,14 @@ import {
 
 export const queryClient = new QueryClient();
 
+type VerseMemoryStatusQueryKey = readonly [
+  "indexedDb",
+  string,
+  number,
+  string,
+  number
+];
+
 export function useVerseMemoryStatusesQuery() {
   const query = useQuery(
     [
@@ -30,7 +38,12 @@ export function useVerseMemoryStatusesQuery() {
 interface UseVerseMemoryStatusQueryProps {
   verseId: number;
   opts?: Omit<
-    UseQueryOptions<VerseMemoryStatusType, Error>,
+    UseQueryOptions<
+      VerseMemoryStatusType,
+      Error,
+      VerseMemoryStatusType,
+      VerseMemoryStatusQueryKey
+    >,
     "queryKey" | "queryFn"
   >;
 }
@@ -39,25 +52,22 @@ export function useVerseMemoryStatusQuery({
   verseId,
   opts = {},
 }: UseVerseMemoryStatusQueryProps) {
-  const baseOptions = { offlineFirst: true };
+  const queryKey: VerseMemoryStatusQueryKey = [
+    "indexedDb",
+    INDEXED_DB_NAME,
+    INDEXED_DB_VERSION,
+    VerseMemoryStatus.tableName,
+    verseId,
+  ];
   const verseMemoryStatusQuery = useQuery(
-    [
-      "indexedDb",
-      INDEXED_DB_NAME,
-      INDEXED_DB_VERSION,
-      VerseMemoryStatus.tableName,
-      verseId,
-    ],
+    queryKey,
     async () => {
       const res = await VerseMemoryStatus.get({
         userId_verseId: [USER_ID, verseId],
       });
       return res;
     },
-    { ...opts, ...baseOptions } as Omit<
-      UseQueryOptions<VerseMemoryStatusType, Error>,
-      "queryKey" | "queryFn"
-    >
+    { ...opts, networkMode: "offlineFirst" }
   );
 
   return verseMemoryStatusQuery;

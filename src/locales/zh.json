@@ -58,7 +58,8 @@
     },
     "showMore": {
       "tooltip": "显示更多"
-    }
+    },
+    "translator": "Translator"
   },
   "Footer": {
     "AudioPlayer": {

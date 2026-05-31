@@ -1,24 +1,36 @@
+"use client";
+
+import { use } from "react";
+import { useTranslation } from "@/components/IntlProvider";
 import { ButtonStyle, HeadingStyle } from "@/styles";
 import { capitalize } from "@/utils";
 import Link from "next/link";
 import { twJoin } from "tailwind-merge";
 import { Translators } from "types/materials";
 
-export default function TranslatorLayout({
-  children,
-  params,
-}: {
-  children: any;
-  params: {
-    locale: string;
-    language: string;
-    translator: string;
-  };
-}) {
+export default function TranslatorLayout(
+  props: {
+    children: any;
+    params: Promise<{
+      locale: string;
+      language: string;
+      translator: string;
+    }>;
+  }
+) {
+  const params = use(props.params);
+
+  const {
+    children
+  } = props;
+
+  const { t } = useTranslation();
   return (
     <div>
       <nav className="mb-8">
-        <h3 className={twJoin(HeadingStyle(), "mb-1")}>Translation</h3>
+        <h3 className={twJoin(HeadingStyle(), "mb-1")}>
+          {t("Verses.translator")}
+        </h3>
         <div className="flex items-center gap-x-2">
           {Translators.map((t) => {
             // const isActive = pathname?.includes(t) ?? false;

@@ -2,7 +2,7 @@ import { SHARED_METADATA } from "@/app/sharedMetadata";
 import { themeEffect } from "@/app/theme-effect";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata, Viewport } from "next";
 
 export default function LocaleRootLayout({
   children,
@@ -10,7 +10,7 @@ export default function LocaleRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-p-16">
+    <html lang="en" className="scroll-p-16" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -29,11 +29,10 @@ export default function LocaleRootLayout({
   );
 }
 
-export async function generateMetadata(
-  { params, ...rest }: { params: { locale: string } },
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  return {
-    ...SHARED_METADATA,
-  };
-}
+export const metadata: Metadata = {
+  ...SHARED_METADATA,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+};

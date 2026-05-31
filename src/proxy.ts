@@ -24,7 +24,7 @@ function getLocale(request: NextRequest) {
   }
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const localeCookie = request.cookies.get("NEXT_LOCALE");
   let locale;
   const cookieValue = (localeCookie?.value ?? "") as Locale;
