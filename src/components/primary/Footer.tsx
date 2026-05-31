@@ -27,7 +27,7 @@ export function Footer() {
           <div className="relative">
             <div
               className={twJoin(
-                "-top-12 right-2 absolute rounded-full w-60 border shadow-md",
+                "-top-12 left-1/2 absolute w-60 -translate-x-1/2 rounded-full border shadow-lg",
                 BackgroundStyle,
                 border()
               )}
