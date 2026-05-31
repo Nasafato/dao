@@ -1,7 +1,7 @@
 import { OgLayout, font } from "@/components/OgLayout";
 import { fetchFont, fetchRelevantFont } from "@/serverUtils";
 import { computeUniqueChars } from "@/utils";
-import { ImageResponse } from "next/server";
+import { ImageResponse } from "next/og";
 
 export default async function RootOg() {
   const uniqueChars = computeUniqueChars("道德经");

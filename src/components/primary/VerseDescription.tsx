@@ -45,13 +45,9 @@ export function VerseDescription({
       {data.explanation && (
         <section>
           <h3 className={twJoin(HeadingStyle(), "mb-2")}>Explanation</h3>
-          <ReactMarkdown
-            className={`
-            [&_p]:mb-2
-          `}
-          >
-            {data.explanation}
-          </ReactMarkdown>
+          <div className="[&_p]:mb-2">
+            <ReactMarkdown>{data.explanation}</ReactMarkdown>
+          </div>
         </section>
       )}
       <section>

@@ -10,10 +10,15 @@ import colors from "tailwindcss/colors";
 import { computePopoverDimensions, computePosition } from "@/lib/positioning";
 import { useDaoStore } from "@/state/store";
 
+export type PopoverAnchor = {
+  getBoundingClientRect: () => DOMRect;
+  style?: CSSStyleDeclaration;
+};
+
 export type Popover = {
   content: React.ReactNode;
   currentCharId: string | null;
-  element: HTMLElement | null;
+  element: PopoverAnchor | null;
   isOpen: boolean;
   width: number;
   height: number;
@@ -34,7 +39,7 @@ type DataContext = {
   meta: Meta | null;
   popoverDimensions: PopoverDimensions;
   arrow: Arrow;
-  anchor: HTMLElement | null;
+  anchor: PopoverAnchor | null;
   content: React.ReactNode | null;
   coordinates: Coordinates;
   isOpen: boolean;
@@ -43,7 +48,7 @@ type DataContext = {
 
 type ApiContext = {
   renderPopover: (args: RenderPopoverArgs) => void;
-  closePopover: (anchorElement: HTMLElement) => void;
+  closePopover: (anchorElement: PopoverAnchor) => void;
   // openPopover: () => void;
 };
 
@@ -59,7 +64,7 @@ interface RenderPopoverArgs {
   /** What's being rendered inside the popover. */
   content: React.ReactNode;
   /** The element over which the popover is positioned. */
-  anchor: HTMLElement;
+  anchor: PopoverAnchor;
   /** Any metadata to pass */
   meta?: { charId: string };
 }
@@ -83,7 +88,7 @@ type Coordinates = {
  * and it will only change if it's been highlighted or not highlighted. That would solve the re-render issue.
  */
 export function PopoverProvider({ children }: { children: React.ReactNode }) {
-  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const [anchor, setAnchor] = useState<PopoverAnchor | null>(null);
   const [content, setContent] = useState<React.ReactNode | null>(null);
   const [coordinates, setCoordinates] = useState<Coordinates>({
     left: 0,
@@ -102,19 +107,19 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
   const [meta, setMeta] = useState<{ charId: string } | null>(null);
 
   const popoverRef = React.useRef<HTMLDivElement>(null);
-  const prevAnchor = React.useRef<HTMLElement | null>(null);
+  const prevAnchor = React.useRef<PopoverAnchor | null>(null);
 
   const api = useMemo(() => {
     const renderPopover = (args: RenderPopoverArgs) => {
       if (!popoverRef.current) return;
       const { anchor, content } = args;
       if (prevAnchor.current && prevAnchor.current !== anchor) {
-        prevAnchor.current.style.color = "inherit";
+        setAnchorColor(prevAnchor.current, "inherit");
         prevAnchor.current = anchor;
-        anchor.style.color = colors.green["500"];
+        setAnchorColor(anchor, colors.green["500"]);
       } else if (!prevAnchor.current) {
         prevAnchor.current = anchor;
-        anchor.style.color = colors.green["500"];
+        setAnchorColor(anchor, colors.green["500"]);
       }
       const desiredDimensions = computePopoverDimensions();
       const { position, computedDimensions, arrow } = computePosition({
@@ -130,8 +135,8 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
       setMeta(args.meta ?? null);
     };
 
-    const closePopover = (anchorElement: HTMLElement) => {
-      anchorElement.style.color = "inherit";
+    const closePopover = (anchorElement: PopoverAnchor) => {
+      setAnchorColor(anchorElement, "inherit");
       setIsOpen(false);
     };
 
@@ -142,12 +147,12 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     const handleResize = () => {
       if (anchor && popoverRef.current && isOpen) {
         if (prevAnchor.current && prevAnchor.current !== anchor) {
-          prevAnchor.current.style.color = "inherit";
+          setAnchorColor(prevAnchor.current, "inherit");
           prevAnchor.current = anchor;
-          anchor.style.color = colors.green["500"];
+          setAnchorColor(anchor, colors.green["500"]);
         } else if (!prevAnchor.current) {
           prevAnchor.current = anchor;
-          anchor.style.color = colors.green["500"];
+          setAnchorColor(anchor, colors.green["500"]);
         }
         const desiredDimensions = computePopoverDimensions();
         const { position, computedDimensions, arrow } = computePosition({
@@ -206,4 +211,9 @@ export function usePopoverApi() {
 export function usePopoverData() {
   const context = useContext(PopoverDataContext);
   return context;
+}
+
+function setAnchorColor(anchor: PopoverAnchor, color: string) {
+  if (!anchor.style) return;
+  anchor.style.color = color;
 }

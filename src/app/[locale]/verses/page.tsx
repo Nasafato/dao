@@ -1,9 +1,15 @@
 import { redirect } from "next/navigation";
 
-export default function VersesRootPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function VersesRootPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   redirect(`/${locale}/verses/chinese`);
 }

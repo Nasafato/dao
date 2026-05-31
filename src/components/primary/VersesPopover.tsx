@@ -4,7 +4,11 @@ import { createPortal } from "react-dom";
 import { twJoin } from "tailwind-merge";
 import { CharMetaSchema, useCharNavigation } from "@/lib/charNavigation";
 import { BorderStyle, IconButtonColor, border } from "@/styles";
-import { Arrow, usePopoverApi, usePopoverData } from "./PopoverProvider";
+import {
+  usePopoverApi,
+  usePopoverData,
+  type Arrow as ArrowType,
+} from "./PopoverProvider";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export function Popover() {
@@ -12,7 +16,7 @@ export function Popover() {
   const { closePopover } = usePopoverApi();
   const ref = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { renderPrevChar, renderNextChar, renderCharId } = useCharNavigation();
+  const { renderPrevChar, renderNextChar } = useCharNavigation();
 
   useEffect(() => {
     ref.current = document.getElementById("popover-portal");
@@ -30,7 +34,6 @@ export function Popover() {
 
       if (clickedOnPopover || clickedOnFooter) return;
       if (clickedOnCharacter) {
-        renderCharId(clickedOnCharacter.id);
         return;
       }
       if (popover.isOpen && ref.current && popover.anchor) {
@@ -42,7 +45,7 @@ export function Popover() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [closePopover, popover, renderCharId]);
+  }, [closePopover, popover]);
 
   useEffect(() => {
     if (popover.isOpen && popover.popoverRef.current) {
@@ -149,7 +152,7 @@ function Arrow({
   popoverDimensions,
   className,
 }: {
-  arrow: Arrow;
+  arrow: ArrowType;
   popoverDimensions: { width: number; height: number };
   className?: string;
 }) {

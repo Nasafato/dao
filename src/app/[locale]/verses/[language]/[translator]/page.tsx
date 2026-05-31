@@ -2,14 +2,15 @@ import { VersesEnglish } from "@/components/primary/VersesEnglish";
 import { Container } from "@/components/shared/PageLayout";
 import { Translators } from "types/materials";
 
-export default async function VersesTranslation({
-  params,
-}: {
-  params: {
-    translator: string;
-    language: string;
-  };
-}) {
+export default async function VersesTranslation(
+  props: {
+    params: Promise<{
+      translator: string;
+      language: string;
+    }>;
+  }
+) {
+  const params = await props.params;
   const { language, translator } = params;
   switch (language) {
     default:

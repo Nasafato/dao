@@ -1,7 +1,3 @@
-import { punctuation } from "@/consts";
-import { buildCharId } from "@/lib/charNavigation";
-import { VerseChar } from "./VerseChar";
-
 export function VerseText({
   verseId,
   text,
@@ -9,27 +5,12 @@ export function VerseText({
   verseId: number;
   text: string;
 }) {
-  const chars = text.split("");
-  const textNodes = chars.map((char, index) => {
-    if (punctuation.includes(char)) {
-      return char;
-    }
-    return (
-      <VerseChar
-        key={index}
-        char={char}
-        charId={buildCharId({
-          verseId,
-          charIndex: index,
-          context: "verse",
-        })}
-      />
-    );
-  });
-
   return (
-    <p className="text-xl font-normal text-gray-800 dark:text-gray-50">
-      {textNodes}
+    <p
+      data-reader-verse-id={verseId}
+      className="select-text text-[2rem]/[1.7] font-normal tracking-normal text-gray-900 selection:bg-amber-200 selection:text-gray-950 dark:text-gray-50 dark:selection:bg-amber-300/30 dark:selection:text-amber-50 sm:text-[2.25rem]/[1.65]"
+    >
+      {text}
     </p>
   );
 }

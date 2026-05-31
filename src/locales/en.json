@@ -58,7 +58,8 @@
     },
     "showMore": {
       "base": "Show more"
-    }
+    },
+    "translator": "Translator"
   },
   "Footer": {
     "AudioPlayer": {

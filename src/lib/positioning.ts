@@ -1,7 +1,9 @@
 import { Arrow } from "@/components/primary/PopoverProvider";
 
 interface ComputePositionArgs {
-  anchorElement: HTMLElement;
+  anchorElement: {
+    getBoundingClientRect: () => DOMRect;
+  };
   desiredDimensions: {
     width: number;
     height: number;

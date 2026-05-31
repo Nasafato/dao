@@ -2,10 +2,8 @@ import "server-only";
 import DAO_COMBINED from "materials/combined.json";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { verseId: string } }
-) {
+export async function GET(request: Request, props: { params: Promise<{ verseId: string }> }) {
+  const params = await props.params;
   const verseId = Number(params.verseId);
   const verse = DAO_COMBINED.find((verse) => verse.verseId === verseId);
   if (!verse) {

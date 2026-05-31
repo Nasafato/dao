@@ -1,5 +1,7 @@
 import { useDaoStore } from "@/state/store";
 
+import type { JSX } from "react";
+
 interface Props {
   isBeginning?: boolean;
   children: (time: number) => JSX.Element;

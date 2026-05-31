@@ -1,11 +1,12 @@
 import { DAO_COMBINED } from "@/lib/materials";
 import { VerseDetails } from "./VerseDetails";
 
-export default async function VerseDetailsPage({
-  params,
-}: {
-  params: { verseId: string };
-}) {
+export default async function VerseDetailsPage(
+  props: {
+    params: Promise<{ verseId: string }>;
+  }
+) {
+  const params = await props.params;
   const verseId = params.verseId;
   const verseIdNumber = Number(verseId);
   if (isNaN(verseIdNumber)) throw new Error("Invalid verseId");

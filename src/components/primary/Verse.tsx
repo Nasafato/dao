@@ -66,7 +66,7 @@ export function Verse({
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className="flex select-none items-center">
         <div>
           <a
             id={`dao${verseId}`}

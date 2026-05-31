@@ -1,15 +1,13 @@
 import { SHARED_METADATA } from "@/app/sharedMetadata";
 import { VersesChinese } from "@/components/VersesChinese";
 import { VersesEnglish } from "@/components/primary/VersesEnglish";
-import { ResolvingMetadata, Metadata } from "next";
+import { Metadata } from "next";
 import { Languages } from "types/materials";
 
-export default async function Verses({
-  params,
-}: {
-  params: { language: (typeof Languages)[number] };
+export default async function Verses(props: {
+  params: Promise<{ language: (typeof Languages)[number] }>;
 }) {
-  const language = params.language;
+  const { language } = await props.params;
   switch (language) {
     case "english":
       return <VersesEnglish translator="gou" />;
@@ -31,10 +29,7 @@ export async function generateStaticParams() {
   return Languages.map((language) => ({ language }));
 }
 
-export async function generateMetadata(
-  { params, ...rest }: { params: { locale: string } },
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     ...SHARED_METADATA,
   };

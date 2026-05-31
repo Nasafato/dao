@@ -8,7 +8,7 @@ import { getNestedValue } from "@/utils";
 import { usePathname } from "next/navigation";
 import { twJoin, twMerge } from "tailwind-merge";
 import { MenuLink } from "@/components/primary/MenuLink";
-import { Link, LinkWithChildren } from "@/types";
+import type { Link, LinkWithChildren as LinkWithChildrenType } from "@/types";
 import { LocaleSwitcher } from "@/components/primary/LocaleSwitcher";
 
 const links: Link[] = [
@@ -117,7 +117,7 @@ function LinkWithChildren({
       </NextLink>
     );
   } else {
-    content = <MenuLink link={link as LinkWithChildren} />;
+    content = <MenuLink link={link as LinkWithChildrenType} />;
   }
   return (
     <li
