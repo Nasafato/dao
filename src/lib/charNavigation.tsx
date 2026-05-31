@@ -3,7 +3,9 @@ import { Definition } from "@/components/primary/Definition";
 import {
   usePopoverApi,
   usePopoverData,
+  type PopoverAnchor,
 } from "@/components/primary/PopoverProvider";
+import { punctuation } from "@/consts";
 
 export function buildCharId(args: {
   verseId: number;
@@ -26,12 +28,51 @@ export function extractCharInfoFromId(charId: string) {
 export const RefMap = new Map<string, HTMLElement>();
 export const CharMap = new Map<string, string>();
 export const charIds: string[] = [];
+type ReaderVerseTextEntry = {
+  element: HTMLElement;
+  text: string;
+  textNode: Text;
+};
+
+const ReaderVerseTextMap = new Map<number, ReaderVerseTextEntry>();
+
 export function addToRefMap(charId: string, ref: HTMLElement) {
   charIds.push(charId);
   RefMap.set(charId, ref);
 }
 
+export function registerReaderVerseText(verseId: number, element: HTMLElement) {
+  const textNode = findTextNode(element);
+  const text = textNode?.nodeValue ?? "";
+  if (!textNode || !text) return () => {};
+
+  const entry = {
+    element,
+    text,
+    textNode,
+  };
+  ReaderVerseTextMap.set(verseId, entry);
+
+  return () => {
+    if (ReaderVerseTextMap.get(verseId)?.element === element) {
+      ReaderVerseTextMap.delete(verseId);
+    }
+  };
+}
+
+function findTextNode(element: HTMLElement) {
+  for (const child of element.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      return child as Text;
+    }
+  }
+  return null;
+}
+
 export function getNextCharId(charId: string, forward = true) {
+  const readerNextCharId = getNextReaderCharId(charId, forward);
+  if (readerNextCharId) return readerNextCharId;
+
   const index = charIds.indexOf(charId);
   if (index === -1) return null;
   const addend = forward ? 1 : -1;
@@ -53,6 +94,53 @@ export function getNextCharId(charId: string, forward = true) {
 
 export function getPrevCharId(charId: string) {
   return getNextCharId(charId, false);
+}
+
+function getNextReaderCharId(charId: string, forward = true) {
+  const { verseId, context, charIndex } = extractCharInfoFromId(charId);
+  if (context !== "verse") return null;
+  if (!ReaderVerseTextMap.has(verseId)) return null;
+
+  const addend = forward ? 1 : -1;
+  const verseIds = Array.from(ReaderVerseTextMap.keys()).sort((a, b) => a - b);
+  let verseIdIndex = verseIds.indexOf(verseId);
+  let nextCharIndex = charIndex + addend;
+
+  while (verseIdIndex >= 0 && verseIdIndex < verseIds.length) {
+    const nextVerseId = verseIds[verseIdIndex];
+    const entry = ReaderVerseTextMap.get(nextVerseId);
+    if (!entry) return null;
+
+    if (nextCharIndex < 0) {
+      verseIdIndex -= 1;
+      const prevEntry = ReaderVerseTextMap.get(verseIds[verseIdIndex]);
+      nextCharIndex = prevEntry ? prevEntry.text.length - 1 : -1;
+      continue;
+    }
+
+    if (nextCharIndex >= entry.text.length) {
+      verseIdIndex += 1;
+      nextCharIndex = 0;
+      continue;
+    }
+
+    const char = entry.text[nextCharIndex];
+    if (canLookupReaderChar(char)) {
+      return buildCharId({
+        verseId: nextVerseId,
+        charIndex: nextCharIndex,
+        context: "verse",
+      });
+    }
+
+    nextCharIndex += addend;
+  }
+
+  return null;
+}
+
+function canLookupReaderChar(char: string) {
+  return !!char.trim() && !punctuation.includes(char);
 }
 
 export const CharMetaSchema = z.object({
@@ -88,9 +176,9 @@ export function useCharInfo() {
   }
 
   const nextCharId = getNextCharId(meta.charId);
-  const nextChar = nextCharId ? CharMap.get(nextCharId) : null;
+  const nextChar = nextCharId ? getCharFromId(nextCharId) : null;
   const prevCharId = getPrevCharId(meta.charId);
-  const prevChar = prevCharId ? CharMap.get(prevCharId) : null;
+  const prevChar = prevCharId ? getCharFromId(prevCharId) : null;
 
   return {
     nextChar: nextChar
@@ -101,7 +189,7 @@ export function useCharInfo() {
       : null,
     currChar: {
       charId: meta.charId,
-      char: CharMap.get(meta.charId),
+      char: getCharFromId(meta.charId),
     },
     prevChar: prevChar ? { charId: prevCharId, char: prevChar } : null,
   };
@@ -112,9 +200,32 @@ export function useCharNavigation() {
   const renderCharId = (charId?: string | null) => {
     if (!charId) return;
     const charRef = RefMap.get(charId);
-    const char = CharMap.get(charId);
-    if (!charRef) return;
+    const char = getCharFromId(charId);
     if (!char) return;
+
+    const readerRange = getReaderCharRange(charId);
+    if (readerRange) {
+      document.documentElement.dataset.readerCharacterSelection = "true";
+      selectRange(readerRange);
+      const anchorRect = getRangeRect(readerRange);
+      if (!anchorRect) return;
+      CharMap.set(charId, char);
+      renderPopover({
+        anchor: createVirtualAnchor(anchorRect),
+        content: (
+          <Definition.Wrapper>
+            <Definition char={char} />
+          </Definition.Wrapper>
+        ),
+        meta: {
+          charId,
+        },
+      });
+      return;
+    }
+
+    if (!charRef) return;
+
     renderPopover({
       anchor: charRef,
       content: (
@@ -132,5 +243,58 @@ export function useCharNavigation() {
     renderCharId,
     renderPrevChar: (charId: string) => renderCharId(getPrevCharId(charId)),
     renderNextChar: (charId: string) => renderCharId(getNextCharId(charId)),
+  };
+}
+
+function getCharFromId(charId: string) {
+  const mappedChar = CharMap.get(charId);
+  if (mappedChar) return mappedChar;
+
+  const { verseId, context, charIndex } = extractCharInfoFromId(charId);
+  if (context !== "verse") return null;
+
+  const entry = ReaderVerseTextMap.get(verseId);
+  return entry?.text[charIndex] ?? null;
+}
+
+export function getReaderCharRange(charId: string) {
+  const { verseId, context, charIndex } = extractCharInfoFromId(charId);
+  if (context !== "verse") return null;
+
+  const entry = ReaderVerseTextMap.get(verseId);
+  if (!entry) return null;
+  if (charIndex < 0 || charIndex >= entry.text.length) return null;
+
+  const range = document.createRange();
+  range.setStart(entry.textNode, charIndex);
+  range.setEnd(entry.textNode, charIndex + 1);
+  return range;
+}
+
+function getRangeRect(range: Range) {
+  const rect = Array.from(range.getClientRects()).find(
+    (rect) => rect.width > 0 && rect.height > 0
+  );
+  if (!rect) return null;
+
+  return DOMRect.fromRect({
+    x: rect.x,
+    y: rect.y,
+    width: rect.width,
+    height: rect.height,
+  });
+}
+
+function selectRange(range: Range) {
+  const selection = window.getSelection();
+  if (!selection) return;
+
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function createVirtualAnchor(rect: DOMRect): PopoverAnchor {
+  return {
+    getBoundingClientRect: () => rect,
   };
 }

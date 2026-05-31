@@ -21,6 +21,8 @@ export function DefinitionNavigation({ className }: { className?: string }) {
         side="top"
         anchor={
           <button
+            type="button"
+            aria-label="Previous character"
             className={twJoin(CharNavButtonStyle, !prevChar && "opacity-30")}
             onClick={renderPrevChar}
           >
@@ -45,6 +47,8 @@ export function DefinitionNavigation({ className }: { className?: string }) {
         }
         anchor={
           <button
+            type="button"
+            aria-label="Next character"
             className={twJoin(CharNavButtonStyle, !nextChar && "opacity-30")}
             onClick={renderNextChar}
           >

@@ -2,6 +2,7 @@
 
 import { punctuation } from "@/consts";
 import { buildCharId, CharMap } from "@/lib/charNavigation";
+import { markReaderCharacterLookupPointer } from "@/lib/readerCharacterTap";
 import { Definition } from "./Definition";
 import { usePopoverApi, type PopoverAnchor } from "./PopoverProvider";
 import { useEffect, useRef, type RefObject } from "react";
@@ -83,6 +84,7 @@ export function ReaderCharacterLookup({
         context: "verse",
       });
       CharMap.set(charId, hit.char);
+      markReaderCharacterLookupPointer();
 
       renderPopover({
         anchor: createVirtualAnchor(hit.rect),

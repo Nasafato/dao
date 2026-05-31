@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { twJoin } from "tailwind-merge";
 import { CharMetaSchema, useCharNavigation } from "@/lib/charNavigation";
+import { consumeReaderCharacterLookupPointer } from "@/lib/readerCharacterTap";
 import { BorderStyle, IconButtonColor, border } from "@/styles";
 import {
   usePopoverApi,
@@ -32,6 +33,7 @@ export function Popover() {
       const clickedOnFooter = target.closest("#footer");
       const clickedOnCharacter = target.closest(".character");
 
+      if (consumeReaderCharacterLookupPointer()) return;
       if (clickedOnPopover || clickedOnFooter) return;
       if (clickedOnCharacter) {
         return;
