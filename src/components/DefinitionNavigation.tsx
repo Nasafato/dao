@@ -10,7 +10,8 @@ const CharNavArrowStyle = "h-5 w-5 hover:text-gray-400";
 const SurroundingCharStyle = "text-sm text-gray-500 w-4";
 
 export function DefinitionNavigation({ className }: { className?: string }) {
-  const { renderNextChar, renderPrevChar } = useRenderNextOrPrevChar();
+  const { extendNextChar, extendPrevChar, renderNextChar, renderPrevChar } =
+    useRenderNextOrPrevChar();
   const { currChar, nextChar, prevChar } = useCharInfo();
   return (
     <div
@@ -24,7 +25,13 @@ export function DefinitionNavigation({ className }: { className?: string }) {
             type="button"
             aria-label="Previous character"
             className={twJoin(CharNavButtonStyle, !prevChar && "opacity-30")}
-            onClick={renderPrevChar}
+            onClick={(event) => {
+              if (event.shiftKey) {
+                extendPrevChar();
+              } else {
+                renderPrevChar();
+              }
+            }}
           >
             <ArrowLeftIcon className={CharNavArrowStyle} />
           </button>
@@ -50,7 +57,13 @@ export function DefinitionNavigation({ className }: { className?: string }) {
             type="button"
             aria-label="Next character"
             className={twJoin(CharNavButtonStyle, !nextChar && "opacity-30")}
-            onClick={renderNextChar}
+            onClick={(event) => {
+              if (event.shiftKey) {
+                extendNextChar();
+              } else {
+                renderNextChar();
+              }
+            }}
           >
             <ArrowRightIcon className={CharNavArrowStyle} />
           </button>

@@ -4,6 +4,7 @@ import {
   usePopoverApi,
   usePopoverData,
   type PopoverAnchor,
+  type PopoverMeta,
 } from "@/components/primary/PopoverProvider";
 import { punctuation } from "@/consts";
 
@@ -145,11 +146,17 @@ function canLookupReaderChar(char: string) {
 
 export const CharMetaSchema = z.object({
   charId: z.string(),
+  anchorCharId: z.string().optional(),
+  focusCharId: z.string().optional(),
+  selectionMode: z.enum(["character", "range"]).optional(),
 });
+
+type CharMeta = z.infer<typeof CharMetaSchema>;
 
 export function useRenderNextOrPrevChar() {
   const popover = usePopoverData();
-  const { renderNextChar, renderPrevChar } = useCharNavigation();
+  const { extendNextChar, extendPrevChar, renderNextChar, renderPrevChar } =
+    useCharNavigation();
   const meta = CharMetaSchema.safeParse(popover.meta);
   let charId: string | null;
   if (meta.success) {
@@ -165,6 +172,14 @@ export function useRenderNextOrPrevChar() {
     renderPrevChar: () => {
       if (!charId) return;
       renderPrevChar(charId);
+    },
+    extendNextChar: () => {
+      if (!meta.success) return;
+      extendNextChar(meta.data);
+    },
+    extendPrevChar: () => {
+      if (!meta.success) return;
+      extendPrevChar(meta.data);
     },
   };
 }
@@ -197,17 +212,32 @@ export function useCharInfo() {
 
 export function useCharNavigation() {
   const { renderPopover } = usePopoverApi();
-  const renderCharId = (charId?: string | null) => {
+  const renderCharId = (
+    charId?: string | null,
+    options?: {
+      anchorCharId?: string;
+      focusCharId?: string;
+      selectionMode?: PopoverMeta["selectionMode"];
+    }
+  ) => {
     if (!charId) return;
     const charRef = RefMap.get(charId);
     const char = getCharFromId(charId);
     if (!char) return;
 
-    const readerRange = getReaderCharRange(charId);
+    const anchorCharId = options?.anchorCharId ?? charId;
+    const focusCharId = options?.focusCharId ?? charId;
+    const selectionMode = options?.selectionMode ?? "character";
+    const readerRange =
+      selectionMode === "range"
+        ? getReaderSelectionRange(anchorCharId, focusCharId)
+        : getReaderCharRange(charId);
+
     if (readerRange) {
       document.documentElement.dataset.readerCharacterSelection = "true";
       selectRange(readerRange);
-      const anchorRect = getRangeRect(readerRange);
+      const focusRange = getReaderCharRange(focusCharId);
+      const anchorRect = getRangeRect(focusRange ?? readerRange);
       if (!anchorRect) return;
       CharMap.set(charId, char);
       renderPopover({
@@ -218,7 +248,10 @@ export function useCharNavigation() {
           </Definition.Wrapper>
         ),
         meta: {
+          anchorCharId,
           charId,
+          focusCharId,
+          selectionMode,
         },
       });
       return;
@@ -239,7 +272,24 @@ export function useCharNavigation() {
     });
   };
 
+  const extendSelection = (meta: CharMeta, forward: boolean) => {
+    const anchorCharId = meta.anchorCharId ?? meta.charId;
+    const focusCharId = meta.focusCharId ?? meta.charId;
+    const nextFocusCharId = getNextCharId(focusCharId, forward);
+    if (!nextFocusCharId) return;
+    if (!getReaderSelectionRange(anchorCharId, nextFocusCharId)) return;
+
+    renderCharId(nextFocusCharId, {
+      anchorCharId,
+      focusCharId: nextFocusCharId,
+      selectionMode:
+        anchorCharId === nextFocusCharId ? "character" : "range",
+    });
+  };
+
   return {
+    extendPrevChar: (meta: CharMeta) => extendSelection(meta, false),
+    extendNextChar: (meta: CharMeta) => extendSelection(meta, true),
     renderCharId,
     renderPrevChar: (charId: string) => renderCharId(getPrevCharId(charId)),
     renderNextChar: (charId: string) => renderCharId(getNextCharId(charId)),
@@ -268,6 +318,25 @@ export function getReaderCharRange(charId: string) {
   const range = document.createRange();
   range.setStart(entry.textNode, charIndex);
   range.setEnd(entry.textNode, charIndex + 1);
+  return range;
+}
+
+function getReaderSelectionRange(anchorCharId: string, focusCharId: string) {
+  const anchor = extractCharInfoFromId(anchorCharId);
+  const focus = extractCharInfoFromId(focusCharId);
+  if (anchor.context !== "verse" || focus.context !== "verse") return null;
+  if (anchor.verseId !== focus.verseId) return null;
+
+  const entry = ReaderVerseTextMap.get(anchor.verseId);
+  if (!entry) return null;
+  if (anchor.charIndex < 0 || anchor.charIndex >= entry.text.length) return null;
+  if (focus.charIndex < 0 || focus.charIndex >= entry.text.length) return null;
+
+  const startIndex = Math.min(anchor.charIndex, focus.charIndex);
+  const endIndex = Math.max(anchor.charIndex, focus.charIndex) + 1;
+  const range = document.createRange();
+  range.setStart(entry.textNode, startIndex);
+  range.setEnd(entry.textNode, endIndex);
   return range;
 }
 

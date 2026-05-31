@@ -17,7 +17,8 @@ export function Popover() {
   const { closePopover } = usePopoverApi();
   const ref = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { renderPrevChar, renderNextChar } = useCharNavigation();
+  const { extendPrevChar, extendNextChar, renderPrevChar, renderNextChar } =
+    useCharNavigation();
 
   useEffect(() => {
     ref.current = document.getElementById("popover-portal");
@@ -71,6 +72,16 @@ export function Popover() {
           if (!charMeta.success) return;
           const { charId } = charMeta.data;
           event.preventDefault();
+          if (event.shiftKey && event.key === "ArrowRight") {
+            extendNextChar(charMeta.data);
+            return;
+          }
+
+          if (event.shiftKey && event.key === "ArrowLeft") {
+            extendPrevChar(charMeta.data);
+            return;
+          }
+
           if (event.key === "ArrowRight") {
             renderNextChar(charId);
           } else {
@@ -87,6 +98,8 @@ export function Popover() {
       popover.popoverRef.current?.blur();
     }
   }, [
+    extendNextChar,
+    extendPrevChar,
     renderNextChar,
     renderPrevChar,
     popover.isOpen,
