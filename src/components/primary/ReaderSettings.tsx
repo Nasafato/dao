@@ -1,6 +1,7 @@
 "use client";
 
 import { themeEffect } from "@/app/theme-effect";
+import { clearReaderSelectionHighlight } from "@/lib/readerSelectionHighlight";
 import { useDaoStore } from "@/state/store";
 import { BackgroundStyle, border } from "@/styles";
 import {
@@ -108,8 +109,7 @@ export function ReaderSettings() {
     setDictionaryMode(nextDictionaryMode);
     if (!nextDictionaryMode) {
       setIsPopoverOpen(false);
-      delete document.documentElement.dataset.readerCharacterSelection;
-      window.getSelection()?.removeAllRanges();
+      clearReaderSelectionHighlight();
     }
   };
 

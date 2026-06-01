@@ -3,6 +3,10 @@
 import { punctuation } from "@/consts";
 import { buildCharId, CharMap } from "@/lib/charNavigation";
 import { markReaderCharacterLookupPointer } from "@/lib/readerCharacterTap";
+import {
+  clearReaderSelectionHighlight,
+  highlightReaderRange,
+} from "@/lib/readerSelectionHighlight";
 import { Definition } from "./Definition";
 import { usePopoverApi, type PopoverAnchor } from "./PopoverProvider";
 import { useEffect, useRef, type RefObject } from "react";
@@ -40,10 +44,7 @@ export function ReaderCharacterLookup({
       if (event.pointerType === "mouse" && event.button !== 0) return;
       if (!isReaderTextTarget(event.target, root)) return;
 
-      if (document.documentElement.dataset.readerCharacterSelection === "true") {
-        window.getSelection()?.removeAllRanges();
-      }
-      delete document.documentElement.dataset.readerCharacterSelection;
+      clearReaderSelectionHighlight();
       pointerStartRef.current = {
         pointerId: event.pointerId,
         x: event.clientX,
@@ -72,8 +73,7 @@ export function ReaderCharacterLookup({
       const hit = findCharacterAtPoint(event.clientX, event.clientY, root);
       if (!hit) return;
 
-      document.documentElement.dataset.readerCharacterSelection = "true";
-      selectCharacter(hit.range);
+      highlightReaderRange(hit.range);
 
       if (punctuation.includes(hit.char) || !hit.char.trim()) return;
 
@@ -171,14 +171,6 @@ function findTextNode(element: HTMLElement) {
     }
   }
   return null;
-}
-
-function selectCharacter(range: Range) {
-  const selection = window.getSelection();
-  if (!selection) return;
-
-  selection.removeAllRanges();
-  selection.addRange(range);
 }
 
 function createVirtualAnchor(range: Range): PopoverAnchor {

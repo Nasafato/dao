@@ -41,7 +41,7 @@ export default async function LocaleRootLayout(
         <main
           className={twJoin(
             MainLayoutHorizontalPaddingStyle,
-            "pb-28 pt-14 lg:pb-32 lg:pt-16"
+            "pb-28 pt-20 lg:pb-32 lg:pt-20"
           )}
         >
           {children}

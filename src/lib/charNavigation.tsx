@@ -7,6 +7,7 @@ import {
   type PopoverMeta,
 } from "@/components/primary/PopoverProvider";
 import { punctuation } from "@/consts";
+import { highlightReaderRange } from "./readerSelectionHighlight";
 
 export function buildCharId(args: {
   verseId: number;
@@ -234,8 +235,7 @@ export function useCharNavigation() {
         : getReaderCharRange(charId);
 
     if (readerRange) {
-      document.documentElement.dataset.readerCharacterSelection = "true";
-      selectRange(readerRange);
+      highlightReaderRange(readerRange);
       const focusRange = getReaderCharRange(focusCharId);
       const anchorRange = focusRange ?? readerRange;
       if (!getRangeRect(anchorRange)) return;
@@ -352,14 +352,6 @@ function getRangeRect(range: Range) {
     width: rect.width,
     height: rect.height,
   });
-}
-
-function selectRange(range: Range) {
-  const selection = window.getSelection();
-  if (!selection) return;
-
-  selection.removeAllRanges();
-  selection.addRange(range);
 }
 
 function createVirtualAnchor(range: Range): PopoverAnchor {

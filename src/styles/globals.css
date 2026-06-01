@@ -8,6 +8,11 @@ html {
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+::highlight(reader-character-selection) {
+  background-color: rgb(254 240 138);
+  color: rgb(17 24 39);
+}
+
 @layer base {
   :root {
     font-family: "Inter", sans-serif;

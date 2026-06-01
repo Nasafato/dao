@@ -50,10 +50,11 @@ export function Popover() {
       const clickedOnPopover = target.closest("[data-dictionary-popover]");
       const clickedOnFooter = target.closest("#footer");
       const clickedOnCharacter = target.closest(".character");
+      const clickedOnReaderText = target.closest("[data-reader-verse-id]");
 
       if (consumeReaderCharacterLookupPointer()) return;
       if (clickedOnPopover || clickedOnFooter) return;
-      if (clickedOnCharacter) {
+      if (clickedOnCharacter || clickedOnReaderText) {
         return;
       }
       if (popover.isOpen && popover.anchor) {
