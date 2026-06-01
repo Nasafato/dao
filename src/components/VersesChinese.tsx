@@ -12,7 +12,7 @@ export function VersesChinese({ verses }: { verses: DaoVerse[] }) {
         <AuxVerseMemoryTestModal />
         <Verses verses={verses} />
       </Container>
-      <ReaderSettings />
+      <ReaderSettings verses={verses} />
     </>
   );
 }

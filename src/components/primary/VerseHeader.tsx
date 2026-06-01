@@ -4,7 +4,7 @@ import { DaoVerse } from "@/types";
 import { AuxVerseHeaderLearning } from "@/components/auxiliary/AuxVerseHeaderLearning";
 
 export const VerseHeaderStyle =
-  "text-gray-400 dark:text-gray-200 text-base whitespace-nowrap";
+  "text-gray-400 dark:text-gray-200 text-base whitespace-nowrap scroll-mt-24";
 
 export function VerseHeader({
   verse,
