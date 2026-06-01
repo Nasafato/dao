@@ -13,6 +13,8 @@ interface DaoStore {
   setAudioCached: (audioUrl: string, status: boolean) => void;
   readerMode: boolean;
   setReaderMode: (status: boolean) => void;
+  dictionaryMode: boolean;
+  setDictionaryMode: (status: boolean) => void;
   pinyinMode: boolean;
   setPinyinMode: (status: boolean) => void;
   isFooterOpen: boolean;
@@ -120,6 +122,8 @@ export const useDaoStore = create<DaoStore>((set) => ({
   },
   readerMode: false,
   setReaderMode: (status: boolean) => set({ readerMode: status }),
+  dictionaryMode: false,
+  setDictionaryMode: (status: boolean) => set({ dictionaryMode: status }),
   pinyinMode: false,
   setPinyinMode: (status: boolean) => set({ pinyinMode: status }),
   isFooterOpen: false,

@@ -1,10 +1,10 @@
 import { VerseMemoryStatusType } from "@/lib/localDb/verseMemoryStatus";
 import { useVerseMemoryStatusesQuery } from "@/lib/reactQuery";
+import { useDaoStore } from "@/state/store";
 import { DaoVerse } from "@/types";
 import { useRef } from "react";
 import { CommandPalette } from "./CommandPalette";
 import { ReaderCharacterLookup } from "./ReaderCharacterLookup";
-import { TextSelectionToolbar } from "./TextSelectionToolbar";
 import { Verse } from "./Verse";
 
 interface VerseProps {
@@ -13,6 +13,7 @@ interface VerseProps {
 
 export function Verses({ verses }: VerseProps) {
   const verseMemoryStatusesQuery = useVerseMemoryStatusesQuery();
+  const dictionaryMode = useDaoStore((state) => state.dictionaryMode);
   const readerRef = useRef<HTMLDivElement>(null);
   const statusMap: Record<string, VerseMemoryStatusType> = {};
   for (const status of verseMemoryStatusesQuery.data ?? []) {
@@ -32,8 +33,7 @@ export function Verses({ verses }: VerseProps) {
           );
         })}
       </div>
-      <ReaderCharacterLookup rootRef={readerRef} />
-      <TextSelectionToolbar rootRef={readerRef} />
+      {dictionaryMode && <ReaderCharacterLookup rootRef={readerRef} />}
       <CommandPalette />
     </>
   );

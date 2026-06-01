@@ -1,13 +1,6 @@
 "use client";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
-import { computePopoverDimensions, computePosition } from "@/lib/positioning";
 import { useDaoStore } from "@/state/store";
 
 export type PopoverAnchor = {
@@ -26,11 +19,6 @@ export type Popover = {
   left: number;
 };
 
-type PopoverDimensions = {
-  width: number;
-  height: number;
-};
-
 export type PopoverMeta = {
   charId: string;
   anchorCharId?: string;
@@ -40,13 +28,9 @@ export type PopoverMeta = {
 
 type DataContext = {
   meta: PopoverMeta | null;
-  popoverDimensions: PopoverDimensions;
-  arrow: Arrow;
   anchor: PopoverAnchor | null;
   content: React.ReactNode | null;
-  coordinates: Coordinates;
   isOpen: boolean;
-  popoverRef: React.MutableRefObject<HTMLDivElement | null>;
 };
 
 type ApiContext = {
@@ -72,11 +56,6 @@ interface RenderPopoverArgs {
   meta?: PopoverMeta;
 }
 
-type Coordinates = {
-  left: number;
-  top: number;
-};
-
 /**
  * This is the popover provider for individual characters. It's designed to minimize re-renders when showing
  * the definition for each character. There are two contexts: one for the data and one for the API.
@@ -93,23 +72,10 @@ type Coordinates = {
 export function PopoverProvider({ children }: { children: React.ReactNode }) {
   const [anchor, setAnchor] = useState<PopoverAnchor | null>(null);
   const [content, setContent] = useState<React.ReactNode | null>(null);
-  const [coordinates, setCoordinates] = useState<Coordinates>({
-    left: 0,
-    top: 0,
-  });
-  const [arrow, setArrow] = useState<Arrow>({
-    orientation: "facingUp",
-    left: 0,
-  });
   const isOpen = useDaoStore((s) => s.isPopoverOpen);
   const setIsOpen = useDaoStore((s) => s.setIsPopoverOpen);
-  const [popoverDimensions, setPopoverDimensions] = useState<{
-    width: number;
-    height: number;
-  }>(computePopoverDimensions());
   const [meta, setMeta] = useState<PopoverMeta | null>(null);
 
-  const popoverRef = React.useRef<HTMLDivElement>(null);
   const prevAnchor = React.useRef<PopoverAnchor | null>(null);
 
   const api = useMemo(() => {
@@ -123,17 +89,9 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
         prevAnchor.current = anchor;
         setAnchorColor(anchor, colors.green["500"]);
       }
-      const desiredDimensions = computePopoverDimensions();
-      const { position, computedDimensions, arrow } = computePosition({
-        anchorElement: anchor,
-        desiredDimensions: desiredDimensions,
-      });
       setAnchor(anchor);
       setContent(content);
-      setCoordinates(position);
       setIsOpen(true);
-      setArrow(arrow);
-      setPopoverDimensions(computedDimensions);
       setMeta(args.meta ?? null);
     };
 
@@ -145,56 +103,14 @@ export function PopoverProvider({ children }: { children: React.ReactNode }) {
     return { renderPopover, closePopover };
   }, [setIsOpen]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (anchor && popoverRef.current && isOpen) {
-        if (prevAnchor.current && prevAnchor.current !== anchor) {
-          setAnchorColor(prevAnchor.current, "inherit");
-          prevAnchor.current = anchor;
-          setAnchorColor(anchor, colors.green["500"]);
-        } else if (!prevAnchor.current) {
-          prevAnchor.current = anchor;
-          setAnchorColor(anchor, colors.green["500"]);
-        }
-        const desiredDimensions = computePopoverDimensions();
-        const { position, computedDimensions, arrow } = computePosition({
-          anchorElement: anchor,
-          desiredDimensions,
-        });
-        setCoordinates(position);
-        setArrow(arrow);
-        setPopoverDimensions(computedDimensions);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [anchor, isOpen]);
-
   const popover = useMemo(() => {
     return {
-      popoverDimensions,
-      coordinates,
       content,
-      popoverRef,
       isOpen,
       anchor,
-      arrow,
       meta,
     };
-  }, [
-    coordinates,
-    content,
-    popoverRef,
-    isOpen,
-    popoverDimensions,
-    anchor,
-    arrow,
-    meta,
-  ]);
+  }, [content, isOpen, anchor, meta]);
 
   return (
     <PopoverApiContext.Provider value={api}>

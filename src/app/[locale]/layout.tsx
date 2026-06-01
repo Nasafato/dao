@@ -1,4 +1,3 @@
-import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
 import { Setup } from "@/components/Setup";
 import { IntlContextProvider } from "@/components/IntlProvider";
@@ -38,12 +37,11 @@ export default async function LocaleRootLayout(
   return (
     <IntlContextProvider locale={locale} dict={dict}>
       <Providers>
-        <Header />
         <Setup />
         <main
           className={twJoin(
             MainLayoutHorizontalPaddingStyle,
-            "pb-28 lg:pb-32 pt-4 lg:pt-8 mt-12"
+            "pb-28 pt-14 lg:pb-32 lg:pt-16"
           )}
         >
           {children}

@@ -237,11 +237,11 @@ export function useCharNavigation() {
       document.documentElement.dataset.readerCharacterSelection = "true";
       selectRange(readerRange);
       const focusRange = getReaderCharRange(focusCharId);
-      const anchorRect = getRangeRect(focusRange ?? readerRange);
-      if (!anchorRect) return;
+      const anchorRange = focusRange ?? readerRange;
+      if (!getRangeRect(anchorRange)) return;
       CharMap.set(charId, char);
       renderPopover({
-        anchor: createVirtualAnchor(anchorRect),
+        anchor: createVirtualAnchor(anchorRange),
         content: (
           <Definition.Wrapper>
             <Definition char={char} />
@@ -362,8 +362,10 @@ function selectRange(range: Range) {
   selection.addRange(range);
 }
 
-function createVirtualAnchor(rect: DOMRect): PopoverAnchor {
+function createVirtualAnchor(range: Range): PopoverAnchor {
+  const fallbackRect = getRangeRect(range) ?? new DOMRect();
+
   return {
-    getBoundingClientRect: () => rect,
+    getBoundingClientRect: () => getRangeRect(range) ?? fallbackRect,
   };
 }

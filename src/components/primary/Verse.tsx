@@ -13,7 +13,6 @@ import {
   TooltipStyle,
 } from "@/styles";
 import { DaoVerse } from "@/types";
-import { buildAudioFile } from "@/utils";
 import {
   ArrowRightIcon,
   ChevronUpDownIcon,
@@ -24,7 +23,6 @@ import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { twMerge as twJoin } from "tailwind-merge";
-import { PlayPauseButton } from "./AudioPlayer/PlayPauseButton";
 import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
@@ -76,14 +74,6 @@ export function Verse({
             第{verseId}章
           </a>
         </div>
-        <PlayPauseButton
-          className="ml-2"
-          audioFile={buildAudioFile({
-            verseId: verse.id,
-            speaker: "human",
-            language: "chinese",
-          })}
-        />
         {/* <AuxVerseHeaderLearning verse={verse} verseStatus={verseStatus} /> */}
 
         <div className="grid items-center justify-self-end flex-1">

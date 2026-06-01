@@ -18,7 +18,6 @@ type CharacterHit = {
   char: string;
   charIndex: number;
   range: Range;
-  rect: DOMRect;
   verseId: number;
 };
 
@@ -87,7 +86,7 @@ export function ReaderCharacterLookup({
       markReaderCharacterLookupPointer();
 
       renderPopover({
-        anchor: createVirtualAnchor(hit.rect),
+        anchor: createVirtualAnchor(hit.range),
         content: (
           <Definition.Wrapper>
             <Definition char={hit.char} />
@@ -156,7 +155,6 @@ function findCharacterAtPoint(
           char: text[index],
           charIndex: index,
           range,
-          rect: cloneRect(rect),
           verseId,
         };
       }
@@ -183,9 +181,17 @@ function selectCharacter(range: Range) {
   selection.addRange(range);
 }
 
-function createVirtualAnchor(rect: DOMRect): PopoverAnchor {
+function createVirtualAnchor(range: Range): PopoverAnchor {
+  const fallbackRect = cloneRect(range.getBoundingClientRect());
+
   return {
-    getBoundingClientRect: () => rect,
+    getBoundingClientRect: () => {
+      const rect = range.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        return rect;
+      }
+      return fallbackRect;
+    },
   };
 }
 

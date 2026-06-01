@@ -40,6 +40,7 @@ export function useDefinition(
   char: string,
   { enabled = true }: { enabled?: boolean } = { enabled: true }
 ) {
+  const encodedQuery = encodeURIComponent(char);
   const query = useQuery({
     queryKey: ["definition", char],
     initialData: () => {
@@ -62,9 +63,9 @@ export function useDefinition(
         console.log("cache miss: dict not cached");
         const result: {
           data: DbEntryWithDefinitions[];
-        } = await fetch("/api/dictionary/definition?query=" + char).then(
-          (res) => res.json()
-        );
+        } = await fetch(
+          "/api/dictionary/definition?query=" + encodedQuery
+        ).then((res) => res.json());
         // const result = await trpcClient.definition.findOne.query(char);
         return result.data;
       }
@@ -73,9 +74,9 @@ export function useDefinition(
         console.log("cache miss: char not in dict");
         const result: {
           data: DbEntryWithDefinitions[];
-        } = await fetch("/api/dictionary/definition?query=" + char).then(
-          (res) => res.json()
-        );
+        } = await fetch(
+          "/api/dictionary/definition?query=" + encodedQuery
+        ).then((res) => res.json());
         // const result = await trpcClient.definition.findOne.query(char);
         return result.data;
       }

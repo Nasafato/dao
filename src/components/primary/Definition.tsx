@@ -11,15 +11,16 @@ export function Definition({
   char: string;
   className?: string;
 }) {
-  const { data, isLoading, isError } = useDefinition(char);
+  const { data, isFetching, isLoading, isError } = useDefinition(char);
+  const hasEntries = !!data?.length;
 
   return (
-    <div className={className}>
-      {isLoading ? (
+    <div className={twJoin("min-h-8", className)}>
+      {isLoading || (isFetching && !hasEntries) ? (
         <Spinner className="h-4 w-4" />
       ) : isError ? (
         "Error"
-      ) : data ? (
+      ) : hasEntries ? (
         <SingleCharDefinition entries={data} className="text-sm" />
       ) : (
         "No definition found"
@@ -38,7 +39,7 @@ export const DefinitionWrapper = (Definition.Wrapper = function Wrapper({
   return (
     <div
       className={twJoin(
-        "border px-3 py-2 rounded-md shadow-md overflow-scroll hyphens-auto h-full",
+        "max-h-[min(20rem,calc(100vh-6rem))] overflow-auto rounded-md border px-3 py-2 shadow-md hyphens-auto",
         TextStyle,
         border(),
         BackgroundStyle,
