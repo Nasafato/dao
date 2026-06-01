@@ -14,6 +14,17 @@ import { CharMetaSchema, useCharNavigation } from "@/lib/charNavigation";
 import { consumeReaderCharacterLookupPointer } from "@/lib/readerCharacterTap";
 import { usePopoverApi, usePopoverData } from "./PopoverProvider";
 
+const DICTIONARY_POPOVER_HEIGHT = 176;
+const DICTIONARY_POPOVER_MIN_HEIGHT = 120;
+const FLOATING_MENU_RESERVED_TOP = 76;
+const FLOATING_NAV_RESERVED_BOTTOM = 92;
+const POPOVER_PADDING = {
+  bottom: FLOATING_NAV_RESERVED_BOTTOM,
+  left: 12,
+  right: 12,
+  top: FLOATING_MENU_RESERVED_TOP,
+};
+
 export function Popover() {
   const popover = usePopoverData();
   const { closePopover } = usePopoverApi();
@@ -25,15 +36,17 @@ export function Popover() {
     strategy: "fixed",
     middleware: [
       offset(10),
-      flip({ padding: 12 }),
-      shift({ padding: 12 }),
+      flip({ padding: POPOVER_PADDING }),
+      shift({ padding: POPOVER_PADDING }),
       size({
-        padding: 12,
+        padding: POPOVER_PADDING,
         apply({ availableHeight, elements }) {
-          elements.floating.style.maxHeight = `${Math.max(
-            160,
-            Math.min(320, availableHeight)
-          )}px`;
+          const height = Math.max(
+            DICTIONARY_POPOVER_MIN_HEIGHT,
+            Math.min(DICTIONARY_POPOVER_HEIGHT, availableHeight)
+          );
+          elements.floating.style.height = `${height}px`;
+          elements.floating.style.maxHeight = `${height}px`;
         },
       }),
     ],
@@ -45,12 +58,12 @@ export function Popover() {
   }, [popover.anchor, refs]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handlePointerDownOutside = (event: PointerEvent) => {
       const target = event.target as HTMLElement;
       const clickedOnPopover = target.closest("[data-dictionary-popover]");
       const clickedOnFooter = target.closest("#footer");
       const clickedOnCharacter = target.closest(".character");
-      const clickedOnReaderText = target.closest("[data-reader-verse-id]");
+      const clickedOnReaderText = target.closest("[data-reader-text]");
 
       if (consumeReaderCharacterLookupPointer()) return;
       if (clickedOnPopover || clickedOnFooter) return;
@@ -62,11 +75,38 @@ export function Popover() {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handlePointerDownOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("pointerdown", handlePointerDownOutside);
     };
   }, [closePopover, popover]);
+
+  useEffect(() => {
+    if (!popover.isOpen || !popover.anchor) return;
+    const anchor = popover.anchor;
+
+    const handleSelectionChange = () => {
+      const activeSelection = window.getSelection();
+      if (
+        !activeSelection ||
+        activeSelection.rangeCount === 0 ||
+        activeSelection.isCollapsed ||
+        !activeSelection.toString().trim()
+      ) {
+        return;
+      }
+
+      const range = activeSelection.getRangeAt(0);
+      if (doesRangeTouchPopover(range)) return;
+
+      closePopover(anchor);
+    };
+
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () => {
+      document.removeEventListener("selectionchange", handleSelectionChange);
+    };
+  }, [closePopover, popover.anchor, popover.isOpen]);
 
   useEffect(() => {
     if (popover.isOpen) {
@@ -132,7 +172,7 @@ export function Popover() {
       <div
         ref={refs.setFloating}
         style={floatingStyles}
-        className="z-40 w-[min(25rem,calc(100vw-1.5rem))] overflow-auto focus:outline-none"
+        className="reader-liquid-glass z-30 w-[min(25rem,calc(100vw-1.5rem))] overflow-hidden rounded-md text-gray-900 focus:outline-none dark:text-gray-50"
         data-dictionary-popover=""
         role="dialog"
         aria-label="Dictionary"
@@ -141,4 +181,11 @@ export function Popover() {
       </div>
     </FloatingPortal>
   );
+}
+
+function doesRangeTouchPopover(range: Range) {
+  const ancestor = range.commonAncestorContainer;
+  const element =
+    ancestor instanceof Element ? ancestor : ancestor.parentElement;
+  return !!element?.closest("[data-dictionary-popover]");
 }

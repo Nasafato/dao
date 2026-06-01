@@ -8,7 +8,6 @@ import {
 import { MEMORY_STATUS } from "@/lib/localDb/verseMemoryStatus/schema";
 import { queryClient } from "@/lib/reactQuery";
 import {
-  SecondaryButtonStyle,
   SecondaryDarkModeTextStyle,
   TooltipStyle,
 } from "@/styles";
@@ -27,6 +26,8 @@ import { VerseDescription } from "./VerseDescription";
 import { VerseHeaderStyle } from "./VerseHeader";
 import { VerseText } from "./VerseText";
 import { useTranslation } from "@/components/IntlProvider";
+
+const SHOW_VERSE_DETAIL_LINK = false;
 
 export function Verse({
   verse,
@@ -83,84 +84,66 @@ export function Verse({
               verseStatus={verseStatus}
               updateStatusMutation={updateStatusMutation}
             /> */}
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <button
-                  className="flex items-center hover:underline text-gray-600 dark:text-gray-50"
-                  onClick={() => {
-                    setShowDescription(!showDescription);
-                  }}
-                >
-                  <span
+            <button
+              type="button"
+              aria-expanded={showDescription}
+              aria-label={
+                showDescription
+                  ? t("Verses.showMore.hide")
+                  : t("Verses.showMore.base")
+              }
+              className="inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-gray-500 transition hover:bg-gray-100 active:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700 sm:h-9 sm:px-2.5 sm:text-xs"
+              onClick={() => {
+                setShowDescription(!showDescription);
+              }}
+            >
+              {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
+                <Spinner className="h-5 w-5 fill-gray-500 text-gray-200 sm:h-4 sm:w-4" />
+              ) : showDescription ? (
+                <XMarkIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+              ) : (
+                <ChevronUpDownIcon className="h-6 w-6 sm:h-4 sm:w-4" />
+              )}
+              <span>
+                {showDescription
+                  ? t("Verses.showMore.hide")
+                  : t("Verses.showMore.base")}
+              </span>
+            </button>
+            {SHOW_VERSE_DETAIL_LINK && (
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <Link
+                    href={{
+                      pathname: `/verse/${verse.id}`,
+                      hash: `#dao${verse.id}`,
+                      query: {
+                        prev: `/verses/chinese`,
+                      },
+                    }}
                     className={twJoin(
-                      "group hover:bg-gray-200 rounded-full py-1 dark:hover:bg-gray-800",
-                      "px-1"
+                      SecondaryDarkModeTextStyle,
+                      "text-sm flex items-center hover:underline gap-x-1 px-1"
                     )}
                   >
-                    {moreQuery.isLoading && moreQuery.fetchStatus !== "idle" ? (
-                      <Spinner className="h-4 w-4 text-gray-200 fill-gray-500" />
-                    ) : showDescription ? (
-                      <XMarkIcon
-                        className={twJoin(
-                          SecondaryButtonStyle,
-                          // SecondaryButtonPadding,
-                          "border-1 border-blue-500"
-                        )}
-                      />
-                    ) : (
-                      <ChevronUpDownIcon
-                        className={twJoin(
-                          SecondaryButtonStyle
-                          // SecondaryButtonPadding,
-                        )}
-                      />
-                    )}
-                  </span>
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  sideOffset={3}
-                  side={verseId === 1 ? "bottom" : "top"}
-                  className={twJoin(TooltipStyle().content())}
-                >
-                  {t("Verses.showMore.tooltip")}
-                  <Tooltip.Arrow className={TooltipStyle().arrow()} />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <Link
-                  href={{
-                    pathname: `/verse/${verse.id}`,
-                    hash: `#dao${verse.id}`,
-                    query: {
-                      prev: `/verses/chinese`,
-                    },
-                  }}
-                  className={twJoin(
-                    SecondaryDarkModeTextStyle,
-                    "text-sm flex items-center hover:underline gap-x-1 px-1"
-                  )}
-                >
-                  {t("Verses.goTo.base")}{" "}
-                  <ArrowRightIcon
-                    className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
-                  />
-                </Link>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  sideOffset={3}
-                  side={verseId === 1 ? "bottom" : "top"}
-                  className={twJoin(TooltipStyle().content())}
-                >
-                  {t("Verses.goTo.tooltip")}
-                  <Tooltip.Arrow className={TooltipStyle().arrow()} />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
+                    {t("Verses.goTo.base")}{" "}
+                    <ArrowRightIcon
+                      className={twJoin("h-3 w-3", SecondaryDarkModeTextStyle)}
+                    />
+                  </Link>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content
+                    sideOffset={3}
+                    side={verseId === 1 ? "bottom" : "top"}
+                    className={twJoin(TooltipStyle().content())}
+                  >
+                    {t("Verses.goTo.tooltip")}
+                    <Tooltip.Arrow className={TooltipStyle().arrow()} />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            )}
           </div>
         </div>
       </div>

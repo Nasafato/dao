@@ -57,7 +57,8 @@
       "tooltip": "Back to verses"
     },
     "showMore": {
-      "base": "Show more"
+      "base": "Show more",
+      "hide": "Hide"
     },
     "translator": "Translator"
   },

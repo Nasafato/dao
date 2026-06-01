@@ -10,7 +10,7 @@ import { Tooltip } from "@/components/Tooltip";
 import { KeyboardButton } from "@/components/KeyboardButton";
 
 const CharNavButtonStyle =
-  "flex h-12 w-12 items-center justify-center rounded-full touch-manipulation active:bg-gray-100 min-[380px]:h-14 min-[380px]:w-14 dark:active:bg-gray-800";
+  "flex h-12 w-12 items-center justify-center rounded-full touch-manipulation transition hover:bg-white/25 active:bg-white/35 min-[380px]:h-14 min-[380px]:w-14 dark:hover:bg-white/10 dark:active:bg-white/15";
 const CharNavArrowStyle = "h-7 w-7 min-[380px]:h-9 min-[380px]:w-9";
 const CharNavExpandArrowStyle = "h-6 w-6 min-[380px]:h-7 min-[380px]:w-7";
 

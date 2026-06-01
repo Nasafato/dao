@@ -3,7 +3,6 @@
 import { themeEffect } from "@/app/theme-effect";
 import { clearReaderSelectionHighlight } from "@/lib/readerSelectionHighlight";
 import { useDaoStore } from "@/state/store";
-import { BackgroundStyle, border } from "@/styles";
 import type { DaoVerse } from "@/types";
 import {
   Cog6ToothIcon,
@@ -17,14 +16,18 @@ import { twJoin } from "tailwind-merge";
 
 const DICTIONARY_MODE_STORAGE_KEY = "dao.reader.dictionaryMode";
 const PINYIN_MODE_STORAGE_KEY = "dao.reader.pinyinMode.v2";
+const LiquidControlStyle =
+  "reader-liquid-glass inline-flex h-11 items-center justify-center outline-none transition hover:brightness-[0.98] focus:outline-none focus-visible:outline-none focus-visible:ring-0 active:scale-[0.98] dark:hover:brightness-110";
+const LiquidPanelStyle =
+  "reader-liquid-glass text-gray-900 outline-none dark:text-gray-50";
+type OpenReaderMenu = "contents" | "settings" | null;
 
 export function ReaderSettings({
   verses = [],
 }: {
   verses?: Pick<DaoVerse, "id" | "text">[];
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isContentsOpen, setIsContentsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<OpenReaderMenu>(null);
   const [hasLoadedPreference, setHasLoadedPreference] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<"dark" | "light">("light");
   const dictionaryMode = useDaoStore((state) => state.dictionaryMode);
@@ -33,6 +36,8 @@ export function ReaderSettings({
   const pinyinMode = useDaoStore((state) => state.pinyinMode);
   const setPinyinMode = useDaoStore((state) => state.setPinyinMode);
   const panelRef = useRef<HTMLDivElement>(null);
+  const isContentsOpen = openMenu === "contents";
+  const isOpen = openMenu === "settings";
 
   useEffect(() => {
     const storedDictionaryPreference = window.localStorage.getItem(
@@ -83,20 +88,18 @@ export function ReaderSettings({
   }, [dictionaryMode, hasLoadedPreference]);
 
   useEffect(() => {
-    if (!isOpen && !isContentsOpen) return;
+    if (!openMenu) return;
 
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target;
       if (!(target instanceof Node)) return;
       if (panelRef.current?.contains(target)) return;
-      setIsOpen(false);
-      setIsContentsOpen(false);
+      setOpenMenu(null);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
-        setIsContentsOpen(false);
+        setOpenMenu(null);
       }
     };
 
@@ -107,7 +110,7 @@ export function ReaderSettings({
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isContentsOpen, isOpen]);
+  }, [openMenu]);
 
   const setDarkMode = (enabled: boolean) => {
     window.localStorage.setItem("theme", enabled ? "dark" : "light");
@@ -129,28 +132,9 @@ export function ReaderSettings({
   return (
     <div
       ref={panelRef}
-      className="fixed right-4 top-4 z-30 flex flex-col items-end gap-2"
+      className="fixed right-4 top-4 z-50 flex flex-col items-end gap-2"
     >
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          aria-label="Open table of contents"
-          aria-expanded={isContentsOpen}
-          className={twJoin(
-            "inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-lg",
-            isContentsOpen
-              ? "bg-gray-900 text-white hover:bg-gray-800 active:bg-gray-700 dark:bg-gray-100 dark:text-gray-950 dark:hover:bg-gray-200 dark:active:bg-gray-300"
-              : "text-gray-700 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-800 dark:active:bg-gray-700",
-            !isContentsOpen && BackgroundStyle,
-            border()
-          )}
-          onClick={() => {
-            setIsContentsOpen((current) => !current);
-            setIsOpen(false);
-          }}
-        >
-          <TableOfContents className="h-5 w-5" strokeWidth={2.2} />
-        </button>
         <button
           type="button"
           aria-label={
@@ -160,12 +144,9 @@ export function ReaderSettings({
           }
           aria-pressed={dictionaryMode}
           className={twJoin(
-            "inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3.5 text-sm font-medium shadow-lg",
-            dictionaryMode
-              ? "bg-gray-900 text-white hover:bg-gray-800 active:bg-gray-700 dark:bg-gray-100 dark:text-gray-950 dark:hover:bg-gray-200 dark:active:bg-gray-300"
-              : "text-gray-700 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-800 dark:active:bg-gray-700",
-            !dictionaryMode && BackgroundStyle,
-            border()
+            LiquidControlStyle,
+            "gap-2 whitespace-nowrap rounded-full px-3.5 text-sm font-medium",
+            "text-gray-800 dark:text-gray-100"
           )}
           onClick={toggleDictionaryMode}
         >
@@ -174,17 +155,45 @@ export function ReaderSettings({
         </button>
         <button
           type="button"
+          aria-label="Open table of contents"
+          aria-expanded={isContentsOpen}
+          className={twJoin(
+            LiquidControlStyle,
+            "w-11 rounded-full",
+            "text-gray-800 dark:text-gray-100"
+          )}
+          onClick={() => {
+            setOpenMenu((current) =>
+              current === "contents" ? null : "contents"
+            );
+          }}
+        >
+          {isContentsOpen ? (
+            <XMarkIcon className="h-6 w-6" />
+          ) : (
+            <TableOfContents className="h-5 w-5" strokeWidth={2.2} />
+          )}
+        </button>
+        <button
+          type="button"
           aria-label="Open reader settings"
           aria-expanded={isOpen}
           className={twJoin(
-            "inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-lg",
-            "text-gray-700 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-800 dark:active:bg-gray-700",
-            BackgroundStyle,
-            border()
+            LiquidControlStyle,
+            "w-11 rounded-full",
+            "text-gray-800 dark:text-gray-100"
           )}
-          onClick={() => setIsOpen((current) => !current)}
+          onClick={() => {
+            setOpenMenu((current) =>
+              current === "settings" ? null : "settings"
+            );
+          }}
         >
-          <Cog6ToothIcon className="h-6 w-6" />
+          {isOpen ? (
+            <XMarkIcon className="h-6 w-6" />
+          ) : (
+            <Cog6ToothIcon className="h-6 w-6" />
+          )}
         </button>
       </div>
 
@@ -193,23 +202,14 @@ export function ReaderSettings({
           role="dialog"
           aria-label="Table of contents"
           className={twJoin(
-            "max-h-[70vh] w-80 max-w-[calc(100vw-2rem)] overflow-auto rounded-md border p-3 shadow-xl sm:w-[30rem]",
-            BackgroundStyle,
-            border()
+            "max-h-[70vh] w-80 max-w-[calc(100vw-2rem)] overflow-auto rounded-md p-3 sm:w-[30rem]",
+            LiquidPanelStyle
           )}
         >
-          <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="mb-3 flex items-center gap-3">
             <div className="text-sm font-medium text-gray-900 dark:text-gray-50">
               Contents
             </div>
-            <button
-              type="button"
-              aria-label="Close table of contents"
-              className="rounded p-1 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-              onClick={() => setIsContentsOpen(false)}
-            >
-              <XMarkIcon className="h-5 w-5" />
-            </button>
           </div>
           <div className="grid grid-cols-6 gap-1.5 sm:grid-cols-9">
             {(hasVerses ? verses : buildFallbackVerses()).map((verse) => (
@@ -218,8 +218,8 @@ export function ReaderSettings({
                 href={`#dao${verse.id}`}
                 aria-label={`Go to chapter ${verse.id}`}
                 title={verse.text}
-                className="flex h-11 w-11 items-center justify-center rounded border border-gray-200 text-sm font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                onClick={() => setIsContentsOpen(false)}
+                className="reader-liquid-glass-item flex h-11 w-11 items-center justify-center rounded border text-sm font-medium text-gray-900 transition hover:brightness-95 active:scale-[0.98] dark:text-gray-50 dark:hover:brightness-110"
+                onClick={() => setOpenMenu(null)}
               >
                 {verse.id}
               </a>
@@ -233,22 +233,10 @@ export function ReaderSettings({
           role="dialog"
           aria-label="Reader settings"
           className={twJoin(
-            "w-64 max-w-[calc(100vw-2rem)] rounded-md border p-3 shadow-xl",
-            BackgroundStyle,
-            border()
+            "w-64 max-w-[calc(100vw-2rem)] rounded-md p-3",
+            LiquidPanelStyle
           )}
         >
-          <div className="mb-3 flex justify-end">
-            <button
-              type="button"
-              aria-label="Close reader settings"
-              className="rounded p-1 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-              onClick={() => setIsOpen(false)}
-            >
-              <XMarkIcon className="h-5 w-5" />
-            </button>
-          </div>
-
           <div className="space-y-3">
             <SettingsSwitch
               ariaLabel="Pinyin mode"
@@ -302,17 +290,20 @@ function SettingsSwitch({
         aria-checked={checked}
         aria-label={ariaLabel}
         className={twJoin(
-          "relative h-6 w-11 rounded-full transition",
+          "inline-flex h-7 w-12 shrink-0 items-center rounded-full border p-0.5 transition shadow-inner",
           checked
-            ? "bg-gray-900 dark:bg-gray-100"
-            : "bg-gray-300 dark:bg-gray-700"
+            ? "border-emerald-500/50 bg-emerald-500 dark:border-emerald-300/50 dark:bg-emerald-400"
+            : "reader-liquid-glass-item border-gray-950/10 bg-white/45 dark:border-white/10 dark:bg-white/10"
         )}
         onClick={() => onChange(!checked)}
       >
         <span
           className={twJoin(
-            "absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition dark:bg-gray-950",
-            checked ? "left-5" : "left-0.5"
+            "block h-6 w-6 rounded-full shadow transition-transform",
+            checked
+              ? "bg-white dark:bg-gray-950"
+              : "bg-white/95 dark:bg-gray-950/95",
+            checked ? "translate-x-5" : "translate-x-0"
           )}
         />
       </button>

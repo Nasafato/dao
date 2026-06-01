@@ -9,10 +9,12 @@ import {
 import { punctuation } from "@/consts";
 import { highlightReaderRange } from "./readerSelectionHighlight";
 
+export type ReaderTextContext = "description" | "verse";
+
 export function buildCharId(args: {
   verseId: number;
   charIndex: number;
-  context: "description" | "verse";
+  context: ReaderTextContext;
 }) {
   const { verseId, charIndex, context } = args;
   return `${verseId}-${context}-${charIndex}`;
@@ -31,33 +33,42 @@ export const RefMap = new Map<string, HTMLElement>();
 export const CharMap = new Map<string, string>();
 export const charIds: string[] = [];
 type ReaderVerseTextEntry = {
+  context: ReaderTextContext;
   element: HTMLElement;
   text: string;
   textNode: Text;
+  verseId: number;
 };
 
-const ReaderVerseTextMap = new Map<number, ReaderVerseTextEntry>();
+const ReaderVerseTextMap = new Map<string, ReaderVerseTextEntry>();
 
 export function addToRefMap(charId: string, ref: HTMLElement) {
   charIds.push(charId);
   RefMap.set(charId, ref);
 }
 
-export function registerReaderVerseText(verseId: number, element: HTMLElement) {
+export function registerReaderVerseText(
+  verseId: number,
+  element: HTMLElement,
+  context: ReaderTextContext = "verse"
+) {
   const textNode = findTextNode(element);
   const text = textNode?.nodeValue ?? "";
   if (!textNode || !text) return () => {};
 
   const entry = {
+    context,
     element,
     text,
     textNode,
+    verseId,
   };
-  ReaderVerseTextMap.set(verseId, entry);
+  const key = getReaderTextKey(verseId, context);
+  ReaderVerseTextMap.set(key, entry);
 
   return () => {
-    if (ReaderVerseTextMap.get(verseId)?.element === element) {
-      ReaderVerseTextMap.delete(verseId);
+    if (ReaderVerseTextMap.get(key)?.element === element) {
+      ReaderVerseTextMap.delete(key);
     }
   };
 }
@@ -100,22 +111,23 @@ export function getPrevCharId(charId: string) {
 
 function getNextReaderCharId(charId: string, forward = true) {
   const { verseId, context, charIndex } = extractCharInfoFromId(charId);
-  if (context !== "verse") return null;
-  if (!ReaderVerseTextMap.has(verseId)) return null;
+  if (!isReaderTextContext(context)) return null;
+  if (!getReaderTextEntry(verseId, context)) return null;
 
   const addend = forward ? 1 : -1;
-  const verseIds = Array.from(ReaderVerseTextMap.keys()).sort((a, b) => a - b);
-  let verseIdIndex = verseIds.indexOf(verseId);
+  const entries = Array.from(ReaderVerseTextMap.values())
+    .filter((entry) => entry.context === context)
+    .sort((a, b) => a.verseId - b.verseId);
+  let verseIdIndex = entries.findIndex((entry) => entry.verseId === verseId);
   let nextCharIndex = charIndex + addend;
 
-  while (verseIdIndex >= 0 && verseIdIndex < verseIds.length) {
-    const nextVerseId = verseIds[verseIdIndex];
-    const entry = ReaderVerseTextMap.get(nextVerseId);
+  while (verseIdIndex >= 0 && verseIdIndex < entries.length) {
+    const entry = entries[verseIdIndex];
     if (!entry) return null;
 
     if (nextCharIndex < 0) {
       verseIdIndex -= 1;
-      const prevEntry = ReaderVerseTextMap.get(verseIds[verseIdIndex]);
+      const prevEntry = entries[verseIdIndex];
       nextCharIndex = prevEntry ? prevEntry.text.length - 1 : -1;
       continue;
     }
@@ -129,9 +141,9 @@ function getNextReaderCharId(charId: string, forward = true) {
     const char = entry.text[nextCharIndex];
     if (canLookupReaderChar(char)) {
       return buildCharId({
-        verseId: nextVerseId,
+        verseId: entry.verseId,
         charIndex: nextCharIndex,
-        context: "verse",
+        context,
       });
     }
 
@@ -301,17 +313,17 @@ function getCharFromId(charId: string) {
   if (mappedChar) return mappedChar;
 
   const { verseId, context, charIndex } = extractCharInfoFromId(charId);
-  if (context !== "verse") return null;
+  if (!isReaderTextContext(context)) return null;
 
-  const entry = ReaderVerseTextMap.get(verseId);
+  const entry = getReaderTextEntry(verseId, context);
   return entry?.text[charIndex] ?? null;
 }
 
 export function getReaderCharRange(charId: string) {
   const { verseId, context, charIndex } = extractCharInfoFromId(charId);
-  if (context !== "verse") return null;
+  if (!isReaderTextContext(context)) return null;
 
-  const entry = ReaderVerseTextMap.get(verseId);
+  const entry = getReaderTextEntry(verseId, context);
   if (!entry) return null;
   if (charIndex < 0 || charIndex >= entry.text.length) return null;
 
@@ -324,10 +336,12 @@ export function getReaderCharRange(charId: string) {
 function getReaderSelectionRange(anchorCharId: string, focusCharId: string) {
   const anchor = extractCharInfoFromId(anchorCharId);
   const focus = extractCharInfoFromId(focusCharId);
-  if (anchor.context !== "verse" || focus.context !== "verse") return null;
+  if (!isReaderTextContext(anchor.context)) return null;
+  if (!isReaderTextContext(focus.context)) return null;
   if (anchor.verseId !== focus.verseId) return null;
+  if (anchor.context !== focus.context) return null;
 
-  const entry = ReaderVerseTextMap.get(anchor.verseId);
+  const entry = getReaderTextEntry(anchor.verseId, anchor.context);
   if (!entry) return null;
   if (anchor.charIndex < 0 || anchor.charIndex >= entry.text.length) return null;
   if (focus.charIndex < 0 || focus.charIndex >= entry.text.length) return null;
@@ -360,4 +374,16 @@ function createVirtualAnchor(range: Range): PopoverAnchor {
   return {
     getBoundingClientRect: () => getRangeRect(range) ?? fallbackRect,
   };
+}
+
+function getReaderTextEntry(verseId: number, context: ReaderTextContext) {
+  return ReaderVerseTextMap.get(getReaderTextKey(verseId, context));
+}
+
+function getReaderTextKey(verseId: number, context: ReaderTextContext) {
+  return `${verseId}-${context}`;
+}
+
+function isReaderTextContext(context: string): context is ReaderTextContext {
+  return context === "description" || context === "verse";
 }

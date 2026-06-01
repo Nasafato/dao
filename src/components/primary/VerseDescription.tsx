@@ -1,11 +1,12 @@
-import { punctuation } from "@/consts";
-import { buildCharId } from "@/lib/charNavigation";
+"use client";
+
+import { registerReaderVerseText } from "@/lib/charNavigation";
 import { HeadingStyle } from "@/styles";
 import { capitalize } from "@/utils";
+import { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { twJoin } from "tailwind-merge";
 import { VerseCombined } from "types/materials";
-import { VerseChar } from "./VerseChar";
 
 const TRANSLATORS = ["gou", "legge", "goddard", "susuki"] as const;
 
@@ -18,29 +19,11 @@ export function VerseDescription({
 }) {
   const { description, translations } = data;
 
-  const descriptionChars = description.split("");
-  const descriptionText = descriptionChars.map((char, index) => {
-    if (punctuation.includes(char)) {
-      return char;
-    }
-    return (
-      <VerseChar
-        key={index}
-        char={char}
-        charId={buildCharId({
-          verseId,
-          charIndex: index,
-          context: "description",
-        })}
-      />
-    );
-  });
-
   return (
     <div className="text-[0.95rem]/[22px] space-y-4 mt-4">
       <section>
         <div className={twJoin(HeadingStyle())}>简介</div>
-        <p className="text-lg">{descriptionText}</p>
+        <ReaderDescriptionText text={description} verseId={verseId} />
       </section>
       {data.explanation && (
         <section>
@@ -74,3 +57,30 @@ export function VerseDescription({
 }
 
 const TranslationHeaderStyle = "text-gray-400 text-xs";
+
+function ReaderDescriptionText({
+  text,
+  verseId,
+}: {
+  text: string;
+  verseId: number;
+}) {
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    return registerReaderVerseText(verseId, ref.current, "description");
+  }, [text, verseId]);
+
+  return (
+    <p
+      ref={ref}
+      data-reader-text=""
+      data-reader-text-context="description"
+      data-reader-verse-id={verseId}
+      className="select-text text-lg selection:bg-amber-200 selection:text-gray-950 dark:selection:bg-amber-300/30 dark:selection:text-amber-50"
+    >
+      {text}
+    </p>
+  );
+}

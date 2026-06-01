@@ -1,6 +1,6 @@
 import { twJoin } from "tailwind-merge";
 import { useDefinition } from "@/hooks";
-import { BackgroundStyle, BorderStyle, TextStyle, border } from "@/styles";
+import { TextStyle } from "@/styles";
 import { Spinner } from "@/components/shared/Spinner";
 import { SingleCharDefinition } from "./SingleCharDefinition";
 
@@ -39,10 +39,8 @@ export const DefinitionWrapper = (Definition.Wrapper = function Wrapper({
   return (
     <div
       className={twJoin(
-        "max-h-[min(20rem,calc(100vh-6rem))] overflow-auto rounded-md border px-3 py-2 shadow-md hyphens-auto",
+        "h-full overflow-auto px-3 py-2 hyphens-auto",
         TextStyle,
-        border(),
-        BackgroundStyle,
         className
       )}
     >

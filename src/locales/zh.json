@@ -57,6 +57,8 @@
       "tooltip": "返回诗篇"
     },
     "showMore": {
+      "base": "显示更多",
+      "hide": "收起",
       "tooltip": "显示更多"
     },
     "translator": "Translator"
